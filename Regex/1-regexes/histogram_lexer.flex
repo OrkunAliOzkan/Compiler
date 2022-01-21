@@ -25,29 +25,30 @@ Symbol		   [!-~]
 
 (-?{Integer}+|(-?{Integer}+"/"{Integer}+))
 {
-   fprintf(stderr, "Integer : %s\n", yytext); 
-   /* TODO: get value out of yytext and into yylval.numberValue */
+   fprintf(stderr, "Integer : %s\n", *yytext); 
+   yylval.numberValue = yytext;
    return Number;
 }
 
 (-?{Decimal}|(-?{Decimal}"/"{Decimal}))
 {
-   fprintf(stderr, "Decimal : %s\n", yytext); 
-   /* TODO: get value out of yytext and into yylval.numberValue */
+   fprintf(stderr, "Decimal : %s\n", *yytext); 
+   yylval.numberValue = yytext;
    return Number;
 }
 
 {character}+
 {
    fprintf(stderr, "Word (w/o brakets) : %s\n", yytext);
-   /* TODO: get value out of yytext and into yylval.wordValue */
+   yylval->wordValue = std::stood(*yytext);
+
    return Word;
 }
 
 ("["({character}|{Integer}|{Symbol})*"]")
 {
    fprintf(stderr, "Word (w brakets) : %s\n", yytext);
-   /* TODO: get value out of yytext and into yylval.wordValue */
+   yylval->wordValue = std::stood(*yytext);
    return Word;
 }
 
