@@ -5,9 +5,9 @@
 %}
 Integer     [0-9]
 character   [A-z] /* Check ASCII table for clarity*/
-Num         {-}?{Decimal}+( {.}{Decimal}* )? /* TODO: Check!*/
+Num         {-}?{Integer}+( {.}{Integer}* )? /* TODO: Check!*/
+
 %%
-/*  yylex() */
 Num | {Num}{/}?{Num}
 {
    fprintf(stderr, "Number : %s\n", yytext); 
@@ -15,19 +15,11 @@ Num | {Num}{/}?{Num}
    return Number;
 }
 
-l+
+character
 {
    fprintf(stderr, "Word : %s\n", yytext);
-   /* TODO: get value out of yytext and into yylval.wordValue */
-   return Word;
 }
 
-L+
-{
-   fprintf(stderr, "Word : %s\n", yytext);
-   /* TODO: get value out of yytext and into yylval.wordValue */
-   return Word;
-}
 
 \n
 {
