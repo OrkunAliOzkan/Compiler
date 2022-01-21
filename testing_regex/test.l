@@ -4,24 +4,13 @@
 %}
 Integer     [0-9]
 character   [A-z]
-Num         {Integer}+(.{Integer}*)?
+Decimal     {Integer}+"."{Integer}*
 %%
-(-?{Num}|(-?{Num}"/"{Num}))
-{
-   printf("Number:%s\n",yytext); 
-}
-{character}+
-{
-   printf("Word:%s\n",yytext);
-}
-\n
-{
-   printf("Newline");
-}
-.
-{
-   printf("Error!");
-}
+(-?{Integer}+|(-?{Integer}"/"{Integer}))	{	printf("Integer:%s\n",yytext);	}
+(-?{Decimal}|(-?{Decimal}"/"{Decimal}))	{	printf("Decimal:%s\n",yytext);	}
+{character}+				{	printf("Word:%s\n",yytext);	}
+\n					{	printf("Newline");		}
+.					{	printf("Error!");		}
 %%
 int main()
 {
