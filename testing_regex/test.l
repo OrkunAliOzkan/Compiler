@@ -1,32 +1,29 @@
 %option noyywrap
-
 %{
-#include stdio.h
+#include <stdio.h>
 %}
 Integer     [0-9]
-character   [A-z] /* Check ASCII table for clarity*/
-Num         {Integer}+(.{Integer}*)? /* TODO: Check!*/
-
+character   [A-z]
+Num         {Integer}+(.{Integer}*)?
 %%
-(-?Num | ({-?Num}"/"{Num}))
+(-?{Num}|(-?{Num}"/"{Num}))
 {
-   fprintf(stderr, "Number : %s\n", yytext); 
-   /* TODO: get value out of yytext and into yylval.numberValue */
-   return Number;
+   printf("Number:%s\n",yytext); 
 }
-
-character
+{character}+
 {
-   fprintf(stderr, "Word : %s\n", yytext);
+   printf("Word:%s\n",yytext);
 }
-
-
 \n
 {
-   fprintf(stderr, "Newline\n");
+   printf("Newline");
+}
+.
+{
+   printf("Error!");
 }
 %%
-int main(void)
+int main()
 {
     yylex();
 }
