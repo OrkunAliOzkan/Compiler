@@ -5,7 +5,7 @@
 %}
 Integer     [0-9]
 character   [A-z] /* Check ASCII table for clarity*/
-Num         {-}?{Num}+( {.}{Num}* )? /* TODO: Check!*/
+Num         {-}?{Integer}+( {.}{Integer}* )? /* TODO: Check!*/
 
 %%
 Num | {Num}{/}?{Num}
