@@ -16,17 +16,36 @@ extern "C" int fileno(FILE *stream);
 
 /* End the embedded code section. */
 %}
-
-
+Integer     [0-9]
+character   [A-z] /* Check ASCII table for clarity*/
+Num         {-}?{Decimal}+( {.}{Decimal}* )? /* TODO: Check!*/
 %%
 
-[0-9]+          { fprintf(stderr, "Number : %s\n", yytext); /* TODO: get value out of yytext and into yylval.numberValue */;  return Number; }
+Num | {Num}{/}?{Num}
+{
+   fprintf(stderr, "Number : %s\n", yytext); 
+   /* TODO: get value out of yytext and into yylval.numberValue */
+   return Number;
+}
 
-[a-z]+          { fprintf(stderr, "Word : %s\n", yytext);   /* TODO: get value out of yytext and into yylval.wordValue */;  return Word; }
+l+
+{
+   fprintf(stderr, "Word : %s\n", yytext);
+   /* TODO: get value out of yytext and into yylval.wordValue */
+   return Word;
+}
 
-\n              { fprintf(stderr, "Newline\n"); }
+L+
+{
+   fprintf(stderr, "Word : %s\n", yytext);
+   /* TODO: get value out of yytext and into yylval.wordValue */
+   return Word;
+}
 
-
+\n
+{
+   fprintf(stderr, "Newline\n");
+}
 %%
 
 /* Error handler. This will get called if none of the rules match. */
@@ -34,4 +53,9 @@ void yyerror (char const *s)
 {
   fprintf (stderr, "Flex Error: %s\n", s); /* s is the text that wasn't matched */
   exit(1);
+}
+
+int main(void)
+{
+
 }

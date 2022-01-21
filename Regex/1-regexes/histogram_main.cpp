@@ -14,7 +14,6 @@
 // rather than O(log n).
 typedef std::unordered_map<std::string,unsigned> histogram_type;
 
-
 // Define the instance of the variable that is declared in the histogram.hpp header
 TokenValue yylval;
 
@@ -74,8 +73,6 @@ int main()
         std::string name=it->first;
         unsigned count=it->second;
         // TODO: Print out `name` and `count` to std::cout
-        
-        
         ++it;
     }
 
