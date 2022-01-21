@@ -8,6 +8,7 @@
 /* Bring in our declarations for token types and
    the yylval variable. */
 #include "histogram.hpp"
+#include <stdio.h>
 
 
 // This is to work around an irritating bug in Flex
@@ -16,28 +17,36 @@ extern "C" int fileno(FILE *stream);
 
 /* End the embedded code section. */
 %}
-Integer     [0-9]
-character   [A-z] /* Check ASCII table for clarity*/
-Num         {-}?{Decimal}+( {.}{Decimal}* )? /* TODO: Check!*/
+Integer     	[0-9]
+character   	[A-Z]|[a-z]
+Decimal     	{Integer}+"."{Integer}*
+Symbol		   [!-~]
 %%
 
-Num | {Num}{/}?{Num}
+(-?{Integer}+|(-?{Integer}+"/"{Integer}+))
 {
-   fprintf(stderr, "Number : %s\n", yytext); 
+   fprintf(stderr, "Integer : %s\n", yytext); 
    /* TODO: get value out of yytext and into yylval.numberValue */
    return Number;
 }
 
-l+
+(-?{Decimal}|(-?{Decimal}"/"{Decimal}))
 {
-   fprintf(stderr, "Word : %s\n", yytext);
+   fprintf(stderr, "Decimal : %s\n", yytext); 
+   /* TODO: get value out of yytext and into yylval.numberValue */
+   return Number;
+}
+
+{character}+
+{
+   fprintf(stderr, "Word (w/o brakets) : %s\n", yytext);
    /* TODO: get value out of yytext and into yylval.wordValue */
    return Word;
 }
 
-L+
+("["({character}|{Integer}|{Symbol})*"]")
 {
-   fprintf(stderr, "Word : %s\n", yytext);
+   fprintf(stderr, "Word (w brakets) : %s\n", yytext);
    /* TODO: get value out of yytext and into yylval.wordValue */
    return Word;
 }

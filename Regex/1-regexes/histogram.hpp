@@ -9,6 +9,7 @@ enum TokenType{
     Word      // = 2, implicit from C++ enumeration
 };
 
+//  Union stores one or the other. It is an object.
 union TokenValue{
     double numberValue;
     std::string *wordValue;
@@ -20,11 +21,11 @@ union TokenValue{
 // By convention it is called yylval, as that is
 // the name that will be automatically generated
 // by Bison (see next lab).
-extern TokenValue yylval;
+extern TokenValue yylval;   //  Has external linkage, is defined in header
 
 // This is the lexer function defined by flex. Each
 // time it is called, a token type value will be
 // returned.
-extern int yylex();
+extern int yylex();     //  Has external linkage. Defined here, used elsewhere
 
 #endif
