@@ -5,10 +5,10 @@
 %}
 Integer     [0-9]
 character   [A-z] /* Check ASCII table for clarity*/
-Num         -?{Integer}+(.{Integer}*)? /* TODO: Check!*/
+Num         {Integer}+(.{Integer}*)? /* TODO: Check!*/
 
 %%
-(Num | ({Num}"/"{Num}))
+(-?Num | ({-?Num}"/"{Num}))
 {
    fprintf(stderr, "Number : %s\n", yytext); 
    /* TODO: get value out of yytext and into yylval.numberValue */
