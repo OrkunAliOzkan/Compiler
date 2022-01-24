@@ -23,32 +23,18 @@ Decimal     	{Integer}+"."{Integer}*
 Symbol		   [!-~]
 %%
 
-(-?{Integer}+|(-?{Integer}+"/"{Integer}+))
+(-?{Integer}+|(-?{Integer}+"/"{Integer}+)) | (-?{Decimal}|(-?{Decimal}"/"{Decimal}))
 {
    fprintf(stderr, "Integer : %s\n", *yytext); 
    yylval.numberValue = yytext;
    return Number;
 }
 
-(-?{Decimal}|(-?{Decimal}"/"{Decimal}))
-{
-   fprintf(stderr, "Decimal : %s\n", *yytext); 
-   yylval.numberValue = yytext;
-   return Number;
-}
-
-{character}+
+{character}+|("["({character}|{Integer}|{Symbol})*"]")
 {
    fprintf(stderr, "Word (w/o brakets) : %s\n", yytext);
    yylval->wordValue = std::stood(*yytext);
 
-   return Word;
-}
-
-("["({character}|{Integer}|{Symbol})*"]")
-{
-   fprintf(stderr, "Word (w brakets) : %s\n", yytext);
-   yylval->wordValue = std::stood(*yytext);
    return Word;
 }
 
