@@ -26,8 +26,8 @@ Symbol		   [!-~]
 (-?{Integer}+|(-?{Integer}+"/"{Integer}+)) | (-?{Decimal}|(-?{Decimal}"/"{Decimal}))
 {
    fprintf(stderr, "Number : %s\n", yytext);
-   yylval.numberValue = yytext;
-   return Integer;
+   yylval.numberValue = std::stod(*yytext);
+   return Number;
 }
 
 {character}+|("["({character}|{Integer}|{Symbol})*"]")
