@@ -25,7 +25,7 @@ Symbol		   [!-~]
 
 (-?{Integer}+|(-?{Integer}+"/"{Integer}+)) | (-?{Decimal}|(-?{Decimal}"/"{Decimal}))
 {
-   fprintf(stderr, "Integer : %s\n", *yytext); 
+   fprintf(stderr, "Number : %s\n", *yytext); 
    yylval.numberValue = yytext;
    return Number;
 }
