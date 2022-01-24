@@ -19,13 +19,13 @@ extern "C" int fileno(FILE *stream);
 %}
 Integer     	[0-9]
 character   	[A-Z]|[a-z]
-Decimal     	{Integer}+"."{Integer}*
+Decimal     	{Integer}+"."{Integer}*?
 Symbol		   [!-~]
 %%
 
 (-?{Integer}+|(-?{Integer}+"/"{Integer}+)) | (-?{Decimal}|(-?{Decimal}"/"{Decimal}))
 {
-   fprintf(stderr, "Number : %s\n", *yytext); 
+   fprintf(stderr, "Number : %s\n", yytext);
    yylval.numberValue = yytext;
    return Number;
 }
@@ -33,7 +33,7 @@ Symbol		   [!-~]
 {character}+|("["({character}|{Integer}|{Symbol})*"]")
 {
    fprintf(stderr, "Word (w/o brakets) : %s\n", yytext);
-   yylval->wordValue = std::stood(*yytext);
+   yylval->wordValue = std::stood(yytext);
 
    return Word;
 }
