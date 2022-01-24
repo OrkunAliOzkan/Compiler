@@ -27,7 +27,7 @@ Symbol		   [!-~]
 {
    fprintf(stderr, "Number : %s\n", yytext);
    yylval.numberValue = yytext;
-   return Number;
+   return Integer;
 }
 
 {character}+|("["({character}|{Integer}|{Symbol})*"]")
