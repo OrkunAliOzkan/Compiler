@@ -33,7 +33,7 @@ Symbol		   [!-~]
 {character}+|("["({character}|{Integer}|{Symbol})*"]")
 {
    fprintf(stderr, "Word (w/o brakets) : %s\n", yytext);
-   yylval->wordValue = std::stood(yytext);
+   yylval->wordValue = std::stood(*yytext);
 
    return Word;
 }
