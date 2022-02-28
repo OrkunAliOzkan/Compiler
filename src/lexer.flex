@@ -43,7 +43,7 @@ SciNotation     {Decimal}{"E"|"e"}{Integer}
 "/"                {return(ARITHMETIC_DASH);   }
 "="                {return(ARITHMETIC_E);   }
 
-"*"                {return(TYPE_*);         }
-"&"                {return(TYPE_&);			}
+"*"                {return(TYPE_STAR);         }
+"&"                {return(TYPE_AMPERSAND);			}
 
 .                   {/*Undesired/Undefined*/}
