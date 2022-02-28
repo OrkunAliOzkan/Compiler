@@ -10,7 +10,6 @@ Decimal         {Integer}+"."?{Integer}*
 character   	[A-Z]|[a-z]
 Hexadecimal     [0-9]|[A-F]|[a-f]
 SciNotation     {Decimal}{"E"|"e"}{Integer}
-
 %%
 
 "int"               {return(DATATYPE_INT);  }
@@ -23,7 +22,6 @@ SciNotation     {Decimal}{"E"|"e"}{Integer}
 "if"                {return(IF);            }
 "else"              {return(ELSE);          }
 "break"             {return(BREAK);         }
-"return"			{return(RETURN)}
 
 "do"                {return(DO);            }
 "while"             {return(WHILE);         }
@@ -34,19 +32,19 @@ SciNotation     {Decimal}{"E"|"e"}{Integer}
 "signed"            {return(SIGNED);        }
 "unsigned"          {return(UNSIGNED);      }
 
-"<"                 {return(CONDITIONAL_<); }
-"<="                {return(CONDITIONAL_<=);}
-">"                 {return(CONDITIONAL_>); }
-">="                {return(CONDITIONAL_>=);}
-"=="                {return(CONDITIONAL_==);}
+"<"                 {return(CONDITIONAL_LT); }
+"<="                {return(CONDITIONAL_LTET);}
+">"                 {return(CONDITIONAL_GT; }
+">="                {return(CONDITIONAL_GTET);}
+"=="                {return(CONDITIONAL_EE);}
 
-"+"                {return(ARITHMETIC_+);   }
-"-"                {return(ARITHMETIC_-);   }
-"/"                {return(ARITHMETIC_/);   }
-"="                {return(ARITHMETIC_=);   }
+"+"                {return(ARITHMETIC_PLUS);}
+"-"                {return(ARITHMETIC_DEDUCT);}
+"/"                {return(ARITHMETIC_DASH);}
+"="                {return(ARITHMETIC_E);	}
 
-"*"                {return(*);              }
-"&"                {return(&);              }
-[ \t\v\n\f]		   {/*Undesired*/			}
+"*"                {return(TYPE_STAR);		}
+"&"                {return(TYPE_AMPERSAND);	}
+[ \t\v\n\f]		   {return(UNDESIRED); }
 
-.                   {/*Undesired/Undefined*/}
+.                   {return(N);	        }
