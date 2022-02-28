@@ -1,7 +1,6 @@
 %option noyywrap
 
 %{
-#include "histogram.hpp"
 #include <stdio.h>
 #include <string.h>
 %}
