@@ -32,18 +32,18 @@ SciNotation     {Decimal}{"E"|"e"}{Integer}
 "signed"            {return(SIGNED);        }
 "unsigned"          {return(UNSIGNED);      }
 
-"<"                 {return(CONDITIONAL_<); }
-"<="                {return(CONDITIONAL_<=);}
-">"                 {return(CONDITIONAL_>); }
-">="                {return(CONDITIONAL_>=);}
-"=="                {return(CONDITIONAL_==);}
+"<"                 {return(CONDITIONAL_LT); }
+"<="                {return(CONDITIONAL_LTET);}
+">"                 {return(CONDITIONAL_GT; }
+">="                {return(CONDITIONAL_GTET);}
+"=="                {return(CONDITIONAL_EE);}
 
-"+"                {return(ARITHMETIC_+);   }
-"-"                {return(ARITHMETIC_-);   }
-"/"                {return(ARITHMETIC_/);   }
-"="                {return(ARITHMETIC_=);   }
+"+"                {return(ARITHMETIC_PLUS);   }
+"-"                {return(ARITHMETIC_DEDUCT);   }
+"/"                {return(ARITHMETIC_DASH);   }
+"="                {return(ARITHMETIC_E);   }
 
-"*"                {return(*);              }
-"&"                {return(&);              }
+"*"                {return(TYPE_*);         }
+"&"                {return(TYPE_&);			}
 
 .                   {/*Undesired/Undefined*/}
