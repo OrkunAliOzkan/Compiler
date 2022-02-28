@@ -13,7 +13,8 @@ SciNotation     (Decimal)("E"|"e")(Integer)
 %%
 
 
-character+          {return(VARIABLE);          }
+character           {return(VARIABLE);          }
+Integer		    {return(NUMBER);		}
 "int"               {return(DATATYPE_INT);  	}
 "char"              {return(DATATYPE_CHAR); 	}
 "float"             {return(DATATYPE_FLOAT);	}
@@ -40,17 +41,20 @@ character+          {return(VARIABLE);          }
 ">="                {return(CONDITIONAL_GTET);	}
 "=="                {return(CONDITIONAL_EE);	}
 
-"+"                {return(ARITHMETIC_PLUS);	}
-"-"                {return(ARITHMETIC_DEDUCT);	}
-"/"                {return(ARITHMETIC_DASH);	}
-"="                {return(ARITHMETIC_E);		}
+"("					{return(OPEN_BRACK);		}
+")"					{return(CLOSE_BRACK);		}
 
-"*"                {return(TYPE_STAR);			}
-"&"                {return(TYPE_AMPERSAND);		}
-"return"           {return(RETURN);             }
-";"                {return(SEMICOLON);          }
-[ \t\v\n\f]		   {}
+"+"                	{return(ARITHMETIC_PLUS);	}
+"-"                	{return(ARITHMETIC_DEDUCT);	}
+"/"                	{return(ARITHMETIC_DASH);	}
+"="                	{return(ARITHMETIC_E);		}
 
-.                  {}
+"*"                	{return(TYPE_STAR);			}
+"&"                	{return(TYPE_AMPERSAND);		}
+"return"           	{return(RETURN);             }
+";"                	{return(SEMICOLON);          }
+[ \t\v\n\f]		   	{}
+
+.                  	{}
 
 %%%

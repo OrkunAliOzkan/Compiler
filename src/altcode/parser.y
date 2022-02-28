@@ -9,10 +9,6 @@
 %type<string> stmt expr
 %type<number> line
 
-
-
-
-
 %{
   #include <stdio.h>
 %}

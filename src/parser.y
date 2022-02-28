@@ -1,4 +1,4 @@
-%union {char *string; char variable; double Decimal;}
+%union {char *string; char variable; int number;}
 
 %token DATATYPE_INT DATATYPE_CHAR DATATYPE_FLOAT DATATYPE_LONG DATATYPE_SHORT DATATYPE_VOID
 %token DO WHILE FOR CONTINUE GOTO
@@ -6,12 +6,13 @@
 
 %token CONDITIONAL_LT CONDITIONAL_LTET CONDITIONAL_GT CONDITIONAL_GTET CONDITIONAL_EE
 %token ARITHMETIC_PLUS ARITHMETIC_DEDUCT ARITHMETIC_DASH ARITHMETIC_E
+%token OPEN_BRACK CLOSE_BRACK
 %token TYPE_STAR TYPE_AMPERSAND SEMICOLON
 
 %token IF ELSE RETURN BREAK 
 
 %token<variable> VARIABLE
-%token<Decimal> NUMBER
+%token<number> NUMBER
 
 %start line
 
@@ -36,11 +37,11 @@ expr :
 ;
 
 stmt :
-  IF '(' expr ')' stmt {
+  IF OPEN_BRACK expr CLOSE_BRACK stmt {
                  char *buffer = malloc(100);
                  sprintf(buffer, "if (%s) { %s }", $3, $5);
 		 $$ = buffer; }
-| IF '(' expr ')' stmt ELSE stmt {
+| IF OPEN_BRACK expr CLOSE_BRACK stmt ELSE stmt {
                  char *buffer = malloc(100);
                  sprintf(buffer, "if (%s) { %s } else { %s }", $3, $5, $7);
 		 $$ = buffer; }

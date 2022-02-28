@@ -66,75 +66,19 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     DATATYPE_INT = 258,
-     DATATYPE_CHAR = 259,
-     DATATYPE_FLOAT = 260,
-     DATATYPE_LONG = 261,
-     DATATYPE_SHORT = 262,
-     DATATYPE_VOID = 263,
-     DO = 264,
-     WHILE = 265,
-     FOR = 266,
-     CONTINUE = 267,
-     GOTO = 268,
-     SIGNED = 269,
-     UNSIGNED = 270,
-     CONDITIONAL_LT = 271,
-     CONDITIONAL_LTET = 272,
-     CONDITIONAL_GT = 273,
-     CONDITIONAL_GTET = 274,
-     CONDITIONAL_EE = 275,
-     ARITHMETIC_PLUS = 276,
-     ARITHMETIC_DEDUCT = 277,
-     ARITHMETIC_DASH = 278,
-     ARITHMETIC_E = 279,
-     OPEN_BRACK = 280,
-     CLOSE_BRACK = 281,
-     TYPE_STAR = 282,
-     TYPE_AMPERSAND = 283,
-     SEMICOLON = 284,
-     IF = 285,
-     ELSE = 286,
-     RETURN = 287,
-     BREAK = 288,
-     VARIABLE = 289,
-     NUMBER = 290
+     IF = 258,
+     RETURN = 259,
+     ELSE = 260,
+     IDENT = 261,
+     NUMBER = 262
    };
 #endif
 /* Tokens.  */
-#define DATATYPE_INT 258
-#define DATATYPE_CHAR 259
-#define DATATYPE_FLOAT 260
-#define DATATYPE_LONG 261
-#define DATATYPE_SHORT 262
-#define DATATYPE_VOID 263
-#define DO 264
-#define WHILE 265
-#define FOR 266
-#define CONTINUE 267
-#define GOTO 268
-#define SIGNED 269
-#define UNSIGNED 270
-#define CONDITIONAL_LT 271
-#define CONDITIONAL_LTET 272
-#define CONDITIONAL_GT 273
-#define CONDITIONAL_GTET 274
-#define CONDITIONAL_EE 275
-#define ARITHMETIC_PLUS 276
-#define ARITHMETIC_DEDUCT 277
-#define ARITHMETIC_DASH 278
-#define ARITHMETIC_E 279
-#define OPEN_BRACK 280
-#define CLOSE_BRACK 281
-#define TYPE_STAR 282
-#define TYPE_AMPERSAND 283
-#define SEMICOLON 284
-#define IF 285
-#define ELSE 286
-#define RETURN 287
-#define BREAK 288
-#define VARIABLE 289
-#define NUMBER 290
+#define IF 258
+#define RETURN 259
+#define ELSE 260
+#define IDENT 261
+#define NUMBER 262
 
 
 
@@ -163,9 +107,9 @@
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
 #line 1 "parser.y"
-{char *string; char variable; int number;}
+{char *string; char ident; int number;}
 /* Line 193 of yacc.c.  */
-#line 169 "y.tab.c"
+#line 113 "y.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -175,13 +119,13 @@ typedef union YYSTYPE
 
 
 /* Copy the second part of user declarations.  */
-#line 22 "parser.y"
+#line 16 "parser.y"
 
   #include <stdio.h>
 
 
 /* Line 216 of yacc.c.  */
-#line 185 "y.tab.c"
+#line 129 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -396,10 +340,10 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  7
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   13
+#define YYLAST   14
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  37
+#define YYNTOKENS  13
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  4
 /* YYNRULES -- Number of rules.  */
@@ -409,7 +353,7 @@ union yyalloc
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   290
+#define YYMAXUTOK   262
 
 #define YYTRANSLATE(YYX)						\
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
@@ -418,12 +362,12 @@ union yyalloc
 static const yytype_uint8 yytranslate[] =
 {
        0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-      36,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       8,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+      10,    11,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,    12,
+       2,     2,     9,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -443,10 +387,7 @@ static const yytype_uint8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
-      15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
-      25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
-      35
+       5,     6,     7
 };
 
 #if YYDEBUG
@@ -460,15 +401,15 @@ static const yytype_uint8 yyprhs[] =
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
 static const yytype_int8 yyrhs[] =
 {
-      38,     0,    -1,    40,    36,    -1,    34,    18,    35,    -1,
-      30,    25,    39,    26,    40,    -1,    30,    25,    39,    26,
-      40,    31,    40,    -1,    32,    35,    29,    -1
+      14,     0,    -1,    16,     8,    -1,     6,     9,     7,    -1,
+       3,    10,    15,    11,    16,    -1,     3,    10,    15,    11,
+      16,     5,    16,    -1,     4,     7,    12,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    29,    29,    33,    40,    44,    48
+       0,    23,    23,    27,    34,    38,    42
 };
 #endif
 
@@ -477,15 +418,9 @@ static const yytype_uint8 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "DATATYPE_INT", "DATATYPE_CHAR",
-  "DATATYPE_FLOAT", "DATATYPE_LONG", "DATATYPE_SHORT", "DATATYPE_VOID",
-  "DO", "WHILE", "FOR", "CONTINUE", "GOTO", "SIGNED", "UNSIGNED",
-  "CONDITIONAL_LT", "CONDITIONAL_LTET", "CONDITIONAL_GT",
-  "CONDITIONAL_GTET", "CONDITIONAL_EE", "ARITHMETIC_PLUS",
-  "ARITHMETIC_DEDUCT", "ARITHMETIC_DASH", "ARITHMETIC_E", "OPEN_BRACK",
-  "CLOSE_BRACK", "TYPE_STAR", "TYPE_AMPERSAND", "SEMICOLON", "IF", "ELSE",
-  "RETURN", "BREAK", "VARIABLE", "NUMBER", "'\\n'", "$accept", "line",
-  "expr", "stmt", 0
+  "$end", "error", "$undefined", "IF", "RETURN", "ELSE", "IDENT",
+  "NUMBER", "'\\n'", "'>'", "'('", "')'", "';'", "$accept", "line", "expr",
+  "stmt", 0
 };
 #endif
 
@@ -494,17 +429,15 @@ static const char *const yytname[] =
    token YYLEX-NUM.  */
 static const yytype_uint16 yytoknum[] =
 {
-       0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
-     265,   266,   267,   268,   269,   270,   271,   272,   273,   274,
-     275,   276,   277,   278,   279,   280,   281,   282,   283,   284,
-     285,   286,   287,   288,   289,   290,    10
+       0,   256,   257,   258,   259,   260,   261,   262,    10,    62,
+      40,    41,    59
 };
 # endif
 
 /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,    37,    38,    39,    40,    40,    40
+       0,    13,    14,    15,    16,    16,    16
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
@@ -530,17 +463,17 @@ static const yytype_int8 yydefgoto[] =
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
-#define YYPACT_NINF -31
+#define YYPACT_NINF -14
 static const yytype_int8 yypact[] =
 {
-     -28,   -24,   -30,     6,   -29,   -26,   -20,   -31,   -31,    -8,
-     -15,   -31,   -23,   -28,   -31,   -18,   -28,   -31
+      -2,    -6,    -1,     5,     0,     1,    -3,   -14,   -14,     2,
+       3,   -14,     6,    -2,   -14,     7,    -2,   -14
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -31,   -31,   -31,   -13
+     -14,   -14,   -14,   -13
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -550,22 +483,22 @@ static const yytype_int8 yypgoto[] =
 #define YYTABLE_NINF -1
 static const yytype_uint8 yytable[] =
 {
-      15,     5,     1,    17,     2,     6,     7,     8,     9,    11,
-      12,    13,    14,    16
+      15,     1,     2,    17,     5,     7,     6,     9,     8,    11,
+       0,    12,    16,    14,    13
 };
 
-static const yytype_uint8 yycheck[] =
+static const yytype_int8 yycheck[] =
 {
-      13,    25,    30,    16,    32,    35,     0,    36,    34,    29,
-      18,    26,    35,    31
+      13,     3,     4,    16,    10,     0,     7,     6,     8,    12,
+      -1,     9,     5,     7,    11
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
    symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    30,    32,    38,    40,    25,    35,     0,    36,    34,
-      39,    29,    18,    26,    35,    40,    31,    40
+       0,     3,     4,    14,    16,    10,     7,     0,     8,     6,
+      15,    12,     9,    11,     7,    16,     5,    16
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -1380,20 +1313,20 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 29 "parser.y"
+#line 23 "parser.y"
     { printf ("\nParsed as:\n%s\n\n", (yyvsp[(1) - (2)].string)); return 0; }
     break;
 
   case 3:
-#line 33 "parser.y"
+#line 27 "parser.y"
     {
                  char *buffer = malloc(100);
-                 sprintf(buffer, "%c > %d", (yyvsp[(1) - (3)].variable), (yyvsp[(3) - (3)].number));
+                 sprintf(buffer, "%c > %d", (yyvsp[(1) - (3)].ident), (yyvsp[(3) - (3)].number));
 		 (yyval.string) = buffer; }
     break;
 
   case 4:
-#line 40 "parser.y"
+#line 34 "parser.y"
     {
                  char *buffer = malloc(100);
                  sprintf(buffer, "if (%s) { %s }", (yyvsp[(3) - (5)].string), (yyvsp[(5) - (5)].string));
@@ -1401,7 +1334,7 @@ yyreduce:
     break;
 
   case 5:
-#line 44 "parser.y"
+#line 38 "parser.y"
     {
                  char *buffer = malloc(100);
                  sprintf(buffer, "if (%s) { %s } else { %s }", (yyvsp[(3) - (7)].string), (yyvsp[(5) - (7)].string), (yyvsp[(7) - (7)].string));
@@ -1409,7 +1342,7 @@ yyreduce:
     break;
 
   case 6:
-#line 48 "parser.y"
+#line 42 "parser.y"
     {
                  char *buffer = malloc(100);
                  sprintf(buffer, "return %d;", (yyvsp[(2) - (3)].number));
@@ -1418,7 +1351,7 @@ yyreduce:
 
 
 /* Line 1267 of yacc.c.  */
-#line 1422 "y.tab.c"
+#line 1355 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1632,7 +1565,7 @@ yyreturn:
 }
 
 
-#line 54 "parser.y"
+#line 48 "parser.y"
 
 
 #include "lex.yy.c"
@@ -1645,3 +1578,4 @@ int yyerror (char *s) {
   fprintf (stderr, "%s\n", s);
   exit(1);
 }
+
