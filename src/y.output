@@ -1,0 +1,188 @@
+State 15 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: line $end
+
+    1 line: stmt '\n'
+
+    2 expr: IDENT '>' NUMBER
+
+    3 stmt: IF '(' expr ')' stmt
+    4     | IF '(' expr ')' stmt ELSE stmt
+    5     | RETURN NUMBER ';'
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'\n' (10) 1
+'(' (40) 3 4
+')' (41) 3 4
+';' (59) 5
+'>' (62) 2
+error (256)
+IF (258) 3 4
+RETURN (259) 5
+ELSE (260) 4
+IDENT (261) 2
+NUMBER (262) 2 5
+
+
+Nonterminals, with rules where they appear
+
+$accept (13)
+    on left: 0
+line (14)
+    on left: 1, on right: 0
+expr (15)
+    on left: 2, on right: 3 4
+stmt (16)
+    on left: 3 4 5, on right: 1 3 4
+
+
+state 0
+
+    0 $accept: . line $end
+
+    IF      shift, and go to state 1
+    RETURN  shift, and go to state 2
+
+    line  go to state 3
+    stmt  go to state 4
+
+
+state 1
+
+    3 stmt: IF . '(' expr ')' stmt
+    4     | IF . '(' expr ')' stmt ELSE stmt
+
+    '('  shift, and go to state 5
+
+
+state 2
+
+    5 stmt: RETURN . NUMBER ';'
+
+    NUMBER  shift, and go to state 6
+
+
+state 3
+
+    0 $accept: line . $end
+
+    $end  shift, and go to state 7
+
+
+state 4
+
+    1 line: stmt . '\n'
+
+    '\n'  shift, and go to state 8
+
+
+state 5
+
+    3 stmt: IF '(' . expr ')' stmt
+    4     | IF '(' . expr ')' stmt ELSE stmt
+
+    IDENT  shift, and go to state 9
+
+    expr  go to state 10
+
+
+state 6
+
+    5 stmt: RETURN NUMBER . ';'
+
+    ';'  shift, and go to state 11
+
+
+state 7
+
+    0 $accept: line $end .
+
+    $default  accept
+
+
+state 8
+
+    1 line: stmt '\n' .
+
+    $default  reduce using rule 1 (line)
+
+
+state 9
+
+    2 expr: IDENT . '>' NUMBER
+
+    '>'  shift, and go to state 12
+
+
+state 10
+
+    3 stmt: IF '(' expr . ')' stmt
+    4     | IF '(' expr . ')' stmt ELSE stmt
+
+    ')'  shift, and go to state 13
+
+
+state 11
+
+    5 stmt: RETURN NUMBER ';' .
+
+    $default  reduce using rule 5 (stmt)
+
+
+state 12
+
+    2 expr: IDENT '>' . NUMBER
+
+    NUMBER  shift, and go to state 14
+
+
+state 13
+
+    3 stmt: IF '(' expr ')' . stmt
+    4     | IF '(' expr ')' . stmt ELSE stmt
+
+    IF      shift, and go to state 1
+    RETURN  shift, and go to state 2
+
+    stmt  go to state 15
+
+
+state 14
+
+    2 expr: IDENT '>' NUMBER .
+
+    $default  reduce using rule 2 (expr)
+
+
+state 15
+
+    3 stmt: IF '(' expr ')' stmt .
+    4     | IF '(' expr ')' stmt . ELSE stmt
+
+    ELSE  shift, and go to state 16
+
+    ELSE      [reduce using rule 3 (stmt)]
+    $default  reduce using rule 3 (stmt)
+
+
+state 16
+
+    4 stmt: IF '(' expr ')' stmt ELSE . stmt
+
+    IF      shift, and go to state 1
+    RETURN  shift, and go to state 2
+
+    stmt  go to state 17
+
+
+state 17
+
+    4 stmt: IF '(' expr ')' stmt ELSE stmt .
+
+    $default  reduce using rule 4 (stmt)

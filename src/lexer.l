@@ -10,6 +10,7 @@ Decimal         {Integer}+"."?{Integer}*
 character   	[A-Z]|[a-z]
 Hexadecimal     [0-9]|[A-F]|[a-f]
 SciNotation     {Decimal}{"E"|"e"}{Integer}
+
 %%
 
 "int"               {return(DATATYPE_INT);  }
@@ -45,9 +46,5 @@ SciNotation     {Decimal}{"E"|"e"}{Integer}
 
 "*"                {return(*);              }
 "&"                {return(&);              }
-
-
-
-
 
 .                   {/*Undesired/Undefined*/}

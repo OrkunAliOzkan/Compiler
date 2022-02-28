@@ -1,6 +1,6 @@
 all:
-	lex clexer.lex
-	yacc -v cparser1.y
+	lex lexer.l
+	yacc -v parser.y
 	gcc -Wno-error=all y.tab.c
 
 clean:
