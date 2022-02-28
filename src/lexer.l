@@ -6,10 +6,10 @@
 %}
 
 Integer     	[0-9]
-Decimal         {Integer}+"."?{Integer}*
+Decimal         (Integer)+"."?(Integer)*
 character   	[A-Z]|[a-z]
 Hexadecimal     [0-9]|[A-F]|[a-f]
-SciNotation     {Decimal}{"E"|"e"}{Integer}
+SciNotation     (Decimal)("E"|"e")(Integer)
 %%
 
 "int"               {return(DATATYPE_INT);  	}
