@@ -1,7 +1,7 @@
 %union {char *string; char ident; int number;}
 
 %token DATATYPE_INT DATATYPE_CHAR DATATYPE_FLOAT DATATYPE_LONG DATATYPE_SHORT DATATYPE_VOID
-%token IF RETURN ELSE
+%token IF ELSE RETURN BREAK
 %token<ident> IDENT
 %token<number> NUMBER
 

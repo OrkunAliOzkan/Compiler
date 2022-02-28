@@ -23,6 +23,7 @@ SciNotation     {Decimal}{"E"|"e"}{Integer}
 "if"                {return(IF);            }
 "else"              {return(ELSE);          }
 "break"             {return(BREAK);         }
+"return"			{return(RETURN)}
 
 "do"                {return(DO);            }
 "while"             {return(WHILE);         }
