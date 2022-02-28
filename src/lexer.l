@@ -6,10 +6,10 @@
 %}
 
 Integer     	[0-9]
-Decimal         {Integer}+"."?{Integer}*
+Decimal         (Integer)+"."?(Integer)*
 character   	[A-Z]|[a-z]
 Hexadecimal     [0-9]|[A-F]|[a-f]
-SciNotation     {Decimal}{"E"|"e"}{Integer}
+SciNotation     (Decimal)("E"|"e")(Integer)
 %%
 
 "int"               {return(DATATYPE_INT);  }
@@ -34,7 +34,7 @@ SciNotation     {Decimal}{"E"|"e"}{Integer}
 
 "<"                 {return(CONDITIONAL_LT); }
 "<="                {return(CONDITIONAL_LTET);}
-">"                 {return(CONDITIONAL_GT; }
+">"                 {return(CONDITIONAL_GT); }
 ">="                {return(CONDITIONAL_GTET);}
 "=="                {return(CONDITIONAL_EE);}
 
@@ -45,6 +45,7 @@ SciNotation     {Decimal}{"E"|"e"}{Integer}
 
 "*"                {return(TYPE_STAR);		}
 "&"                {return(TYPE_AMPERSAND);	}
-[ \t\v\n\f]		   {return(UNDESIRED); }
 
-.                   {return(N);	        }
+.                  {return(0);	        }
+
+%%
