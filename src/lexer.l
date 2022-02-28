@@ -45,9 +45,6 @@ SciNotation     {Decimal}{"E"|"e"}{Integer}
 
 "*"                {return(*);              }
 "&"                {return(&);              }
+[ \t\v\n\f]		   {/*Undesired*/			}
 
-
-
-
-
-.                   {/*Undesired/Undefined*/}
+.                   {/*Undefined*/			}
