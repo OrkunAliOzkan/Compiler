@@ -12,6 +12,8 @@ Hexadecimal     [0-9]|[A-F]|[a-f]
 SciNotation     (Decimal)("E"|"e")(Integer)
 %%
 
+
+character+          {return(VARIABLE);          }
 "int"               {return(DATATYPE_INT);  	}
 "char"              {return(DATATYPE_CHAR); 	}
 "float"             {return(DATATYPE_FLOAT);	}
@@ -34,7 +36,7 @@ SciNotation     (Decimal)("E"|"e")(Integer)
 
 "<"                 {return(CONDITIONAL_LT); 	}
 "<="                {return(CONDITIONAL_LTET);	}
-">"                 {return(CONDITIONAL_GT; 	}
+">"                 {return(CONDITIONAL_GT); 	}
 ">="                {return(CONDITIONAL_GTET);	}
 "=="                {return(CONDITIONAL_EE);	}
 
@@ -45,6 +47,8 @@ SciNotation     (Decimal)("E"|"e")(Integer)
 
 "*"                {return(TYPE_STAR);			}
 "&"                {return(TYPE_AMPERSAND);		}
+"return"           {return(RETURN);             }
+";"                {return(SEMICOLON);          }
 [ \t\v\n\f]		   {}
 
 .                  {}
