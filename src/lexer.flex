@@ -38,12 +38,12 @@ SciNotation     {Decimal}{"E"|"e"}{Integer}
 ">="                {return(CONDITIONAL_GTET);}
 "=="                {return(CONDITIONAL_EE);}
 
-"+"                {return(ARITHMETIC_PLUS);   }
-"-"                {return(ARITHMETIC_DEDUCT);   }
-"/"                {return(ARITHMETIC_DASH);   }
-"="                {return(ARITHMETIC_E);   }
+"+"                {return(ARITHMETIC_PLUS);}
+"-"                {return(ARITHMETIC_DEDUCT);}
+"/"                {return(ARITHMETIC_DASH);}
+"="                {return(ARITHMETIC_E);	}
 
-"*"                {return(TYPE_STAR);         }
-"&"                {return(TYPE_AMPERSAND);			}
+"*"                {return(TYPE_STAR);		}
+"&"                {return(TYPE_AMPERSAND);	}
 
 .                   {/*Undesired/Undefined*/}
