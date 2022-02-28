@@ -12,38 +12,38 @@ Hexadecimal     [0-9]|[A-F]|[a-f]
 SciNotation     {Decimal}{"E"|"e"}{Integer}
 %%
 
-"int"               {return(DATATYPE_INT);  }
-"char"              {return(DATATYPE_CHAR); }
-"float"             {return(DATATYPE_FLOAT);}
-"long"              {return(DATATYPE_LONG); }
-"short"             {return(DATATYPE_SHORT);}
-"void"              {return(DATATYPE_VOID); }
+"int"               {return(DATATYPE_INT);  	}
+"char"              {return(DATATYPE_CHAR); 	}
+"float"             {return(DATATYPE_FLOAT);	}
+"long"              {return(DATATYPE_LONG); 	}
+"short"             {return(DATATYPE_SHORT);	}
+"void"              {return(DATATYPE_VOID); 	}
 
-"if"                {return(IF);            }
-"else"              {return(ELSE);          }
-"break"             {return(BREAK);         }
+"if"                {return(IF);            	}
+"else"              {return(ELSE);          	}
+"break"             {return(BREAK);         	}
 
-"do"                {return(DO);            }
-"while"             {return(WHILE);         }
-"for"               {return(FOR);           }
-"continue"          {return(CONTINUE);      }
-"goto"              {return(GOTO);          }
+"do"                {return(DO);            	}
+"while"             {return(WHILE);         	}
+"for"               {return(FOR);           	}
+"continue"          {return(CONTINUE);      	}
+"goto"              {return(GOTO);          	}
 
-"signed"            {return(SIGNED);        }
-"unsigned"          {return(UNSIGNED);      }
+"signed"            {return(SIGNED);        	}
+"unsigned"          {return(UNSIGNED);      	}
 
-"<"                 {return(CONDITIONAL_LT); }
-"<="                {return(CONDITIONAL_LTET);}
-">"                 {return(CONDITIONAL_GT; }
-">="                {return(CONDITIONAL_GTET);}
-"=="                {return(CONDITIONAL_EE);}
+"<"                 {return(CONDITIONAL_LT); 	}
+"<="                {return(CONDITIONAL_LTET);	}
+">"                 {return(CONDITIONAL_GT; 	}
+">="                {return(CONDITIONAL_GTET);	}
+"=="                {return(CONDITIONAL_EE);	}
 
-"+"                {return(ARITHMETIC_PLUS);}
-"-"                {return(ARITHMETIC_DEDUCT);}
-"/"                {return(ARITHMETIC_DASH);}
-"="                {return(ARITHMETIC_E);	}
+"+"                {return(ARITHMETIC_PLUS);	}
+"-"                {return(ARITHMETIC_DEDUCT);	}
+"/"                {return(ARITHMETIC_DASH);	}
+"="                {return(ARITHMETIC_E);		}
 
-"*"                {return(TYPE_STAR);		}
-"&"                {return(TYPE_AMPERSAND);	}
+"*"                {return(TYPE_STAR);			}
+"&"                {return(TYPE_AMPERSAND);		}
 
-.                   {/*Undesired/Undefined*/}
+.                   {/*Undesired/Undefined*/	}
