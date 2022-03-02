@@ -10,8 +10,8 @@ Decimal         (Integer)+"."?(Integer)*
 character   	[A-Z]|[a-z]
 Hexadecimal     [0-9]|[A-F]|[a-f]
 SciNotation     (Decimal)("E"|"e")(Integer)
-%%
 
+%%
 
 character           {return(VARIABLE);          }
 Integer		    {return(NUMBER);		}
