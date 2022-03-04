@@ -12,19 +12,22 @@ Decimal         (Integer)+"."?(Integer)*
 character   	[A-Z]|[a-z]
 Hexadecimal     [0-9]|[A-F]|[a-f]
 SciNotation     (Decimal)("E"|"e")(Integer)
+AcceptedNum     {Decimal}|{Hexadecimal}|{Integer}{SciNotation}
 FS			(f|F|l|L)
 IS			(u|U|l|L)*
 
 %%
 
-character+          { yylval.string=new std::string(yytext);  return T_VARIABLE; }
-Decimal		          { yylval.number=strtod(yytext, 0);        return T_NUMBER; }
-"int"               { return(DATATYPE_INT);  	}
-"char"              { return(DATATYPE_CHAR); 	}
-"float"             { return(DATATYPE_FLOAT);	}
-"long"              { return(DATATYPE_LONG); 	}
-"short"             { return(DATATYPE_SHORT);	}
-"void"              { return(DATATYPE_VOID); 	}
+AcceptedNum         { yylval.number=strtod(yytext, 0); return T_NUMBER;     }
+{AcceptedNum}{FS}   { /*TODO: How to appropriately convert if it has FS or IS
+                      yylval.number=strtod(yytext, 0);*/ return T_NUMBER_FS;  }
+{AcceptedNum}{IS}   { return T_NUMBER_IS;  }
+"int"               { return(DATATYPE_INT);  	    }
+"char"              { return(DATATYPE_CHAR); 	    }
+"float"             { return(DATATYPE_FLOAT);	    }
+"long"              { return(DATATYPE_LONG); 	    }
+"short"             { return(DATATYPE_SHORT);	    }
+"void"              { return(DATATYPE_VOID); 	    }
 "auto"			        { return(DATATYPE_AUTO);      }
 "typedef"		        { return(DATATYPE_TYPEDEF);   }
 "struct"		        { return(DATATYPE_STRUCT);    }
@@ -66,15 +69,15 @@ Decimal		          { yylval.number=strtod(yytext, 0);        return T_NUMBER; }
 "/*"			          { return(L_COMMENT_ML)        }
 "*/"			          { return(R_COMMENT_ML)        }
 
-"default"		        { return(DEFAULT);   }
-"extern"		        { return(EXTERN);    }
-"sizeof"		        { return(SIZEOF);    }
-"static"		        { return(STATIC);    }
-"union"			        { return(UNION);     }
-"volatile"		      { return(VOLATILE);  }
+"default"		        { return(DEFAULT);            }
+"extern"		        { return(EXTERN);             }
+"sizeof"		        { return(SIZEOF);             }
+"static"		        { return(STATIC);             }
+"union"			        { return(UNION);              }
+"volatile"		      { return(VOLATILE);           }
 [ \t\v\n\f]		   	  {}
 {character}({character}|{Integer})* {return(VAR_NAME);}
-//{}|{}|{}|{}|{}|{}{return(CONSTANT);  }
+
 .                   { fprintf(stderr, "Invalid token\n"); exit(1); }
 
 %%
