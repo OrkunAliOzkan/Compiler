@@ -63,8 +63,8 @@ Decimal		          { yylval.number=strtod(yytext, 0);        return T_NUMBER; }
 "&"                	{ return(TYPE_AMPERSAND);		  }
 "return"           	{ return(RETURN);             }
 ";"                	{ return(SEMICOLON);          }
-"/*"			          { comment(); }
-
+"/*"			          { return(L_COMMENT_ML)        }
+"*/"			          { return(R_COMMENT_ML)        }
 
 "default"		        { return(DEFAULT);   }
 "extern"		        { return(EXTERN);    }
