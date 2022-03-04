@@ -96,7 +96,7 @@ CONDITION : IF T_LBRACKET EXPR T_RBRACKET EVALUATE {}
           | IF T_LBRACKET EXPR T_RBRACKET EVALUATE ELSE EVALUATE {}
           ;
 
-// Required??
+// Required?? No, these are in the math library
 FUNCTION_NAME : T_LOG  { $$ = new std::string("log"); }
               | T_EXP  { $$ = new std::string("exp"); }  
               | T_SQRT { $$ = new std::string("sqrt"); }
