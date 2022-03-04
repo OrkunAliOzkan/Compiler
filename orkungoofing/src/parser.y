@@ -132,6 +132,7 @@ const Expression *parseAST()
   yyparse();
   return g_root;
 }
+/*
 //////////////////////////////////////////////////////////////////////////////////////
 
 %token IDENTIFIER CONSTANT STRING_LITERAL SIZEOF
@@ -148,7 +149,6 @@ const Expression *parseAST()
 
 %start translation_unit
 %%
-
 primary_expression
 	: IDENTIFIER
 	| CONSTANT
@@ -561,4 +561,4 @@ char *s;
 {
 	fflush(stdout);
 	printf("\n%*s\n%*s\n", column, "^", column, s);
-}
+}*/
