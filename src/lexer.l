@@ -14,7 +14,7 @@ SciNotation     (Decimal)("E"|"e")(Integer)
 %%
 
 character           {return(VARIABLE);          }
-Integer		    {return(NUMBER);		}
+Integer		        {return(NUMBER);		    }
 "int"               {return(DATATYPE_INT);  	}
 "char"              {return(DATATYPE_CHAR); 	}
 "float"             {return(DATATYPE_FLOAT);	}
@@ -50,9 +50,9 @@ Integer		    {return(NUMBER);		}
 "="                	{return(ARITHMETIC_E);		}
 
 "*"                	{return(TYPE_STAR);			}
-"&"                	{return(TYPE_AMPERSAND);		}
-"return"           	{return(RETURN);             }
-";"                	{return(SEMICOLON);          }
+"&"                	{return(TYPE_AMPERSAND);	}
+"return"           	{return(RETURN);            }
+";"                	{return(SEMICOLON);         }
 [ \t\v\n\f]		   	{}
 
 .                  	{}
