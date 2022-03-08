@@ -11,6 +11,9 @@ class Expression;
 
 typedef const Expression *ExpressionPtr;
 
+struct Tree;
+typedef std::shared_ptr<Tree> TreePtr;
+
 class Expression
 {
 public:
