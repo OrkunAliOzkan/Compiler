@@ -28,6 +28,7 @@
 
 /*Conditionals*/
 %token IF ELSE BREAK SWITCH CASE
+
 /*Loops*/
 %token DO WHILE FOR CONTINUE
 

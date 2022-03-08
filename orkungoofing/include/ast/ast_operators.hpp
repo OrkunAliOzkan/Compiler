@@ -4,156 +4,46 @@
 #include <string>
 #include <iostream>
 #include <cmath>
+#include <memory>
+#include <initializer_list>
+#include <vector>
+#include <map>
 
-class Operator
-    : public Expression
+struct Operator;
+typedef std::shared_ptr<Operator> OperatorPtr;
+
+struct Operator
 {
-private:
-    ExpressionPtr left;
-    ExpressionPtr right;
-protected:
-    Operator(ExpressionPtr _left, ExpressionPtr _right)
-        : left(_left)
+    Tree(std::string _type, OperatorPtr _left, OperatorPtr _right)
+        : type(_type)
+        , left(_left)
         , right(_right)
     {}
-public:
+
+    std::string type;
+    OperatorPtr left;
+    OperatorPtr right;
+
     virtual ~Operator()
     {
         delete left;
         delete right;
     }
-
-    virtual const char *getOpcode() const =0;
-
-    ExpressionPtr getLeft() const
-    { return left; }
-
-    ExpressionPtr getRight() const
-    { return right; }
-
-    virtual void print(std::ostream &dst) const override
-    {
-        dst<<"( ";
-        left->print(dst);
-        dst<<" ";
-        dst<<getOpcode();
-        dst<<" ";
-        right->print(dst);
-        dst<<" )";
-    }
 };
+inline OperatorPtr Add(OperatorPtr left, OperatorPtr right)
+{ return std::make_shared<Tree>("Add", left, right); }
 
-class AddOperator
-    : public Operator
-{
-protected:
-    virtual const char *getOpcode() const override
-    { return "+"; }
-public:
-    AddOperator(ExpressionPtr _left, ExpressionPtr _right)
-        : Operator(_left, _right)
-    {}
-    
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override 
-    {
-        // TODO-C : Run bin/eval_expr with something like 5+a, where a=10, to make sure you understand how this works
-        double vl=getLeft()->evaluate(bindings);
-        double vr=getRight()->evaluate(bindings);
-        return vl + vr;
-    }
-};
+inline OperatorPtr Sub(OperatorPtr left, OperatorPtr right)
+{ return std::make_shared<Tree>("Sub", left, right); }
 
-class SubOperator
-    : public Operator
-{
-protected:
-    virtual const char *getOpcode() const override
-    { return "-"; }
-public:
-    SubOperator(ExpressionPtr _left, ExpressionPtr _right)
-        : Operator(_left, _right)
-    {}
-    
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override 
-    {
-        // TODO-D : Implement this, based on AddOperator::evaluate
-        //throw std::runtime_error("MulOperator::evaluate is not implemented.");
+inline OperatorPtr LessThan(OperatorPtr left, OperatorPtr right)
+{ return std::make_shared<Tree>("LessThan", left, right); }
 
-        double vl=getLeft()->evaluate(bindings);
-        double vr=getRight()->evaluate(bindings);
-        return vl - vr;
-    }
-};
+inline OperatorPtr Mul(OperatorPtr left, OperatorPtr right)
+{ return std::make_shared<Tree>("Multiplication", left, right); }
 
-
-class MulOperator
-    : public Operator
-{
-protected:
-    virtual const char *getOpcode() const override
-    { return "*"; }
-public:
-    MulOperator(ExpressionPtr _left, ExpressionPtr _right)
-        : Operator(_left, _right)
-    {}
-
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
-    {
-        //throw std::runtime_error("MulOperator::evaluate is not implemented.");
-        double vl=getLeft()->evaluate(bindings);
-        double vr=getRight()->evaluate(bindings);
-        return vl * vr;
-    }
-};
-
-class DivOperator
-    : public Operator
-{
-protected:
-    virtual const char *getOpcode() const override
-    { return "/"; }
-public:
-    DivOperator(ExpressionPtr _left, ExpressionPtr _right)
-        : Operator(_left, _right)
-    {}
-
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
-    {
-        //throw std::runtime_error("DivOperator::evaluate is not implemented.");
-        double vl=getLeft()->evaluate(bindings);
-        double vr=getRight()->evaluate(bindings);
-        return vl / vr;
-    }
-};
-
-class ExpOperator
-    : public Operator
-{
-protected:
-    virtual const char *getOpcode() const override
-    { return "^"; }
-public:
-    ExpOperator(ExpressionPtr _left, ExpressionPtr _right)
-        : Operator(_left, _right)
-    {}
-
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
-    {
-        //throw std::runtime_error("ExpOperator::evaluate is not implemented.");
-        double vl=getLeft()->evaluate(bindings);
-        double vr=getRight()->evaluate(bindings);
-        return pow(vl, vr);
-    }
-};
+inline OperatorPtr Div(OperatorPtr left, OperatorPtr right)
+{ return std::make_shared<Tree>("Division", left, right); }
+////////////////////////////////////////////////////////////////////////////////////////////
 
 #endif
