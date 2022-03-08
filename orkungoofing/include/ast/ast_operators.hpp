@@ -54,7 +54,7 @@ public:
         : Operator(_left, _right)
     {}
     
-    virtual double evaluate(
+    /*virtual double evaluate(
         const std::map<std::string,double> &bindings
     ) const override 
     {
@@ -62,7 +62,7 @@ public:
         double vl=getLeft()->evaluate(bindings);
         double vr=getRight()->evaluate(bindings);
         return vl + vr;
-    }
+    }*/
 };
 
 class SubOperator
@@ -76,7 +76,7 @@ public:
         : Operator(_left, _right)
     {}
     
-    virtual double evaluate(
+    /*virtual double evaluate(
         const std::map<std::string,double> &bindings
     ) const override 
     {
@@ -86,7 +86,7 @@ public:
         double vl=getLeft()->evaluate(bindings);
         double vr=getRight()->evaluate(bindings);
         return vl - vr;
-    }
+    }*/
 };
 
 
@@ -101,7 +101,7 @@ public:
         : Operator(_left, _right)
     {}
 
-    virtual double evaluate(
+    /*virtual double evaluate(
         const std::map<std::string,double> &bindings
     ) const override
     {
@@ -109,7 +109,7 @@ public:
         double vl=getLeft()->evaluate(bindings);
         double vr=getRight()->evaluate(bindings);
         return vl * vr;
-    }
+    }*/
 };
 
 class DivOperator
@@ -123,7 +123,7 @@ public:
         : Operator(_left, _right)
     {}
 
-    virtual double evaluate(
+    /*virtual double evaluate(
         const std::map<std::string,double> &bindings
     ) const override
     {
@@ -131,7 +131,7 @@ public:
         double vl=getLeft()->evaluate(bindings);
         double vr=getRight()->evaluate(bindings);
         return vl / vr;
-    }
+    }*/
 };
 
 class ExpOperator
@@ -145,7 +145,7 @@ public:
         : Operator(_left, _right)
     {}
 
-    virtual double evaluate(
+    /*virtual double evaluate(
         const std::map<std::string,double> &bindings
     ) const override
     {
@@ -153,7 +153,21 @@ public:
         double vl=getLeft()->evaluate(bindings);
         double vr=getRight()->evaluate(bindings);
         return pow(vl, vr);
-    }
+    }*/
 };
+
+class OrOperator
+    : public Operator
+{
+protected:
+    virtual const char *getOpcode() const override
+    { return "||"; }
+public:
+    OrOperator(ExpressionPtr _left, ExpressionPtr _right)
+        : Operator(_left, _right)
+    {}
+};
+
+
 
 #endif
