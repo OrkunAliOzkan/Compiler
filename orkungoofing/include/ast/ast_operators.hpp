@@ -11,10 +11,12 @@ class Operator
 private:
     ExpressionPtr left;
     ExpressionPtr right;
+    std::string operator;
 protected:
-    Operator(ExpressionPtr _left, ExpressionPtr _right)
+    Operator(ExpressionPtr _left, ExpressionPtr _right, std::string _operator)
         : left(_left)
         , right(_right)
+        , operator(_operator)
     {}
 public:
     virtual ~Operator()
@@ -50,8 +52,8 @@ protected:
     virtual const char *getOpcode() const override
     { return "+"; }
 public:
-    AddOperator(ExpressionPtr _left, ExpressionPtr _right)
-        : Operator(_left, _right)
+    AddOperator(ExpressionPtr _left, ExpressionPtr _right, std::string _operator)
+        : Operator(_left, _right, getOpcode())
     {}
     
     /*virtual double evaluate(
@@ -72,8 +74,8 @@ protected:
     virtual const char *getOpcode() const override
     { return "-"; }
 public:
-    SubOperator(ExpressionPtr _left, ExpressionPtr _right)
-        : Operator(_left, _right)
+    SubOperator(ExpressionPtr _left, ExpressionPtr _right, std::string _operator)
+        : Operator(_left, _right, getOpcode())
     {}
     
     /*virtual double evaluate(
@@ -97,8 +99,8 @@ protected:
     virtual const char *getOpcode() const override
     { return "*"; }
 public:
-    MulOperator(ExpressionPtr _left, ExpressionPtr _right)
-        : Operator(_left, _right)
+    MulOperator(ExpressionPtr _left, ExpressionPtr _right, std::string _operator)
+        : Operator(_left, _right, getOpcode())
     {}
 
     /*virtual double evaluate(
@@ -119,8 +121,8 @@ protected:
     virtual const char *getOpcode() const override
     { return "/"; }
 public:
-    DivOperator(ExpressionPtr _left, ExpressionPtr _right)
-        : Operator(_left, _right)
+    DivOperator(ExpressionPtr _left, ExpressionPtr _right, std::string _operator)
+        : Operator(_left, _right, getOpcode())
     {}
 
     /*virtual double evaluate(
@@ -141,8 +143,8 @@ protected:
     virtual const char *getOpcode() const override
     { return "^"; }
 public:
-    ExpOperator(ExpressionPtr _left, ExpressionPtr _right)
-        : Operator(_left, _right)
+    ExpOperator(ExpressionPtr _left, ExpressionPtr _right, std::string _operator)
+        : Operator(_left, _right, getOpcode())
     {}
 
     /*virtual double evaluate(
@@ -163,8 +165,8 @@ protected:
     virtual const char *getOpcode() const override
     { return "||"; }
 public:
-    OrOperator(ExpressionPtr _left, ExpressionPtr _right)
-        : Operator(_left, _right)
+    OrOperator(ExpressionPtr _left, ExpressionPtr _right, std::string _operator)
+        : Operator(_left, _right, getOpcode())
     {}
 };
 
