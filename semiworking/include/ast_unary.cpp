@@ -16,3 +16,5 @@ const Expression* Unary_Expression::getNext() const{
 std::string Unary_Expression::getType() const{
 	return "Unary";
 }
+
+/*Additive Expression Function Declarations*/
