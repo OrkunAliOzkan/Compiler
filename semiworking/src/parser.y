@@ -51,6 +51,7 @@ argument_expression_list
 	| argument_expression_list ',' assignment_expression
 	;
 
+/*Unary expressions!*/
 unary_expression
 	: postfix_expression
 	| INC_OP unary_expression
@@ -59,7 +60,7 @@ unary_expression
 	| SIZEOF unary_expression
 	| SIZEOF '(' type_name ')'
 	;
-
+//	Utilised in unary operators
 unary_operator
 	: '&'
 	| '*'
@@ -68,25 +69,26 @@ unary_operator
 	| '~'
 	| '!'
 	;
-
+//	Type changing, e.g. (int)3.2	, also utilised in our binary operators
 cast_expression
 	: unary_expression
 	| '(' type_name ')' cast_expression
 	;
+/*BINARY OPERATORS*/
+//	BIDMAS
+	multiplicative_expression
+		: cast_expression
+		| multiplicative_expression '*' cast_expression
+		| multiplicative_expression '/' cast_expression
+		| multiplicative_expression '%' cast_expression
+		;
 
-multiplicative_expression
-	: cast_expression
-	| multiplicative_expression '*' cast_expression
-	| multiplicative_expression '/' cast_expression
-	| multiplicative_expression '%' cast_expression
-	;
-
-additive_expression
-	: multiplicative_expression
-	| additive_expression '+' multiplicative_expression { std::cout<< "add expr"<<std::endl; }
-	| additive_expression '-' multiplicative_expression
-	;
-
+	additive_expression
+		: multiplicative_expression
+		| additive_expression '+' multiplicative_expression { std::cout<< "add expr"<<std::endl; }
+		| additive_expression '-' multiplicative_expression
+		;
+///////////////////////////////////////////////////////////
 shift_expression
 	: additive_expression
 	| shift_expression LEFT_OP additive_expression
@@ -165,6 +167,7 @@ constant_expression
 	: conditional_expression
 	;
 
+/////////////////////////////
 declaration
 	: declaration_specifiers ';'
 	| declaration_specifiers init_declarator_list ';'
@@ -189,6 +192,7 @@ init_declarator
 	| declarator '=' initializer
 	;
 
+///////////////////////////////////////////////////
 storage_class_specifier
 	: TYPEDEF
 	| EXTERN
@@ -241,15 +245,17 @@ specifier_qualifier_list
 
 struct_declarator_list
 	: struct_declarator
-	| struct_declarator_list ',' struct_declarator
+	| struct_declarator_list ',' struct_declarator	//	Same for when declaring multiple structs at the same time for same struct type.
 	;
 
+//	Declaring a struct
 struct_declarator
-	: declarator
-	| ':' constant_expression
-	| declarator ':' constant_expression
+	: declarator							//	e.g. Conditonal_Expression(Expression* conditon, Expression* body)
+	| ':' constant_expression				//	e.g.	: Cond(conditon), Bod(body) {}
+	| declarator ':' constant_expression	// e.g.	Conditonal_Expression(Expression* conditon, Expression* body): Cond(conditon), Bod(body) {}
 	;
 
+//	Making enums
 enum_specifier
 	: ENUM '{' enumerator_list '}'
 	| ENUM IDENTIFIER '{' enumerator_list '}'
@@ -263,7 +269,7 @@ enumerator_list
 
 enumerator
 	: IDENTIFIER
-	| IDENTIFIER '=' constant_expression
+	| IDENTIFIER '=' constant_expression	{/*TODO:	Define values*/}
 	;
 
 type_qualifier
