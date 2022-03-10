@@ -2,8 +2,10 @@
   #include "ast.hpp"
 
   #include <cassert>
+  #include <iostream>
+  #include <iomanip>
 
-  extern const Expression *g_root; // A way of getting the AST out
+  extern Expression *g_root; // A way of getting the AST out
 
   //! This is to fix problems when generating C++
   // We are declaring the functions provided by Flex, so
@@ -12,103 +14,467 @@
   void yyerror(const char *);
 }
 
-// Represents the value associated with any kind of
-// AST node.
 %union{
-  const Expression *expr;
-  double number;
-  std::string *string;
+	Expression *expr;
+	int int_num;
+	double double_num;
+	float float_num;
+	std::string *string;
 }
 
-%token T_TIMES T_DIVIDE T_PLUS T_MINUS T_EXPONENT
-%token T_LBRACKET T_RBRACKET
-%token T_LOG T_EXP T_SQRT
-%token T_NUMBER T_VARIABLE
+%token<int_num> CONSTANT
+%token<string> IDENTIFIER
 
-%token DATATYPE_INT DATATYPE_CHAR DATATYPE_FLOAT DATATYPE_LONG DATATYPE_SHORT DATATYPE_VOID
-%token DO WHILE FOR CONTINUE GOTO
-%token SIGNED UNSIGNED
+%token STRING_LITERAL SIZEOF
+%token PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP
+%token AND_OP OR_OP    
+%token TYPE_NAME
 
-%token CONDITIONAL_LT CONDITIONAL_LTET CONDITIONAL_GT CONDITIONAL_GTET CONDITIONAL_EE
-%token ARITHMETIC_PLUS ARITHMETIC_DEDUCT ARITHMETIC_DASH ARITHMETIC_E
-%token TYPE_AMPERSAND SEMICOLON
+%token TYPEDEF EXTERN STATIC AUTO REGISTER
+%token CHAR SHORT INT LONG SIGNED UNSIGNED FLOAT DOUBLE CONST VOLATILE VOID
+%token STRUCT UNION ENUM ELLIPSIS
 
-%token IF ELSE RETURN BREAK
+%token CASE DEFAULT IF ELSE SWITCH WHILE DO FOR GOTO CONTINUE BREAK RETURN
 
-// Added condition, iterate + evaluate
-%type <expr> EXPR TERM UNARY FACTOR CONDITION ITERATE EVALUATE DECLARE
-%type <number> T_NUMBER
-%type <string> T_VARIABLE T_LOG T_EXP T_SQRT FUNCTION_NAME
+%token<string> MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN ADD_ASSIGN SUB_ASSIGN LEFT_ASSIGN RIGHT_ASSIGN AND_ASSIGN XOR_ASSIGN OR_ASSIGN
+%type<string> assignment_operator
 
-%start ROOT
+%type<expr> primary_expression postfix_expression unary_expression cast_expression multiplicative_expression additive_expression shift_expression relational_expression
+equality_expression and_expression exclusive_or_expression inclusive_or_expression logical_and_expression logical_or_expression conditional_expression assignment_expression
+expression initializer
+%type<string> declarator
+
+%start translation_unit
+%%
+
+primary_expression
+	: IDENTIFIER				{ std::cout<< "IDENTIFIER " << std::endl; }
+	| CONSTANT					{ std::cout<< "CONSTANT " << std::endl; }
+	| STRING_LITERAL			{ std::cout<< "STRING_LITERAL" <<std::endl; }
+	| '(' expression ')'		{ std::cout<< "( expression )" <<std::endl; }
+	;
+
+postfix_expression
+	: primary_expression
+	| postfix_expression '[' expression ']'
+	| postfix_expression '(' ')'
+	| postfix_expression '(' argument_expression_list ')'
+	| postfix_expression '.' IDENTIFIER
+	| postfix_expression PTR_OP IDENTIFIER
+	| postfix_expression INC_OP
+	| postfix_expression DEC_OP
+	;
+
+argument_expression_list
+	: assignment_expression
+	| argument_expression_list ',' assignment_expression
+	;
+
+unary_expression
+	: postfix_expression
+	| INC_OP unary_expression
+	| DEC_OP unary_expression
+	| unary_operator cast_expression
+	| SIZEOF unary_expression
+	| SIZEOF '(' type_name ')'
+	;
+
+unary_operator
+	: '&'
+	| '*'
+	| '+'
+	| '-'
+	| '~'
+	| '!'
+	;
+
+cast_expression
+	: unary_expression
+	| '(' type_name ')' cast_expression
+	;
+
+multiplicative_expression
+	: cast_expression										{ $$ = $1; }
+	| multiplicative_expression '*' cast_expression			{ std::cout<<"mul operator"<<std::endl; $$ = new MulOperator($1, $3); }
+	| multiplicative_expression '/' cast_expression			{ std::cout<<"div operator"<<std::endl; $$ = new DivOperator($1, $3); }
+	| multiplicative_expression '%' cast_expression			{ std::cout<<"mod operator"<<std::endl; $$ = new ModOperator($1, $3); }
+	;
+
+additive_expression
+	: multiplicative_expression								{ $$ = $1; }
+	| additive_expression '+' multiplicative_expression 	{ std::cout<<"add operator"<<std::endl; $$ = new AddOperator($1, $3); }
+	| additive_expression '-' multiplicative_expression 	{ std::cout<<"sub operator"<<std::endl; $$ = new AddOperator($1, $3); }
+	;
+
+shift_expression
+	: additive_expression									{ $$ = $1; }
+	| shift_expression LEFT_OP additive_expression			{ std::cout<<"Arithmetic Shift Left << operator"<<std::endl; $$ = new AShiftLeftOperator($1, $3); }
+	| shift_expression RIGHT_OP additive_expression			{ std::cout<<"Arithmetic Shift Right >> operator"<<std::endl; $$ = new AShiftRightOperator($1, $3); }
+	;
+
+relational_expression
+	: shift_expression										{ $$ = $1; }
+	| relational_expression '<' shift_expression			{ std::cout<<"LT < operator"<<std::endl; $$ = new LTOperator($1, $3); }
+	| relational_expression '>' shift_expression			{ std::cout<<"GT > operator"<<std::endl; $$ = new GTOperator($1, $3); }
+	| relational_expression LE_OP shift_expression			{ std::cout<<"LE <= operator"<<std::endl; $$ = new LEOperator($1, $3); }
+	| relational_expression GE_OP shift_expression			{ std::cout<<"GE => operator"<<std::endl; $$ = new GEOperator($1, $3); }
+	;
+
+equality_expression
+	: relational_expression									{ $$ = $1; }
+	| equality_expression EQ_OP relational_expression		{ std::cout<<"EQ operator"<<std::endl; $$ = new EqOperator($1, $3); }
+	| equality_expression NE_OP relational_expression		{ std::cout<<"NEQ operator"<<std::endl; $$ = new NeqOperator($1, $3); }
+	;
+
+and_expression
+	: equality_expression									{ $$ = $1; }
+	| and_expression '&' equality_expression				{ std::cout<<"bAND operator"<<std::endl; $$ = new bAndOperator($1, $3); }
+	;
+
+exclusive_or_expression
+	: and_expression										{ $$ = $1; }
+	| exclusive_or_expression '^' and_expression			{ std::cout<<"XOR operator"<<std::endl; $$ = new xorOperator($1, $3); }
+	;
+
+inclusive_or_expression
+	: exclusive_or_expression								{ $$ = $1; }
+	| inclusive_or_expression '|' exclusive_or_expression	{ std::cout<<"bOR operator"<<std::endl; $$ = new bOrOperator($1, $3); }
+	;
+
+logical_and_expression
+	: inclusive_or_expression								{ $$ = $1; }
+	| logical_and_expression AND_OP inclusive_or_expression	{ std::cout<<"AND operator"<<std::endl; $$ = new AndOperator($1, $3); }
+	;
+
+logical_or_expression
+	: logical_and_expression								{ $$ = $1; }
+	| logical_or_expression OR_OP logical_and_expression	{ std::cout<<"OR operator"<<std::endl; $$ = new OrOperator($1, $3); }
+	;
+
+conditional_expression
+	: logical_or_expression									{ $$ = $1; }
+	| logical_or_expression '?' expression ':' conditional_expression
+	;
+
+assignment_expression
+	: conditional_expression										{ $$ = $1; }
+	| unary_expression assignment_operator assignment_expression	{ /*std::cout<<"ASSIGN operator"<<std::endl; $$ = new AssignOperator($1, *$2, $3); Segmentation fault?*/ }
+	;
+
+assignment_operator
+	: '='
+	| MUL_ASSIGN
+	| DIV_ASSIGN
+	| MOD_ASSIGN
+	| ADD_ASSIGN
+	| SUB_ASSIGN
+	| LEFT_ASSIGN
+	| RIGHT_ASSIGN
+	| AND_ASSIGN
+	| XOR_ASSIGN
+	| OR_ASSIGN
+	;
+
+expression
+	: assignment_expression
+	| expression ',' assignment_expression
+	;
+
+constant_expression
+	: conditional_expression
+	;
+
+declaration		
+	: declaration_specifiers ';'							{ std::cout<<"declaration -> declaration_specifiers ;" << std::endl; }
+	| declaration_specifiers init_declarator_list ';'		{ std::cout<<"declaration -> declaration_specifiers init_declarator_list ;" << std::endl; }
+	;
+
+declaration_specifiers
+	: storage_class_specifier								{ std::cout<<"declaration_specifiers -> storage_class_specifier"<<std::endl; }
+	| storage_class_specifier declaration_specifiers		{ std::cout<<"declaration_specifiers -> storage_class_specifier declaration_specifiers"<<std::endl; }
+	| type_specifier										{ std::cout<<"declaration_specifiers -> type_specifier"<<std::endl; }
+	| type_specifier declaration_specifiers					{ std::cout<<"declaration_specifiers -> type_specifier declaration_specifiers"<<std::endl; }
+	| type_qualifier										{ std::cout<<"declaration_specifiers -> type_qualifier"<<std::endl; }
+	| type_qualifier declaration_specifiers					{ std::cout<<"declaration_specifiers -> type_qualifier declaration_specifiers"<<std::endl; }
+	;
+
+init_declarator_list
+	: init_declarator
+	| init_declarator_list ',' init_declarator
+	;
+
+init_declarator
+	: declarator
+	| declarator '=' initializer
+	;
+
+storage_class_specifier
+	: TYPEDEF
+	| EXTERN
+	| STATIC
+	| AUTO
+	| REGISTER
+	;
+
+type_specifier
+	: VOID
+	| CHAR
+	| SHORT
+	| INT								{ std::cout<<"in int!"<<std::endl; }
+	| LONG
+	| FLOAT
+	| DOUBLE
+	| SIGNED
+	| UNSIGNED
+	| struct_or_union_specifier
+	| enum_specifier
+	| TYPE_NAME
+	;
+
+struct_or_union_specifier
+	: struct_or_union IDENTIFIER '{' struct_declaration_list '}'		{ std::cout<<"struct_or_union, should be function."<<std::endl; }
+	| struct_or_union '{' struct_declaration_list '}'
+	| struct_or_union IDENTIFIER
+	;
+
+struct_or_union
+	: STRUCT
+	| UNION
+	;
+
+struct_declaration_list
+	: struct_declaration
+	| struct_declaration_list struct_declaration
+	;
+
+struct_declaration
+	: specifier_qualifier_list struct_declarator_list ';'
+	;
+
+specifier_qualifier_list
+	: type_specifier specifier_qualifier_list		{ std::cout<<"in specifier_qualifier_list 1!"<<std::endl; }
+	| type_specifier								{ std::cout<<"in specifier_qualifier_list 2!"<<std::endl; }
+	| type_qualifier specifier_qualifier_list
+	| type_qualifier
+	;
+
+struct_declarator_list
+	: struct_declarator
+	| struct_declarator_list ',' struct_declarator
+	;
+
+struct_declarator
+	: declarator
+	| ':' constant_expression
+	| declarator ':' constant_expression
+	;
+
+enum_specifier
+	: ENUM '{' enumerator_list '}'
+	| ENUM IDENTIFIER '{' enumerator_list '}'
+	| ENUM IDENTIFIER
+	;
+
+enumerator_list
+	: enumerator
+	| enumerator_list ',' enumerator
+	;
+
+enumerator
+	: IDENTIFIER
+	| IDENTIFIER '=' constant_expression
+	;
+
+type_qualifier
+	: CONST
+	| VOLATILE
+	;
+
+declarator
+	: pointer direct_declarator
+	| direct_declarator
+	;
+
+direct_declarator
+	: IDENTIFIER
+	| '(' declarator ')'
+	| direct_declarator '[' constant_expression ']'
+	| direct_declarator '[' ']'
+	| direct_declarator '(' parameter_type_list ')'
+	| direct_declarator '(' identifier_list ')'
+	| direct_declarator '(' ')'
+	;
+
+pointer
+	: '*'
+	| '*' type_qualifier_list
+	| '*' pointer
+	| '*' type_qualifier_list pointer
+	;
+
+type_qualifier_list
+	: type_qualifier
+	| type_qualifier_list type_qualifier
+	;
+
+
+parameter_type_list
+	: parameter_list
+	| parameter_list ',' ELLIPSIS
+	;
+
+parameter_list
+	: parameter_declaration
+	| parameter_list ',' parameter_declaration
+	;
+
+parameter_declaration
+	: declaration_specifiers declarator
+	| declaration_specifiers abstract_declarator
+	| declaration_specifiers
+	;
+
+identifier_list
+	: IDENTIFIER
+	| identifier_list ',' IDENTIFIER
+	;
+
+type_name
+	: specifier_qualifier_list
+	| specifier_qualifier_list abstract_declarator
+	;
+
+abstract_declarator
+	: pointer
+	| direct_abstract_declarator
+	| pointer direct_abstract_declarator
+	;
+
+direct_abstract_declarator
+	: '(' abstract_declarator ')'
+	| '[' ']'
+	| '[' constant_expression ']'
+	| direct_abstract_declarator '[' ']'
+	| direct_abstract_declarator '[' constant_expression ']'
+	| '(' ')'
+	| '(' parameter_type_list ')'
+	| direct_abstract_declarator '(' ')'
+	| direct_abstract_declarator '(' parameter_type_list ')'
+	;
+
+initializer
+	: assignment_expression
+	| '{' initializer_list '}'
+	| '{' initializer_list ',' '}'
+	;
+
+initializer_list
+	: initializer
+	| initializer_list ',' initializer
+	;
+
+statement
+	: labeled_statement
+	| compound_statement
+	| expression_statement
+	| selection_statement
+	| iteration_statement
+	| jump_statement
+	;
+
+labeled_statement
+	: IDENTIFIER ':' statement
+	| CASE constant_expression ':' statement
+	| DEFAULT ':' statement
+	;
+
+compound_statement
+	: '{' '}'
+	| '{' statement_list '}'
+	| '{' declaration_list '}'
+	| '{' declaration_list statement_list '}'
+	;
+
+declaration_list
+	: declaration
+	| declaration_list declaration
+	;
+
+statement_list
+	: statement
+	| statement_list statement
+	;
+
+expression_statement
+	: ';'
+	| expression ';'
+	;
+
+selection_statement
+	: IF '(' expression ')' statement
+	| IF '(' expression ')' statement ELSE statement
+	| SWITCH '(' expression ')' statement
+	;
+
+iteration_statement
+	: WHILE '(' expression ')' statement
+	| DO statement WHILE '(' expression ')' ';'
+	| FOR '(' expression_statement expression_statement ')' statement
+	| FOR '(' expression_statement expression_statement expression ')' statement
+	;
+
+jump_statement
+	: GOTO IDENTIFIER ';'
+	| CONTINUE ';'
+	| BREAK ';'
+	| RETURN ';'
+	| RETURN expression ';'			{ std::cout<<"jump_statement -> RETURN expression ;"<<std::endl; }
+	;
+
+translation_unit
+	: external_declaration						{ std::cout<<"translation_unit 1"<<std::endl; /* Put the function in here?*/}
+	| translation_unit external_declaration		{ std::cout<<"translation_unit 2"<<std::endl; /* Put the function in here?*/}
+	;
+
+external_declaration
+	: function_definition			{ std::cout<<"external_declaration -> function_definition"<<std::endl; }
+	| declaration					{ std::cout<<"external_declaration -> declaration"<<std::endl; }
+	;
+
+function_definition
+	: declaration_specifiers declarator declaration_list compound_statement			{ std::cout<<"Func1"<<std::endl; }
+	| declaration_specifiers declarator compound_statement							{ std::cout<<"Func2"<<std::endl; }
+	| declarator declaration_list compound_statement								{ std::cout<<"Func3"<<std::endl; }
+	| declarator compound_statement													{ std::cout<<"Func4"<<std::endl; }
+	;
 
 %%
 
-ROOT : EXPR { g_root = $1; };
+#include "lex.yy.c"
 
-EXPR  : TERM              { $$ = $1; }
-      | EXPR T_PLUS TERM  { $$ = new AddOperator($1 , $3); }    
-      | EXPR T_MINUS TERM  { $$ = new SubOperator($1 , $3); }    
-      ;
+void yyerror (char const *s) {
+    fprintf(stderr, "%s\n", s);
+    exit(1);
+}
 
-TERM  : UNARY     { $$ = $1; }
-      | TERM T_DIVIDE UNARY    { $$ = new DivOperator($1 , $3); }
-      | TERM T_TIMES UNARY    { $$ = new MulOperator($1 , $3); } 
-      ;
+//int main() {
+//    yyparse(); // parse user input
+//}
 
-UNARY : FACTOR        { $$ = $1; }
-      | T_MINUS UNARY { $$ = new NegOperator( $2 ); }
-      | T_PLUS UNARY { $$ = $2; }
-      ;
+Expression *g_root; // Definition of variable (to match declaration earlier)
 
-FACTOR : T_NUMBER     { $$ = new Number( $1 ); }
-       | T_VARIABLE     { $$ = new Variable( *$1 ); } 
-       | T_LBRACKET EXPR T_RBRACKET { $$ = $2; }       
-       | FACTOR T_EXPONENT UNARY    { $$ = new ExpOperator($1 , $3); }             
-       | T_LOG T_LBRACKET EXPR T_RBRACKET { $$ = new LogFunction( $3 ); }         
-       | T_EXP T_LBRACKET EXPR T_RBRACKET { $$ = new ExpFunction( $3 ); }      
-       | T_SQRT T_LBRACKET EXPR T_RBRACKET { $$ = new SqrtFunction( $3 ); }
-       ;
-
-// Any type of expression that could go in if statements or loops?
-EVALUATE : EXPR SEMICOLON {}
-         | SEMICOLON {}
-         ;
-
-DECLARE : DATATYPE_INT T_VARIABLE SEMICOLON {}
-        | UNSIGNED DATATYPE_INT T_VARIABLE SEMICOLON {}
-        | SIGNED DATATYPE_INT T_VARIABLE SEMICOLON {}
-
-        | DATATYPE_CHAR T_VARIABLE SEMICOLON {}
-
-        | DATATYPE_FLOAT T_VARIABLE SEMICOLON {}
-        | UNSIGNED DATATYPE_FLOAT T_VARIABLE SEMICOLON {}
-        | SIGNED DATATYPE_FLOAT T_VARIABLE SEMICOLON {}
-
-        | DATATYPE_LONG T_VARIABLE SEMICOLON {}
-        | DATATYPE_SHORT T_VARIABLE SEMICOLON {}
-
-        | DATATYPE_VOID T_VARIABLE SEMICOLON {}
-        ;
-
-//JUST STARTING;
-CONDITION : IF T_LBRACKET EXPR T_RBRACKET EVALUATE {}
-          | IF T_LBRACKET EXPR T_RBRACKET EVALUATE ELSE EVALUATE {}
-          ;
-
-// Required?? No, these are in the math library
-FUNCTION_NAME : T_LOG  { $$ = new std::string("log"); }
-              | T_EXP  { $$ = new std::string("exp"); }  
-              | T_SQRT { $$ = new std::string("sqrt"); }
-              ;
-
-%%
-
-const Expression *g_root; // Definition of variable (to match declaration earlier)
-
-const Expression *parseAST()
+Expression *parseAST()
 {
   g_root=0;
   yyparse();
   return g_root;
+}
+
+int main()
+{
+// Parse the AST
+    Expression *ast=parseAST();
+//Compile AST? Need function in the class
+	std::cout<<"done"<<std::endl;
+    return 0;
 }
