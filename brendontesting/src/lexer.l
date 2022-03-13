@@ -48,7 +48,7 @@ IS			(u|U|l|L)*
 "volatile"		{ return(VOLATILE); }
 "while"			{ return(WHILE); }
 
-{L}({L}|{D})*		{ return(IDENTIFIER); }
+{L}({L}|{D})*		{ yylval.string = new std::string(yytext); return(IDENTIFIER); }
 
 0[xX]{H}+{IS}?		{ return(CONSTANT); }
 0{D}+{IS}?		{ return(CONSTANT); }
@@ -88,7 +88,7 @@ L?\"(\\.|[^\\"])*\"	{ return(STRING_LITERAL); }
 ("}"|"%>")		{ return('}'); }
 ","			{ return(','); }
 ":"			{ return(':'); }
-"="			{ return('='); }
+"="			{ return(EQ_ASSIGN); }
 "("			{ return('('); }
 ")"			{ return(')'); }
 ("["|"<:")		{ return('['); }

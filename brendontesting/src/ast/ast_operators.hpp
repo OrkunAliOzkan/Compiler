@@ -174,20 +174,20 @@ public:
     {}
 };
 
-class AShiftLeftOperator
+class LShiftLeftOperator
     : public Operator
 {
 public:
-    AShiftLeftOperator(ExpressionPtr _left, ExpressionPtr _right)
+    LShiftLeftOperator(ExpressionPtr _left, ExpressionPtr _right)
         : Operator(_left, _right)
     {}
 };
 
-class AShiftRightOperator
+class LShiftRightOperator
     : public Operator
 {
 public:
-    AShiftRightOperator(ExpressionPtr _left, ExpressionPtr _right)
+    LShiftRightOperator(ExpressionPtr _left, ExpressionPtr _right)
         : Operator(_left, _right)
     {}
 };

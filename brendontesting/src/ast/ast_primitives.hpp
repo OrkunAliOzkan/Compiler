@@ -11,13 +11,34 @@ class Variable
 protected:
     std::string id;
 public:
-    Variable(std::string _id)
+    Variable(const std::string &_id)
         : id(_id)
-    {}
+    {
+        std::cout<<"<<<<<<<<<<<<<<<< new variable! " << id << " >>>>>>>>>>>>>>>>>" << std::endl;
+    }
     
     virtual std::string getID() const { return id; }
     
 };
+
+class IdentifierList
+    : public Expression
+{
+protected:
+    ExpressionPtr expr;
+    std::string id;
+public:
+    IdentifierList(ExpressionPtr _expr, const std::string &_id)
+        : expr(_expr)
+        , id(_id)
+    {}
+    IdentifierList(const std::string &_id)
+        : id(_id)
+    {}
+
+    virtual ~IdentifierList() { delete expr; }
+};
+
 
 class Integer
     : public Expression

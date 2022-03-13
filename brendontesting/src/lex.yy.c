@@ -1062,7 +1062,7 @@ YY_RULE_SETUP
 case 33:
 YY_RULE_SETUP
 #line 51 "lexer.l"
-{ return(IDENTIFIER); }
+{ yylval.string = new std::string(yytext); return(IDENTIFIER); }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
@@ -1244,7 +1244,7 @@ YY_RULE_SETUP
 case 69:
 YY_RULE_SETUP
 #line 91 "lexer.l"
-{ return('='); }
+{ return(EQ_ASSIGN); }
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
