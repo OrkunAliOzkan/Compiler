@@ -25,14 +25,7 @@ public:
 
     virtual std::string Compile( std::string current_func, int mem, std::map<std::string, std::string> g_Var, std::map<std::string, bool> reg_available, std::string type_check ) override
     {
-        std::string identifier;
-        if (exprL == NULL)
-        {
-            identifier = exprR->Compile( current_func, mem, g_Var, reg_available, type_check);
-        }
-        else
-        {}
-        return identifier;
+        return "declarator";
     }
 };
 
@@ -49,10 +42,19 @@ public:
         , exprL(_left)
         , exprR(_right)
     {}
+    Declaration_Spec(std::string _type, ExpressionPtr _left)
+        : type(_type)
+        , exprL(_left)
+    {}
+
+    // VOID, CHAR, INT, LONG ETC.
+    // EXTERN TYPEDEF STATIC AUTO REGISTER
+    // CONST VOLATILE
 
     virtual std::string Compile( std::string current_func, int mem, std::map<std::string, std::string> g_Var, std::map<std::string, bool> reg_available, std::string type_check ) override
     {
-        return "hello!";
+        if (exprR == NULL)  { return exprL->Compile(current_func, mem, g_Var, reg_available, type_check); }
+        else { return exprL->Compile(current_func, mem, g_Var, reg_available, type_check) + " " + exprR->Compile(current_func, mem, g_Var, reg_available, type_check); }
     }
 
     virtual ~Declaration_Spec()
@@ -96,7 +98,13 @@ public:
 
     virtual std::string Compile( std::string current_func, int mem, std::map<std::string, std::string> g_Var, std::map<std::string, bool> reg_available, std::string type_check ) override
     {
-        return "hello!";
+        if          (Type == 0) { return ident; } // For direct_declarator -> IDENTIFIER
+        else if     (Type == 1) { return "NOT IMPLEMENTED"; }
+        else if     (Type == 2) { return "NOT IMPLEMENTED"; }
+        else if     (Type == 3) { return "NOT IMPLEMENTED"; }
+        else if     (Type == 4) { return "NOT IMPLEMENTED"; }
+        else if     (Type == 5) { return "NOT IMPLEMENTED"; }
+        else                    { return "NOT IMPLEMENTED"; }
     }
 
     virtual ~DirectDeclarator()
@@ -168,7 +176,7 @@ public:
 
     virtual std::string Compile( std::string current_func, int mem, std::map<std::string, std::string> g_Var, std::map<std::string, bool> reg_available, std::string type_check ) override
     {
-        return "hello!";
+        return exprL->Compile(current_func, mem, g_Var, reg_available, type_check) + " " + exprR->Compile(current_func, mem, g_Var, reg_available, type_check);
     }
 
     virtual ~Declaration()
@@ -192,8 +200,11 @@ public:
 
     virtual std::string Compile( std::string current_func, int mem, std::map<std::string, std::string> g_Var, std::map<std::string, bool> reg_available, std::string type_check ) override
     {
-        return "hello!";
+        if (type == "declaration")  { return expr->Compile(current_func, mem, g_Var, reg_available, type_check);}
+        else                        { return "not implemented"; }
     }
+
+    virtual void AtLocation() override { std::cout<<"in external decalation"<<std::endl; }
 
     virtual ~ExternalDeclaration()
     {

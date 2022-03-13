@@ -25,6 +25,8 @@ public:
         throw std::runtime_error("This should not be called. Needs to be overriden.");
     }
 
+    virtual void AtLocation() { throw std::runtime_error("This should not be called. Needs to be overriden."); }
+    
 };
 
 #endif

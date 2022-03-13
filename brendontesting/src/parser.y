@@ -32,7 +32,7 @@
 %token AND_OP OR_OP    
 
 %token TYPEDEF EXTERN STATIC AUTO REGISTER
-%type<string> TYPEDEF EXTERN STATIC AUTO REGISTER./
+%type<string> TYPEDEF EXTERN STATIC AUTO REGISTER
 
 %token<string> CHAR SHORT INT LONG SIGNED UNSIGNED FLOAT DOUBLE CONST VOLATILE VOID
 %token<string> STRUCT UNION ENUM ELLIPSIS
@@ -202,12 +202,12 @@ declaration
 	;
 
 declaration_specifiers
-	: storage_class_specifier								{ std::cout<<"declaration_specifiers -> storage_class_specifier"<<std::endl; 							$$ = new Declaration_Spec("storage", $1, NULL); }
+	: storage_class_specifier								{ std::cout<<"declaration_specifiers -> storage_class_specifier"<<std::endl; 							$$ = new Declaration_Spec("storage", $1); }
 	| storage_class_specifier declaration_specifiers		{ std::cout<<"declaration_specifiers -> storage_class_specifier declaration_specifiers"<<std::endl;		$$ = new Declaration_Spec("storage", $1, $2); }
-	| type_specifier										{ std::cout<<"declaration_specifiers -> type_specifier"<<std::endl; 									$$ = new Declaration_Spec("type_s", $1, NULL); }
-	| type_specifier declaration_specifiers					{ std::cout<<"declaration_specifiers -> type_specifier declaration_specifiers"<<std::endl;				$$ = new Declaration_Spec("type_s", $1, $2); }
-	| type_qualifier										{ std::cout<<"declaration_specifiers -> type_qualifier"<<std::endl;										$$ = new Declaration_Spec("type_q", $1, NULL); }
-	| type_qualifier declaration_specifiers					{ std::cout<<"declaration_specifiers -> type_qualifier declaration_specifiers"<<std::endl; 				$$ = new Declaration_Spec("type_q", $1, $2); }
+	| type_specifier										{ std::cout<<"declaration_specifiers -> type_specifier"<<std::endl; 									$$ = new Declaration_Spec("specifier", $1); }
+	| type_specifier declaration_specifiers					{ std::cout<<"declaration_specifiers -> type_specifier declaration_specifiers"<<std::endl;				$$ = new Declaration_Spec("specifier", $1, $2); }
+	| type_qualifier										{ std::cout<<"declaration_specifiers -> type_qualifier"<<std::endl;										$$ = new Declaration_Spec("qualifier", $1); }
+	| type_qualifier declaration_specifiers					{ std::cout<<"declaration_specifiers -> type_qualifier declaration_specifiers"<<std::endl; 				$$ = new Declaration_Spec("qualifier", $1, $2); }
 	;
 
 init_declarator_list
@@ -493,9 +493,15 @@ int main()
 	std::map<std::string, bool> reg_available;
 	std::string type_check;
 	int initial_memory = 0;
-	
+
+	std::cout<<"----------------------------------"<<std::endl;
+	std::cout<<"----------------------------------"<<std::endl;
+	std::cout<<"----------------------------------"<<std::endl;
+	std::cout<<"----------------------------------"<<std::endl;
+
 	std::string MIPS;
-	//MIPS += ast->Compile( current_func, initial_memory, g_Var, reg_available, type_check );
-	//std::cout<<"MIPS: " << ast-> <<std::endl;
+	ast->AtLocation();
+	//MIPS = ast->Compile( current_func, initial_memory, g_Var, reg_available, type_check );
+	//std::cout<<"MIPS: " << MIPS <<std::endl;
     return 0;
 }

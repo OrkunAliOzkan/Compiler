@@ -2343,7 +2343,7 @@ yyreduce:
 
   case 78:
 #line 205 "parser.y"
-                                                                                                { std::cout<<"declaration_specifiers -> storage_class_specifier"<<std::endl; 							(yyval.expr) = new Declaration_Spec("storage", (yyvsp[0].expr), NULL); }
+                                                                                                { std::cout<<"declaration_specifiers -> storage_class_specifier"<<std::endl; 							(yyval.expr) = new Declaration_Spec("storage", (yyvsp[0].expr)); }
 #line 2348 "y.tab.c"
     break;
 
@@ -2355,25 +2355,25 @@ yyreduce:
 
   case 80:
 #line 207 "parser.y"
-                                                                                                        { std::cout<<"declaration_specifiers -> type_specifier"<<std::endl; 									(yyval.expr) = new Declaration_Spec("type_s", (yyvsp[0].expr), NULL); }
+                                                                                                        { std::cout<<"declaration_specifiers -> type_specifier"<<std::endl; 									(yyval.expr) = new Declaration_Spec("specifier", (yyvsp[0].expr)); }
 #line 2360 "y.tab.c"
     break;
 
   case 81:
 #line 208 "parser.y"
-                                                                                { std::cout<<"declaration_specifiers -> type_specifier declaration_specifiers"<<std::endl;				(yyval.expr) = new Declaration_Spec("type_s", (yyvsp[-1].expr), (yyvsp[0].expr)); }
+                                                                                { std::cout<<"declaration_specifiers -> type_specifier declaration_specifiers"<<std::endl;				(yyval.expr) = new Declaration_Spec("specifier", (yyvsp[-1].expr), (yyvsp[0].expr)); }
 #line 2366 "y.tab.c"
     break;
 
   case 82:
 #line 209 "parser.y"
-                                                                                                        { std::cout<<"declaration_specifiers -> type_qualifier"<<std::endl;										(yyval.expr) = new Declaration_Spec("type_q", (yyvsp[0].expr), NULL); }
+                                                                                                        { std::cout<<"declaration_specifiers -> type_qualifier"<<std::endl;										(yyval.expr) = new Declaration_Spec("qualifier", (yyvsp[0].expr)); }
 #line 2372 "y.tab.c"
     break;
 
   case 83:
 #line 210 "parser.y"
-                                                                                { std::cout<<"declaration_specifiers -> type_qualifier declaration_specifiers"<<std::endl; 				(yyval.expr) = new Declaration_Spec("type_q", (yyvsp[-1].expr), (yyvsp[0].expr)); }
+                                                                                { std::cout<<"declaration_specifiers -> type_qualifier declaration_specifiers"<<std::endl; 				(yyval.expr) = new Declaration_Spec("qualifier", (yyvsp[-1].expr), (yyvsp[0].expr)); }
 #line 2378 "y.tab.c"
     break;
 
@@ -3376,9 +3376,15 @@ int main()
 	std::map<std::string, bool> reg_available;
 	std::string type_check;
 	int initial_memory = 0;
-	
+
+	std::cout<<"----------------------------------"<<std::endl;
+	std::cout<<"----------------------------------"<<std::endl;
+	std::cout<<"----------------------------------"<<std::endl;
+	std::cout<<"----------------------------------"<<std::endl;
+
 	std::string MIPS;
-	//MIPS += ast->Compile( current_func, initial_memory, g_Var, reg_available, type_check );
-	//std::cout<<"MIPS: " << ast-> <<std::endl;
+	ast->AtLocation();
+	//MIPS = ast->Compile( current_func, initial_memory, g_Var, reg_available, type_check );
+	//std::cout<<"MIPS: " << MIPS <<std::endl;
     return 0;
 }

@@ -13,12 +13,12 @@ protected:
 public:
     Variable(const std::string &_id)
         : id(_id)
+    {}
+
+    virtual std::string Compile( std::string current_func, int mem, std::map<std::string, std::string> g_Var, std::map<std::string, bool> reg_available, std::string type_check ) override
     {
-        std::cout<<"<<<<<<<<<<<<<<<< new variable! " << id << " >>>>>>>>>>>>>>>>>" << std::endl;
-    }
-    
-    virtual std::string getID() const { return id; }
-    
+        return id;
+    }    
 };
 
 class IdentifierList

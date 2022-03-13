@@ -33,7 +33,7 @@ public:
 
     virtual std::string Compile( std::string current_func, int mem, std::map<std::string, std::string> g_Var, std::map<std::string, bool> reg_available, std::string type_check ) override
     {
-        return "TypeSpecifier";
+        return Operator;
     }
 };
 
