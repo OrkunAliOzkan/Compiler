@@ -10,12 +10,10 @@ class AssignOperator
 {
 protected:
     ExpressionPtr exprL;
-    std::string op;
     ExpressionPtr exprR;
 public:
-    AssignOperator(ExpressionPtr _exprL, std::string _op, ExpressionPtr _exprR)
+    AssignOperator(ExpressionPtr _exprL, ExpressionPtr _exprR)
         : exprL(_exprL)
-        , op(_op)
         , exprR(_exprR)
     {}
 
@@ -23,6 +21,13 @@ public:
     {
         delete exprL;
         delete exprR;
+    }
+
+    virtual std::string Compile( std::string current_func, int mem, std::map<std::string, std::string> g_Var, std::map<std::string, bool> reg_available, std::string type_check ) override
+    {
+        exprL->Compile( current_func, mem, g_Var, reg_available, type_check );
+        exprR->Compile( current_func, mem, g_Var, reg_available, type_check );
+        return "add 1 2 3";
     }
 };
 

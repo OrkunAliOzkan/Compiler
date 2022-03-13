@@ -640,28 +640,28 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,    51,    51,    52,    53,    54,    58,    59,    60,    61,
-      62,    63,    64,    65,    69,    70,    74,    75,    76,    77,
-      78,    79,    83,    84,    85,    86,    87,    88,    92,    93,
-      97,    98,    99,   100,   104,   105,   106,   110,   111,   112,
-     116,   117,   118,   119,   120,   124,   125,   126,   130,   131,
-     135,   136,   140,   141,   145,   146,   150,   151,   155,   156,
-     160,   161,   165,   166,   167,   168,   169,   170,   171,   172,
-     173,   174,   175,   179,   180,   184,   188,   189,   193,   194,
-     195,   196,   197,   198,   202,   203,   207,   208,   212,   213,
-     214,   215,   216,   220,   221,   222,   223,   224,   225,   226,
-     227,   228,   229,   230,   231,   235,   236,   237,   241,   242,
-     246,   247,   251,   255,   256,   257,   258,   262,   263,   267,
-     268,   269,   273,   274,   275,   279,   280,   284,   285,   289,
-     290,   294,   295,   299,   300,   301,   302,   303,   304,   305,
-     309,   310,   311,   312,   316,   317,   322,   323,   327,   328,
-     332,   333,   334,   338,   339,   343,   344,   348,   349,   350,
-     354,   355,   356,   357,   358,   359,   360,   361,   362,   366,
-     367,   368,   372,   373,   377,   378,   379,   380,   381,   382,
-     386,   387,   388,   392,   393,   394,   395,   399,   400,   404,
-     405,   409,   410,   414,   415,   416,   420,   421,   422,   423,
-     427,   428,   429,   430,   431,   435,   436,   440,   441,   445,
-     446,   447,   448
+       0,    61,    61,    62,    63,    64,    68,    69,    70,    71,
+      72,    73,    74,    75,    79,    80,    84,    85,    86,    87,
+      88,    89,    93,    94,    95,    96,    97,    98,   102,   103,
+     107,   108,   109,   110,   114,   115,   116,   120,   121,   122,
+     126,   127,   128,   129,   130,   134,   135,   136,   140,   141,
+     145,   146,   150,   151,   155,   156,   160,   161,   165,   166,
+     170,   171,   175,   176,   177,   178,   179,   180,   181,   182,
+     183,   184,   185,   189,   190,   194,   198,   199,   203,   204,
+     205,   206,   207,   208,   212,   213,   217,   218,   222,   223,
+     224,   225,   226,   230,   231,   232,   233,   234,   235,   236,
+     237,   238,   239,   240,   241,   245,   246,   247,   251,   252,
+     256,   257,   261,   265,   266,   267,   268,   272,   273,   277,
+     278,   279,   283,   284,   285,   289,   290,   294,   295,   299,
+     300,   304,   305,   309,   310,   311,   312,   313,   314,   315,
+     319,   320,   321,   322,   326,   327,   332,   333,   337,   338,
+     342,   343,   344,   348,   349,   353,   354,   358,   359,   360,
+     364,   365,   366,   367,   368,   369,   370,   371,   372,   376,
+     377,   378,   382,   383,   387,   388,   389,   390,   391,   392,
+     396,   397,   398,   402,   403,   404,   405,   409,   410,   414,
+     415,   419,   420,   424,   425,   426,   430,   431,   432,   433,
+     437,   438,   439,   440,   441,   445,   446,   450,   451,   455,
+     456,   457,   458
 };
 #endif
 
@@ -1902,337 +1902,1003 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 51 "parser.y"
-                                                { std::cout<< "IDENTIFIER " << std::endl; }
+#line 61 "parser.y"
+                                                { std::cout<< "primary_expression -> IDENTIFIER " << std::endl; (yyval.expr) = new Variable(*(yyvsp[0].string)); }
 #line 1908 "y.tab.c"
     break;
 
   case 3:
-#line 52 "parser.y"
-                                                        { std::cout<< "CONSTANT " << std::endl; }
+#line 62 "parser.y"
+                                                        { std::cout<< "primary_expression -> CONSTANT " << std::endl; (yyval.expr) = new Integer((yyvsp[0].int_num)); }
 #line 1914 "y.tab.c"
     break;
 
   case 4:
-#line 53 "parser.y"
-                                                { std::cout<< "STRING_LITERAL" <<std::endl; }
+#line 63 "parser.y"
+                                                { std::cout<< "primary_expression -> STRING_LITERAL" <<std::endl; }
 #line 1920 "y.tab.c"
     break;
 
   case 5:
-#line 54 "parser.y"
-                                        { std::cout<< "( expression )" <<std::endl; }
+#line 64 "parser.y"
+                                        { std::cout<< "primary_expression -> ( expression )" <<std::endl; }
 #line 1926 "y.tab.c"
     break;
 
-  case 30:
-#line 97 "parser.y"
-                                                                                                        { (yyval.expr) = (yyvsp[0].expr); }
+  case 6:
+#line 68 "parser.y"
+                                                                                                        { std::cout<< "postfix_expression -> primary_expression" << std::endl; (yyval.expr) = (yyvsp[0].expr);}
 #line 1932 "y.tab.c"
     break;
 
-  case 31:
-#line 98 "parser.y"
-                                                                        { std::cout<<"mul operator"<<std::endl; (yyval.expr) = new MulOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
+  case 7:
+#line 69 "parser.y"
+                                                                                        { std::cout<< "postfix_expression -> postfix_expression '[' expression ']'	" << std::endl; }
 #line 1938 "y.tab.c"
     break;
 
-  case 32:
-#line 99 "parser.y"
-                                                                        { std::cout<<"div operator"<<std::endl; (yyval.expr) = new DivOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
+  case 8:
+#line 70 "parser.y"
+                                                                                                { std::cout<< "postfix_expression -> postfix_expression '(' ')'" << std::endl; }
 #line 1944 "y.tab.c"
     break;
 
-  case 33:
-#line 100 "parser.y"
-                                                                        { std::cout<<"mod operator"<<std::endl; (yyval.expr) = new ModOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
+  case 9:
+#line 71 "parser.y"
+                                                                        { std::cout<< "postfix_expression -> postfix_expression '(' argument_expression_list ')'" << std::endl; }
 #line 1950 "y.tab.c"
     break;
 
-  case 34:
-#line 104 "parser.y"
-                                                                                                { (yyval.expr) = (yyvsp[0].expr); }
+  case 10:
+#line 72 "parser.y"
+                                                                                                { std::cout<< "postfix_expression -> postfix_expression '.' IDENTIFIER" << std::endl; }
 #line 1956 "y.tab.c"
     break;
 
-  case 35:
-#line 105 "parser.y"
-                                                                { std::cout<<"add operator"<<std::endl; (yyval.expr) = new AddOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
+  case 11:
+#line 73 "parser.y"
+                                                                                        { std::cout<< "postfix_expression -> postfix_expression PTR_OP IDENTIFIER" << std::endl; }
 #line 1962 "y.tab.c"
     break;
 
-  case 36:
-#line 106 "parser.y"
-                                                                { std::cout<<"sub operator"<<std::endl; (yyval.expr) = new AddOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
+  case 12:
+#line 74 "parser.y"
+                                                                                                        { std::cout<< "postfix_expression -> postfix_expression INC_OP" << std::endl; }
 #line 1968 "y.tab.c"
     break;
 
-  case 37:
-#line 110 "parser.y"
-                                                                                                { (yyval.expr) = (yyvsp[0].expr); }
+  case 13:
+#line 75 "parser.y"
+                                                                                                        { std::cout<< "postfix_expression -> postfix_expression DEC_OP" << std::endl; }
 #line 1974 "y.tab.c"
     break;
 
-  case 38:
-#line 111 "parser.y"
-                                                                        { std::cout<<"Arithmetic Shift Left << operator"<<std::endl; (yyval.expr) = new AShiftLeftOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
+  case 14:
+#line 79 "parser.y"
+                                                                                                        { std::cout<< "argument_expression_list -> assignment_expression" << std::endl; }
 #line 1980 "y.tab.c"
     break;
 
-  case 39:
-#line 112 "parser.y"
-                                                                        { std::cout<<"Arithmetic Shift Right >> operator"<<std::endl; (yyval.expr) = new AShiftRightOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
+  case 15:
+#line 80 "parser.y"
+                                                                        { std::cout<< "argument_expression_list -> argument_expression_list ',' assignment_expression" << std::endl; }
 #line 1986 "y.tab.c"
     break;
 
-  case 40:
-#line 116 "parser.y"
-                                                                                                        { (yyval.expr) = (yyvsp[0].expr); }
+  case 16:
+#line 84 "parser.y"
+                                                        { std::cout<< "unary_expression -> postfix_expression" << std::endl; (yyval.expr) = (yyvsp[0].expr); }
 #line 1992 "y.tab.c"
     break;
 
-  case 41:
-#line 117 "parser.y"
-                                                                        { std::cout<<"LT < operator"<<std::endl; (yyval.expr) = new LTOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
+  case 17:
+#line 85 "parser.y"
+                                                        { std::cout<< "unary_expression -> INC_OP unary_expression" << std::endl; }
 #line 1998 "y.tab.c"
     break;
 
-  case 42:
-#line 118 "parser.y"
-                                                                        { std::cout<<"GT > operator"<<std::endl; (yyval.expr) = new GTOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
+  case 18:
+#line 86 "parser.y"
+                                                        { std::cout<< "unary_expression -> DEC_OP unary_expression" << std::endl; }
 #line 2004 "y.tab.c"
     break;
 
-  case 43:
-#line 119 "parser.y"
-                                                                        { std::cout<<"LE <= operator"<<std::endl; (yyval.expr) = new LEOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
+  case 19:
+#line 87 "parser.y"
+                                                { std::cout<< "unary_expression -> unary_operator cast_expression" << std::endl; }
 #line 2010 "y.tab.c"
     break;
 
-  case 44:
-#line 120 "parser.y"
-                                                                        { std::cout<<"GE => operator"<<std::endl; (yyval.expr) = new GEOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
+  case 20:
+#line 88 "parser.y"
+                                                        { std::cout<< "unary_expression -> SIZEOF unary_expression" << std::endl; }
 #line 2016 "y.tab.c"
     break;
 
-  case 45:
-#line 124 "parser.y"
-                                                                                                { (yyval.expr) = (yyvsp[0].expr); }
+  case 21:
+#line 89 "parser.y"
+                                                        { std::cout<< "unary_expression -> SIZEOF '(' type_name ')'" << std::endl; }
 #line 2022 "y.tab.c"
     break;
 
-  case 46:
-#line 125 "parser.y"
-                                                                        { std::cout<<"EQ operator"<<std::endl; (yyval.expr) = new EqOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
+  case 22:
+#line 93 "parser.y"
+                                { std::cout<< "unary_operator -> &" << std::endl; }
 #line 2028 "y.tab.c"
     break;
 
-  case 47:
-#line 126 "parser.y"
-                                                                        { std::cout<<"NEQ operator"<<std::endl; (yyval.expr) = new NeqOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
+  case 23:
+#line 94 "parser.y"
+                                { std::cout<< "unary_operator -> *" << std::endl; }
 #line 2034 "y.tab.c"
     break;
 
-  case 48:
-#line 130 "parser.y"
-                                                                                                { (yyval.expr) = (yyvsp[0].expr); }
+  case 24:
+#line 95 "parser.y"
+                                { std::cout<< "unary_operator -> +" << std::endl; }
 #line 2040 "y.tab.c"
     break;
 
-  case 49:
-#line 131 "parser.y"
-                                                                                { std::cout<<"bAND operator"<<std::endl; (yyval.expr) = new bAndOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
+  case 25:
+#line 96 "parser.y"
+                                { std::cout<< "unary_operator -> -" << std::endl; }
 #line 2046 "y.tab.c"
     break;
 
-  case 50:
-#line 135 "parser.y"
-                                                                                                        { (yyval.expr) = (yyvsp[0].expr); }
+  case 26:
+#line 97 "parser.y"
+                                { std::cout<< "unary_operator -> ~" << std::endl; }
 #line 2052 "y.tab.c"
     break;
 
-  case 51:
-#line 136 "parser.y"
-                                                                        { std::cout<<"XOR operator"<<std::endl; (yyval.expr) = new xorOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
+  case 27:
+#line 98 "parser.y"
+                                { std::cout<< "unary_operator -> !" << std::endl; }
 #line 2058 "y.tab.c"
     break;
 
-  case 52:
-#line 140 "parser.y"
-                                                                                                { (yyval.expr) = (yyvsp[0].expr); }
+  case 28:
+#line 102 "parser.y"
+                                                                        { std::cout<< "cast_expression -> unary_expression" << std::endl; (yyval.expr)=(yyvsp[0].expr); }
 #line 2064 "y.tab.c"
     break;
 
-  case 53:
-#line 141 "parser.y"
-                                                                { std::cout<<"bOR operator"<<std::endl; (yyval.expr) = new bOrOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
+  case 29:
+#line 103 "parser.y"
+                                                        { std::cout<< "cast_expression -> '(' type_name ')' cast_expression" << std::endl; }
 #line 2070 "y.tab.c"
     break;
 
-  case 54:
-#line 145 "parser.y"
-                                                                                                { (yyval.expr) = (yyvsp[0].expr); }
+  case 30:
+#line 107 "parser.y"
+                                                                                                        { std::cout<<"multiplicative_expression -> cast_expression"<<std::endl; (yyval.expr) = (yyvsp[0].expr); }
 #line 2076 "y.tab.c"
     break;
 
-  case 55:
-#line 146 "parser.y"
-                                                                { std::cout<<"AND operator"<<std::endl; (yyval.expr) = new AndOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
+  case 31:
+#line 108 "parser.y"
+                                                                        { std::cout<<"multiplicative_expression -> multiplicative_expression '*' cast_expression"<<std::endl; (yyval.expr) = new MulOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
 #line 2082 "y.tab.c"
     break;
 
-  case 56:
-#line 150 "parser.y"
-                                                                                                { (yyval.expr) = (yyvsp[0].expr); }
+  case 32:
+#line 109 "parser.y"
+                                                                        { std::cout<<"multiplicative_expression -> multiplicative_expression '/' cast_expression"<<std::endl; (yyval.expr) = new DivOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
 #line 2088 "y.tab.c"
     break;
 
-  case 57:
-#line 151 "parser.y"
-                                                                { std::cout<<"OR operator"<<std::endl; (yyval.expr) = new OrOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
+  case 33:
+#line 110 "parser.y"
+                                                                        { std::cout<<"multiplicative_expression -> multiplicative_expression '%' cast_expression"<<std::endl; (yyval.expr) = new ModOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
 #line 2094 "y.tab.c"
     break;
 
-  case 58:
-#line 155 "parser.y"
-                                                                                                { (yyval.expr) = (yyvsp[0].expr); }
+  case 34:
+#line 114 "parser.y"
+                                                                                                { std::cout<<"additive_expression -> multiplicative_expression"<<std::endl; (yyval.expr) = (yyvsp[0].expr); }
 #line 2100 "y.tab.c"
     break;
 
-  case 60:
-#line 160 "parser.y"
-                                                                                                                { (yyval.expr) = (yyvsp[0].expr); }
+  case 35:
+#line 115 "parser.y"
+                                                                { std::cout<<"additive_expression -> additive_expression '+' multiplicative_expression"<<std::endl; (yyval.expr) = new AddOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
 #line 2106 "y.tab.c"
     break;
 
-  case 76:
-#line 188 "parser.y"
-                                                                                        { std::cout<<"declaration -> declaration_specifiers ;" << std::endl; }
+  case 36:
+#line 116 "parser.y"
+                                                                { std::cout<<"additive_expression -> additive_expression '-' multiplicative_expression"<<std::endl; (yyval.expr) = new SubOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
 #line 2112 "y.tab.c"
     break;
 
-  case 77:
-#line 189 "parser.y"
-                                                                        { std::cout<<"declaration -> declaration_specifiers init_declarator_list ;" << std::endl; }
+  case 37:
+#line 120 "parser.y"
+                                                                                                { std::cout<<"shift_expression -> additive_expression"<<std::endl; (yyval.expr) = (yyvsp[0].expr); }
 #line 2118 "y.tab.c"
     break;
 
-  case 78:
-#line 193 "parser.y"
-                                                                                                { std::cout<<"declaration_specifiers -> storage_class_specifier"<<std::endl; }
+  case 38:
+#line 121 "parser.y"
+                                                                        { std::cout<<"shift_expression -> shift_expression LEFT_OP additive_expression"<<std::endl; (yyval.expr) = new AShiftLeftOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
 #line 2124 "y.tab.c"
     break;
 
-  case 79:
-#line 194 "parser.y"
-                                                                        { std::cout<<"declaration_specifiers -> storage_class_specifier declaration_specifiers"<<std::endl; }
+  case 39:
+#line 122 "parser.y"
+                                                                        { std::cout<<"shift_expression -> shift_expression RIGHT_OP additive_expression"<<std::endl; (yyval.expr) = new AShiftRightOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
 #line 2130 "y.tab.c"
     break;
 
-  case 80:
-#line 195 "parser.y"
-                                                                                                        { std::cout<<"declaration_specifiers -> type_specifier"<<std::endl; }
+  case 40:
+#line 126 "parser.y"
+                                                                                                        { std::cout<<"relational_expression -> shift_expression"<<std::endl; (yyval.expr) = (yyvsp[0].expr); }
 #line 2136 "y.tab.c"
     break;
 
-  case 81:
-#line 196 "parser.y"
-                                                                                { std::cout<<"declaration_specifiers -> type_specifier declaration_specifiers"<<std::endl; }
+  case 41:
+#line 127 "parser.y"
+                                                                        { std::cout<<"relational_expression -> relational_expression '<' shift_expression"<<std::endl; (yyval.expr) = new LTOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
 #line 2142 "y.tab.c"
     break;
 
-  case 82:
-#line 197 "parser.y"
-                                                                                                        { std::cout<<"declaration_specifiers -> type_qualifier"<<std::endl; }
+  case 42:
+#line 128 "parser.y"
+                                                                        { std::cout<<"relational_expression -> relational_expression '>' shift_expression"<<std::endl; (yyval.expr) = new GTOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
 #line 2148 "y.tab.c"
     break;
 
-  case 83:
-#line 198 "parser.y"
-                                                                                { std::cout<<"declaration_specifiers -> type_qualifier declaration_specifiers"<<std::endl; }
+  case 43:
+#line 129 "parser.y"
+                                                                        { std::cout<<"relational_expression -> relational_expression LE_OP shift_expression"<<std::endl; (yyval.expr) = new LEOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
 #line 2154 "y.tab.c"
     break;
 
-  case 96:
-#line 223 "parser.y"
-                                                                        { std::cout<<"in int!"<<std::endl; }
+  case 44:
+#line 130 "parser.y"
+                                                                        { std::cout<<"relational_expression -> relational_expression GE_OP shift_expression"<<std::endl; (yyval.expr) = new GEOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
 #line 2160 "y.tab.c"
     break;
 
-  case 105:
-#line 235 "parser.y"
-                                                                                { std::cout<<"struct_or_union, should be function."<<std::endl; }
+  case 45:
+#line 134 "parser.y"
+                                                                                                { std::cout<<"equality_expression -> relational_expression"<<std::endl; (yyval.expr) = (yyvsp[0].expr); }
 #line 2166 "y.tab.c"
     break;
 
-  case 113:
-#line 255 "parser.y"
-                                                                { std::cout<<"in specifier_qualifier_list 1!"<<std::endl; }
+  case 46:
+#line 135 "parser.y"
+                                                                        { std::cout<<"equality_expression -> equality_expression EQ_OP relational_expression"<<std::endl; (yyval.expr) = new EqOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
 #line 2172 "y.tab.c"
     break;
 
-  case 114:
-#line 256 "parser.y"
-                                                                                        { std::cout<<"in specifier_qualifier_list 2!"<<std::endl; }
+  case 47:
+#line 136 "parser.y"
+                                                                        { std::cout<<"equality_expression -> equality_expression NE_OP relational_expression"<<std::endl; (yyval.expr) = new NeqOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
 #line 2178 "y.tab.c"
     break;
 
-  case 204:
-#line 431 "parser.y"
-                                                { std::cout<<"jump_statement -> RETURN expression ;"<<std::endl; }
+  case 48:
+#line 140 "parser.y"
+                                                                                                { std::cout<<"and_expression -> equality_expression"<<std::endl; (yyval.expr) = (yyvsp[0].expr); }
 #line 2184 "y.tab.c"
     break;
 
-  case 205:
-#line 435 "parser.y"
-                                                                        { std::cout<<"translation_unit 1"<<std::endl; /* Put the function in here?*/}
+  case 49:
+#line 141 "parser.y"
+                                                                                { std::cout<<"and_expression -> and_expression '&' equality_expression"<<std::endl; (yyval.expr) = new bAndOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
 #line 2190 "y.tab.c"
     break;
 
-  case 206:
-#line 436 "parser.y"
-                                                        { std::cout<<"translation_unit 2"<<std::endl; /* Put the function in here?*/}
+  case 50:
+#line 145 "parser.y"
+                                                                                                        { std::cout<<"exclusive_or_expression -> and_expression"<<std::endl; (yyval.expr) = (yyvsp[0].expr); }
 #line 2196 "y.tab.c"
     break;
 
-  case 207:
-#line 440 "parser.y"
-                                                { std::cout<<"external_declaration -> function_definition"<<std::endl; }
+  case 51:
+#line 146 "parser.y"
+                                                                        { std::cout<<"exclusive_or_expression -> exclusive_or_expression '^' and_expression"<<std::endl; (yyval.expr) = new xorOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
 #line 2202 "y.tab.c"
     break;
 
-  case 208:
-#line 441 "parser.y"
-                                                        { std::cout<<"external_declaration -> declaration"<<std::endl; }
+  case 52:
+#line 150 "parser.y"
+                                                                                                { std::cout<<"inclusive_or_expression -> exclusive_or_expression"<<std::endl; (yyval.expr) = (yyvsp[0].expr); }
 #line 2208 "y.tab.c"
     break;
 
-  case 209:
-#line 445 "parser.y"
-                                                                                                { std::cout<<"Func1"<<std::endl; }
+  case 53:
+#line 151 "parser.y"
+                                                                { std::cout<<"inclusive_or_expression -> inclusive_or_expression '|' exclusive_or_expression"<<std::endl; (yyval.expr) = new bOrOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
 #line 2214 "y.tab.c"
     break;
 
-  case 210:
-#line 446 "parser.y"
-                                                                                                                { std::cout<<"Func2"<<std::endl; }
+  case 54:
+#line 155 "parser.y"
+                                                                                                { std::cout<<"logical_and_expression -> inclusive_or_expression"<<std::endl; (yyval.expr) = (yyvsp[0].expr); }
 #line 2220 "y.tab.c"
     break;
 
-  case 211:
-#line 447 "parser.y"
-                                                                                                                        { std::cout<<"Func3"<<std::endl; }
+  case 55:
+#line 156 "parser.y"
+                                                                { std::cout<<"logical_and_expression -> logical_and_expression AND_OP inclusive_or_expression"<<std::endl; (yyval.expr) = new AndOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
 #line 2226 "y.tab.c"
     break;
 
-  case 212:
-#line 448 "parser.y"
-                                                                                                                                        { std::cout<<"Func4"<<std::endl; }
+  case 56:
+#line 160 "parser.y"
+                                                                                                { std::cout<<"logical_or_expression -> logical_and_expression"<<std::endl; (yyval.expr) = (yyvsp[0].expr); }
 #line 2232 "y.tab.c"
     break;
 
+  case 57:
+#line 161 "parser.y"
+                                                                { std::cout<<"logical_or_expression -> logical_or_expression OR_OP logical_and_expression"<<std::endl; (yyval.expr) = new OrOperator((yyvsp[-2].expr), (yyvsp[0].expr)); }
+#line 2238 "y.tab.c"
+    break;
 
-#line 2236 "y.tab.c"
+  case 58:
+#line 165 "parser.y"
+                                                                                                                        { std::cout<<"conditional_expression -> logical_or_expression"<<std::endl; (yyval.expr) = (yyvsp[0].expr); }
+#line 2244 "y.tab.c"
+    break;
+
+  case 59:
+#line 166 "parser.y"
+                                                                                { std::cout<<"conditional_expression -> logical_or_expression '?' expression ':' conditional_expression"<<std::endl; }
+#line 2250 "y.tab.c"
+    break;
+
+  case 60:
+#line 170 "parser.y"
+                                                                                                                { std::cout << "assignment_expression -> conditional_expression" << std::endl; (yyval.expr) = (yyvsp[0].expr); }
+#line 2256 "y.tab.c"
+    break;
+
+  case 61:
+#line 171 "parser.y"
+                                                                        { std::cout << "assignment_expression -> unary_expression assignment_operator assignment_expression" << std::endl; }
+#line 2262 "y.tab.c"
+    break;
+
+  case 62:
+#line 175 "parser.y"
+                                                { std::cout << "assignment_operator: =" << std::endl; }
+#line 2268 "y.tab.c"
+    break;
+
+  case 63:
+#line 176 "parser.y"
+                                        { std::cout << "assignment_operator: *=" << std::endl; }
+#line 2274 "y.tab.c"
+    break;
+
+  case 64:
+#line 177 "parser.y"
+                                        { std::cout << "assignment_operator: /=" << std::endl; }
+#line 2280 "y.tab.c"
+    break;
+
+  case 65:
+#line 178 "parser.y"
+                                        { std::cout << "assignment_operator: %=" << std::endl; }
+#line 2286 "y.tab.c"
+    break;
+
+  case 66:
+#line 179 "parser.y"
+                                        { std::cout << "assignment_operator: +=" << std::endl; }
+#line 2292 "y.tab.c"
+    break;
+
+  case 67:
+#line 180 "parser.y"
+                                        { std::cout << "assignment_operator: -=" << std::endl; }
+#line 2298 "y.tab.c"
+    break;
+
+  case 68:
+#line 181 "parser.y"
+                                        { std::cout << "assignment_operator: <<=" << std::endl; }
+#line 2304 "y.tab.c"
+    break;
+
+  case 69:
+#line 182 "parser.y"
+                                        { std::cout << "assignment_operator: >>=" << std::endl; }
+#line 2310 "y.tab.c"
+    break;
+
+  case 70:
+#line 183 "parser.y"
+                                        { std::cout << "assignment_operator: &=" << std::endl; }
+#line 2316 "y.tab.c"
+    break;
+
+  case 71:
+#line 184 "parser.y"
+                                        { std::cout << "assignment_operator: ^=" << std::endl; }
+#line 2322 "y.tab.c"
+    break;
+
+  case 72:
+#line 185 "parser.y"
+                                                { std::cout << "assignment_operator: |=" << std::endl; }
+#line 2328 "y.tab.c"
+    break;
+
+  case 73:
+#line 189 "parser.y"
+                                                                        { std::cout<<"expression -> assignment_expression" << std::endl; }
+#line 2334 "y.tab.c"
+    break;
+
+  case 74:
+#line 190 "parser.y"
+                                                        { std::cout<<"expression -> expression ',' assignment_expression" << std::endl; }
+#line 2340 "y.tab.c"
+    break;
+
+  case 75:
+#line 194 "parser.y"
+                                                                        { std::cout<<"constant_expression -> conditional_expression" << std::endl; }
+#line 2346 "y.tab.c"
+    break;
+
+  case 76:
+#line 198 "parser.y"
+                                                                                        { std::cout<<"declaration -> declaration_specifiers ;" << std::endl; }
+#line 2352 "y.tab.c"
+    break;
+
+  case 77:
+#line 199 "parser.y"
+                                                                        { std::cout<<"declaration -> declaration_specifiers init_declarator_list ;" << std::endl; }
+#line 2358 "y.tab.c"
+    break;
+
+  case 78:
+#line 203 "parser.y"
+                                                                                                { std::cout<<"declaration_specifiers -> storage_class_specifier"<<std::endl; }
+#line 2364 "y.tab.c"
+    break;
+
+  case 79:
+#line 204 "parser.y"
+                                                                        { std::cout<<"declaration_specifiers -> storage_class_specifier declaration_specifiers"<<std::endl; }
+#line 2370 "y.tab.c"
+    break;
+
+  case 80:
+#line 205 "parser.y"
+                                                                                                        { std::cout<<"declaration_specifiers -> type_specifier"<<std::endl; }
+#line 2376 "y.tab.c"
+    break;
+
+  case 81:
+#line 206 "parser.y"
+                                                                                { std::cout<<"declaration_specifiers -> type_specifier declaration_specifiers"<<std::endl; }
+#line 2382 "y.tab.c"
+    break;
+
+  case 82:
+#line 207 "parser.y"
+                                                                                                        { std::cout<<"declaration_specifiers -> type_qualifier"<<std::endl; }
+#line 2388 "y.tab.c"
+    break;
+
+  case 83:
+#line 208 "parser.y"
+                                                                                { std::cout<<"declaration_specifiers -> type_qualifier declaration_specifiers"<<std::endl; }
+#line 2394 "y.tab.c"
+    break;
+
+  case 84:
+#line 212 "parser.y"
+                                                                                        { std::cout<<"init_declarator_list -> init_declarator"<<std::endl; }
+#line 2400 "y.tab.c"
+    break;
+
+  case 85:
+#line 213 "parser.y"
+                                                                { std::cout<<"init_declarator_list -> init_declarator_list ',' init_declarator"<<std::endl; }
+#line 2406 "y.tab.c"
+    break;
+
+  case 86:
+#line 217 "parser.y"
+                                                                                        { std::cout<<"init_declarator -> declarator"<<std::endl; }
+#line 2412 "y.tab.c"
+    break;
+
+  case 87:
+#line 218 "parser.y"
+                                                                        { std::cout<<"init_declarator -> declarator '=' initializer"<<std::endl; (yyval.expr) = new AssignOperator((yyvsp[-2].expr), (yyvsp[0].expr));}
+#line 2418 "y.tab.c"
+    break;
+
+  case 88:
+#line 222 "parser.y"
+                                                { std::cout<<"storage_class_specifier -> TYPEDEF"<<std::endl; }
+#line 2424 "y.tab.c"
+    break;
+
+  case 89:
+#line 223 "parser.y"
+                                                { std::cout<<"storage_class_specifier -> EXTERN"<<std::endl; }
+#line 2430 "y.tab.c"
+    break;
+
+  case 90:
+#line 224 "parser.y"
+                                                { std::cout<<"storage_class_specifier -> STATIC"<<std::endl; }
+#line 2436 "y.tab.c"
+    break;
+
+  case 91:
+#line 225 "parser.y"
+                                                { std::cout<<"storage_class_specifier -> AUTO"<<std::endl; }
+#line 2442 "y.tab.c"
+    break;
+
+  case 92:
+#line 226 "parser.y"
+                                                { std::cout<<"storage_class_specifier -> REGISTER"<<std::endl; }
+#line 2448 "y.tab.c"
+    break;
+
+  case 93:
+#line 230 "parser.y"
+                                                                        { std::cout<<"type_specifier -> VOID"<<std::endl; }
+#line 2454 "y.tab.c"
+    break;
+
+  case 94:
+#line 231 "parser.y"
+                                                                        { std::cout<<"type_specifier -> CHAR"<<std::endl; }
+#line 2460 "y.tab.c"
+    break;
+
+  case 95:
+#line 232 "parser.y"
+                                                                        { std::cout<<"type_specifier -> SHORT"<<std::endl; }
+#line 2466 "y.tab.c"
+    break;
+
+  case 96:
+#line 233 "parser.y"
+                                                                        { std::cout<<"type_specifier -> INT"<<std::endl; }
+#line 2472 "y.tab.c"
+    break;
+
+  case 97:
+#line 234 "parser.y"
+                                                                        { std::cout<<"type_specifier -> LONG"<<std::endl; }
+#line 2478 "y.tab.c"
+    break;
+
+  case 98:
+#line 235 "parser.y"
+                                                                        { std::cout<<"type_specifier -> FLOAT"<<std::endl; }
+#line 2484 "y.tab.c"
+    break;
+
+  case 99:
+#line 236 "parser.y"
+                                                                        { std::cout<<"type_specifier -> DOUBLE"<<std::endl; }
+#line 2490 "y.tab.c"
+    break;
+
+  case 100:
+#line 237 "parser.y"
+                                                                        { std::cout<<"type_specifier -> SIGNED"<<std::endl; }
+#line 2496 "y.tab.c"
+    break;
+
+  case 101:
+#line 238 "parser.y"
+                                                                        { std::cout<<"type_specifier -> UNSIGNED"<<std::endl; }
+#line 2502 "y.tab.c"
+    break;
+
+  case 102:
+#line 239 "parser.y"
+                                                        { std::cout<<"type_specifier -> struct_or_union_specifier"<<std::endl; }
+#line 2508 "y.tab.c"
+    break;
+
+  case 103:
+#line 240 "parser.y"
+                                                                { std::cout<<"type_specifier -> enum_specifier"<<std::endl; }
+#line 2514 "y.tab.c"
+    break;
+
+  case 104:
+#line 241 "parser.y"
+                                                                        { std::cout<<"type_specifier -> TYPE_NAME"<<std::endl; }
+#line 2520 "y.tab.c"
+    break;
+
+  case 105:
+#line 245 "parser.y"
+                                                                                { std::cout<<"struct_or_union_specifier -> struct_or_union IDENTIFIER '{' struct_declaration_list '}'"<<std::endl; }
+#line 2526 "y.tab.c"
+    break;
+
+  case 106:
+#line 246 "parser.y"
+                                                                                                { std::cout<<"struct_or_union_specifier -> struct_or_union '{' struct_declaration_list '}'"<<std::endl; }
+#line 2532 "y.tab.c"
+    break;
+
+  case 107:
+#line 247 "parser.y"
+                                                                                                                { std::cout<<"struct_or_union_specifier -> struct_or_union IDENTIFIER"<<std::endl; }
+#line 2538 "y.tab.c"
+    break;
+
+  case 108:
+#line 251 "parser.y"
+                                        { std::cout<<"struct_or_union -> STRUCT"<<std::endl; }
+#line 2544 "y.tab.c"
+    break;
+
+  case 109:
+#line 252 "parser.y"
+                                        { std::cout<<"struct_or_union -> UNION"<<std::endl; }
+#line 2550 "y.tab.c"
+    break;
+
+  case 110:
+#line 256 "parser.y"
+                                                                                        { std::cout<<"struct_declaration_list -> struct_declaration"<<std::endl; }
+#line 2556 "y.tab.c"
+    break;
+
+  case 111:
+#line 257 "parser.y"
+                                                                { std::cout<<"struct_declaration_list -> struct_declaration_list struct_declaration"<<std::endl; }
+#line 2562 "y.tab.c"
+    break;
+
+  case 112:
+#line 261 "parser.y"
+                                                                { std::cout<<"struct_declaration -> specifier_qualifier_list struct_declarator_list"<<std::endl; }
+#line 2568 "y.tab.c"
+    break;
+
+  case 113:
+#line 265 "parser.y"
+                                                                { std::cout<<"specifier_qualifier_list -> type_specifier specifier_qualifier_list"<<std::endl; }
+#line 2574 "y.tab.c"
+    break;
+
+  case 114:
+#line 266 "parser.y"
+                                                                                        { std::cout<<"specifier_qualifier_list -> type_specifier"<<std::endl; }
+#line 2580 "y.tab.c"
+    break;
+
+  case 115:
+#line 267 "parser.y"
+                                                                { std::cout<<"specifier_qualifier_list -> type_qualifier specifier_qualifier_list"<<std::endl; }
+#line 2586 "y.tab.c"
+    break;
+
+  case 116:
+#line 268 "parser.y"
+                                                                                        { std::cout<<"specifier_qualifier_list -> type_qualifier"<<std::endl; }
+#line 2592 "y.tab.c"
+    break;
+
+  case 117:
+#line 272 "parser.y"
+                                                                                                { std::cout<<"struct_declarator_list -> struct_declarator"<<std::endl; }
+#line 2598 "y.tab.c"
+    break;
+
+  case 118:
+#line 273 "parser.y"
+                                                                { std::cout<<"struct_declarator_list -> struct_declarator_list ',' struct_declarator"<<std::endl; }
+#line 2604 "y.tab.c"
+    break;
+
+  case 119:
+#line 277 "parser.y"
+                                                                                { std::cout<<"struct_declarator -> declarator"<<std::endl; }
+#line 2610 "y.tab.c"
+    break;
+
+  case 120:
+#line 278 "parser.y"
+                                                                        { std::cout<<"struct_declarator -> ':' constant_expression" <<std::endl; }
+#line 2616 "y.tab.c"
+    break;
+
+  case 121:
+#line 279 "parser.y"
+                                                        { std::cout<<"struct_declarator -> declarator ':' constant_expression"<<std::endl; }
+#line 2622 "y.tab.c"
+    break;
+
+  case 122:
+#line 283 "parser.y"
+                                                                { std::cout << "enum_specifier -> ENUM '{' enumerator_list '}'" << std::endl; }
+#line 2628 "y.tab.c"
+    break;
+
+  case 123:
+#line 284 "parser.y"
+                                                        { std::cout << "enum_specifier -> ENUM IDENTIFIER '{' enumerator_list '}'" << std::endl; }
+#line 2634 "y.tab.c"
+    break;
+
+  case 124:
+#line 285 "parser.y"
+                                                                                { std::cout << "enum_specifier -> ENUM IDENTIFIER" << std::endl; }
+#line 2640 "y.tab.c"
+    break;
+
+  case 125:
+#line 289 "parser.y"
+                                                                                { std::cout << "enumerator_list -> enumerator" << std::endl; }
+#line 2646 "y.tab.c"
+    break;
+
+  case 126:
+#line 290 "parser.y"
+                                                                { std::cout << "enumerator_list -> enumerator_list ',' enumerator" << std::endl; }
+#line 2652 "y.tab.c"
+    break;
+
+  case 127:
+#line 294 "parser.y"
+                                                                                { std::cout << "enumerator -> IDENTIFIER" << std::endl; }
+#line 2658 "y.tab.c"
+    break;
+
+  case 128:
+#line 295 "parser.y"
+                                                        { std::cout << "enumerator -> IDENTIFIER '=' constant_expression" << std::endl; }
+#line 2664 "y.tab.c"
+    break;
+
+  case 129:
+#line 299 "parser.y"
+                                { std::cout << "type_qualifier -> CONST" << std::endl; }
+#line 2670 "y.tab.c"
+    break;
+
+  case 130:
+#line 300 "parser.y"
+                                { std::cout << "type_qualifier -> VOLATILE" << std::endl; }
+#line 2676 "y.tab.c"
+    break;
+
+  case 131:
+#line 304 "parser.y"
+                                                        { std::cout << "declarator -> pointer direct_declarator" << std::endl; (yyval.expr) = new Declarator((yyvsp[-1].expr), (yyvsp[0].expr)); }
+#line 2682 "y.tab.c"
+    break;
+
+  case 132:
+#line 305 "parser.y"
+                                                                { std::cout << "declarator -> direct_declarator" << std::endl; (yyval.expr) = new Declarator(NULL, (yyvsp[0].expr)); }
+#line 2688 "y.tab.c"
+    break;
+
+  case 133:
+#line 309 "parser.y"
+                                                                                                                { std::cout << "direct_declarator -> IDENTIFIER" << std::endl; (yyval.expr) = new Variable(*(yyvsp[0].string)); }
+#line 2694 "y.tab.c"
+    break;
+
+  case 134:
+#line 310 "parser.y"
+                                                                                                        { std::cout << "direct_declarator -> '(' declarator ')'" << std::endl; (yyval.expr) = (yyvsp[-1].expr); }
+#line 2700 "y.tab.c"
+    break;
+
+  case 135:
+#line 311 "parser.y"
+                                                                                { std::cout << "direct_declarator -> direct_declarator '[' constant_expression ']'" << std::endl; }
+#line 2706 "y.tab.c"
+    break;
+
+  case 136:
+#line 312 "parser.y"
+                                                                                                        { std::cout << "direct_declarator -> direct_declarator '[' ']'" << std::endl; }
+#line 2712 "y.tab.c"
+    break;
+
+  case 137:
+#line 313 "parser.y"
+                                                                                { std::cout << "direct_declarator -> direct_declarator '(' parameter_type_list ')'" << std::endl; }
+#line 2718 "y.tab.c"
+    break;
+
+  case 138:
+#line 314 "parser.y"
+                                                                                        { std::cout << "direct_declarator -> direct_declarator '(' identifier_list ')'" << std::endl; }
+#line 2724 "y.tab.c"
+    break;
+
+  case 139:
+#line 315 "parser.y"
+                                                                                                        { std::cout << "direct_declarator -> direct_declarator '(' ')'" << std::endl; }
+#line 2730 "y.tab.c"
+    break;
+
+  case 140:
+#line 319 "parser.y"
+                                                                                { std::cout << "pointer -> '*'" << std::endl; }
+#line 2736 "y.tab.c"
+    break;
+
+  case 141:
+#line 320 "parser.y"
+                                                                { std::cout << "pointer -> '*' type_qualifier_list" << std::endl; }
+#line 2742 "y.tab.c"
+    break;
+
+  case 142:
+#line 321 "parser.y"
+                                                                        { std::cout << "pointer -> '*' pointer" << std::endl; }
+#line 2748 "y.tab.c"
+    break;
+
+  case 143:
+#line 322 "parser.y"
+                                                        { std::cout << "pointer -> '*' type_qualifier_list pointer" << std::endl; }
+#line 2754 "y.tab.c"
+    break;
+
+  case 155:
+#line 353 "parser.y"
+                                                                                                        { std::cout << "type_name -> specifier_qualifier_list" << std::endl; }
+#line 2760 "y.tab.c"
+    break;
+
+  case 156:
+#line 354 "parser.y"
+                                                                                { std::cout << "type_name -> specifier_qualifier_list abstract_declarator" << std::endl; }
+#line 2766 "y.tab.c"
+    break;
+
+  case 169:
+#line 376 "parser.y"
+                                                                { std::cout << "initializer -> assignment_expression" << std::endl; }
+#line 2772 "y.tab.c"
+    break;
+
+  case 170:
+#line 377 "parser.y"
+                                                                { std::cout << "initializer -> '{' initializer_list '}'" << std::endl; }
+#line 2778 "y.tab.c"
+    break;
+
+  case 171:
+#line 378 "parser.y"
+                                                        { std::cout << "initializer -> '{' initializer_list ',' '}'" << std::endl; }
+#line 2784 "y.tab.c"
+    break;
+
+  case 172:
+#line 382 "parser.y"
+                                                                        { std::cout << "initializer_list -> initializer" << std::endl; }
+#line 2790 "y.tab.c"
+    break;
+
+  case 173:
+#line 383 "parser.y"
+                                                        { std::cout << "initializer_list -> initializer_list ',' initializer" << std::endl; }
+#line 2796 "y.tab.c"
+    break;
+
+  case 174:
+#line 387 "parser.y"
+                                                                        { std::cout << "statement -> labeled_statement" << std::endl; }
+#line 2802 "y.tab.c"
+    break;
+
+  case 175:
+#line 388 "parser.y"
+                                                                { std::cout << "statement -> compound_statement" << std::endl; }
+#line 2808 "y.tab.c"
+    break;
+
+  case 176:
+#line 389 "parser.y"
+                                                                { std::cout << "statement -> expression_statement" << std::endl; }
+#line 2814 "y.tab.c"
+    break;
+
+  case 177:
+#line 390 "parser.y"
+                                                                { std::cout << "statement -> selection_statement" << std::endl; }
+#line 2820 "y.tab.c"
+    break;
+
+  case 178:
+#line 391 "parser.y"
+                                                                { std::cout << "statement -> iteration_statement" << std::endl; }
+#line 2826 "y.tab.c"
+    break;
+
+  case 179:
+#line 392 "parser.y"
+                                                                        { std::cout << "statement -> jump_statement" << std::endl; }
+#line 2832 "y.tab.c"
+    break;
+
+  case 191:
+#line 419 "parser.y"
+                                                                { std::cout << "expression_statement -> ';'" << std::endl; }
+#line 2838 "y.tab.c"
+    break;
+
+  case 192:
+#line 420 "parser.y"
+                                                        { std::cout << "expression_statement -> expression ';'" << std::endl; }
+#line 2844 "y.tab.c"
+    break;
+
+  case 204:
+#line 441 "parser.y"
+                                                { std::cout<<"jump_statement -> RETURN expression ;"<<std::endl; }
+#line 2850 "y.tab.c"
+    break;
+
+  case 205:
+#line 445 "parser.y"
+                                                                        { std::cout<<"translation_unit -> external_declaration"<<std::endl; /* Put the function in here?*/}
+#line 2856 "y.tab.c"
+    break;
+
+  case 206:
+#line 446 "parser.y"
+                                                        { std::cout<<"translation_unit -> translation_unit external_declaration"<<std::endl; /* Put the function in here?*/}
+#line 2862 "y.tab.c"
+    break;
+
+  case 207:
+#line 450 "parser.y"
+                                                { std::cout<<"external_declaration -> function_definition"<<std::endl; }
+#line 2868 "y.tab.c"
+    break;
+
+  case 208:
+#line 451 "parser.y"
+                                                        { std::cout<<"external_declaration -> declaration"<<std::endl; }
+#line 2874 "y.tab.c"
+    break;
+
+  case 209:
+#line 455 "parser.y"
+                                                                                                { std::cout<<"function_definition -> declaration_specifiers declarator declaration_list compound_statement"<<std::endl; }
+#line 2880 "y.tab.c"
+    break;
+
+  case 210:
+#line 456 "parser.y"
+                                                                                                                { std::cout<<"function_definition -> declaration_specifiers declarator compound_statement"<<std::endl; }
+#line 2886 "y.tab.c"
+    break;
+
+  case 211:
+#line 457 "parser.y"
+                                                                                                                        { std::cout<<"function_definition -> declarator declaration_list compound_statement"<<std::endl; }
+#line 2892 "y.tab.c"
+    break;
+
+  case 212:
+#line 458 "parser.y"
+                                                                                                                                        { std::cout<<"function_definition -> declarator compound_statement	"<<std::endl; }
+#line 2898 "y.tab.c"
+    break;
+
+
+#line 2902 "y.tab.c"
 
       default: break;
     }
@@ -2464,7 +3130,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 451 "parser.y"
+#line 461 "parser.y"
 
 
 #include "lex.yy.c"
@@ -2492,6 +3158,15 @@ int main()
 // Parse the AST
     Expression *ast=parseAST();
 //Compile AST? Need function in the class
-	std::cout<<"done"<<std::endl;
+
+	std::string current_func;
+	std::map<std::string, std::string> g_Var;
+	std::map<std::string, bool> reg_available;
+	std::string type_check;
+	int initial_memory = 0;
+	
+	std::string MIPS;
+	//MIPS += ast->Compile( current_func, initial_memory, g_Var, reg_available, type_check );
+	//std::cout<<"MIPS: " << ast-> <<std::endl;
     return 0;
 }
