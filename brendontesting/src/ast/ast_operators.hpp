@@ -31,6 +31,11 @@ public:
     AddOperator(ExpressionPtr _left, ExpressionPtr _right)
         : Operator(_left, _right)
     {}
+
+    virtual std::string Compile( std::string current_func, std::map<std::string, std::string> g_Var, std::map<std::string, bool> reg_available, std::string type_check ) override
+    {
+        return "add 1 2 3";
+    }
 };
 
 class SubOperator

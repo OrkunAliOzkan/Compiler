@@ -19,8 +19,10 @@ public:
     {}
 
     // The map will contain gVar[VARIABLE_NAME] = VARIABLE_LOCATION (global variables)
-    //REMOVE LATER
-    //virtual std::string variable_loc( std::map<std::string, std::string> g_Var) { return 0; }
+    virtual std::string Compile( std::string current_func, std::map<std::string, std::string> g_Var, std::map<std::string, bool> reg_available, std::string type_check ) 
+    {
+        return 0;
+    }
 
 };
 
