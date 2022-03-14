@@ -10,9 +10,9 @@ class IterationStatement
 {
 protected:
     int Type;
-    ExpressionPtr expr1;
-    ExpressionPtr expr2;
-    ExpressionPtr expr3;
+    ExpressionPtr expr1 = NULL;
+    ExpressionPtr expr2 = NULL;
+    ExpressionPtr expr3 = NULL;
 public:
     IterationStatement(int _Type, ExpressionPtr _expr1, ExpressionPtr _expr2, ExpressionPtr _expr3)
         : Type(_Type)

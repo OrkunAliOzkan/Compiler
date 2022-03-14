@@ -10,8 +10,8 @@ class CompoundStatement
 {
 protected:
     int Type;
-    ExpressionPtr exprL;
-    ExpressionPtr exprR;
+    ExpressionPtr exprL = NULL;
+    ExpressionPtr exprR = NULL;
 public:
     CompoundStatement(int _Type)
         : Type(_Type)

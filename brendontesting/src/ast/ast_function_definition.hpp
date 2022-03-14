@@ -9,10 +9,10 @@ class FunctionDefinition
     : public Expression
 {
 protected:
-    ExpressionPtr expr1;
-    ExpressionPtr expr2;
-    ExpressionPtr expr3;
-    ExpressionPtr expr4;
+    ExpressionPtr expr1 = NULL;
+    ExpressionPtr expr2 = NULL;
+    ExpressionPtr expr3 = NULL;
+    ExpressionPtr expr4 = NULL;
 public:
     FunctionDefinition(ExpressionPtr _expr1, ExpressionPtr _expr2, ExpressionPtr _expr3, ExpressionPtr _expr4)
         : expr1(_expr1)

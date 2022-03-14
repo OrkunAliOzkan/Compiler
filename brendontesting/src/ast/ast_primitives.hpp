@@ -25,7 +25,7 @@ class IdentifierList
     : public Expression
 {
 protected:
-    ExpressionPtr expr;
+    ExpressionPtr expr = NULL;
     std::string id;
 public:
     IdentifierList(ExpressionPtr _expr, const std::string &_id)

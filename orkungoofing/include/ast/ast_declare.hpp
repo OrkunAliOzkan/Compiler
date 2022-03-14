@@ -8,7 +8,7 @@ class Declare
     : public Expression
 {
 private:
-    ExpressionPtr expr;
+    ExpressionPtr expr = NULL;
 protected:
     Declare(const ExpressionPtr _expr)
         : expr(_expr)

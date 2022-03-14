@@ -9,8 +9,8 @@ class Declarator
     : public Expression
 {
 protected:
-    ExpressionPtr exprL;
-    ExpressionPtr exprR;
+    ExpressionPtr exprL = NULL;
+    ExpressionPtr exprR = NULL;
 public:
     Declarator(ExpressionPtr _exprL, ExpressionPtr _exprR)
         : exprL(_exprL)
@@ -34,8 +34,8 @@ class Declaration_Spec
 {
 protected:
     std::string type;
-    ExpressionPtr exprL;
-    ExpressionPtr exprR;
+    ExpressionPtr exprL = NULL;
+    ExpressionPtr exprR = NULL;
 public:
     Declaration_Spec(std::string _type, ExpressionPtr _left, ExpressionPtr _right)
         : type(_type)
@@ -70,8 +70,8 @@ class DirectDeclarator
 protected:
     int Type;
     std::string ident;
-    ExpressionPtr exprL;
-    ExpressionPtr exprR;
+    ExpressionPtr exprL = NULL;
+    ExpressionPtr exprR = NULL;
 public:
     DirectDeclarator(int _Type, std::string _ident, ExpressionPtr _exprL, ExpressionPtr _exprR)
         : Type(_Type)
@@ -118,8 +118,8 @@ class Init_Declarator
     : public Expression
 {
 protected:
-    ExpressionPtr exprL;
-    ExpressionPtr exprR;
+    ExpressionPtr exprL = NULL;
+    ExpressionPtr exprR = NULL;
 public:
     Init_Declarator(ExpressionPtr _exprL, ExpressionPtr _exprR)
         : exprL(_exprL)
@@ -142,8 +142,8 @@ class Init_Declarator_List
     : public Expression
 {
 protected:
-    ExpressionPtr exprL;
-    ExpressionPtr exprR;
+    ExpressionPtr exprL = NULL;
+    ExpressionPtr exprR = NULL;
 public:
     Init_Declarator_List(ExpressionPtr _exprL, ExpressionPtr _exprR)
         : exprL(_exprL)
@@ -166,8 +166,8 @@ class Declaration
     : public Expression
 {
 protected:
-    ExpressionPtr exprL;
-    ExpressionPtr exprR;
+    ExpressionPtr exprL = NULL;
+    ExpressionPtr exprR = NULL;
 public:
     Declaration(ExpressionPtr _exprL, ExpressionPtr _exprR)
         : exprL(_exprL)
@@ -176,7 +176,10 @@ public:
 
     virtual std::string Compile( std::string current_func, int mem, std::map<std::string, std::string> g_Var, std::map<std::string, bool> reg_available, std::string type_check ) override
     {
-        return exprL->Compile(current_func, mem, g_Var, reg_available, type_check) + " " + exprR->Compile(current_func, mem, g_Var, reg_available, type_check);
+        std::string TEST_L = exprL->Compile(current_func, mem, g_Var, reg_available, type_check);
+        std::string TEST_R = exprR->Compile(current_func, mem, g_Var, reg_available, type_check);
+
+        return TEST_L + " " + TEST_R;        
     }
 
     virtual ~Declaration()
@@ -186,39 +189,13 @@ public:
     }
 };
 
-class ExternalDeclaration
-    : public Expression
-{
-protected:
-    std::string type;
-    ExpressionPtr expr;
-public:
-    ExternalDeclaration(std::string _type, ExpressionPtr _expr)
-        : type(_type)
-        , expr(_expr)
-    {}
-
-    virtual std::string Compile( std::string current_func, int mem, std::map<std::string, std::string> g_Var, std::map<std::string, bool> reg_available, std::string type_check ) override
-    {
-        if (type == "declaration")  { return expr->Compile(current_func, mem, g_Var, reg_available, type_check);}
-        else                        { return "not implemented"; }
-    }
-
-    virtual void AtLocation() override { std::cout<<"in external decalation"<<std::endl; }
-
-    virtual ~ExternalDeclaration()
-    {
-        delete expr;
-    }
-};
-
 class DirectAbstractDeclarator
     : public Expression
 {
 protected:
     int Type;
-    ExpressionPtr expr1;
-    ExpressionPtr expr2;
+    ExpressionPtr expr1 = NULL;
+    ExpressionPtr expr2 = NULL;
 public:
     DirectAbstractDeclarator(int _Type, ExpressionPtr _expr1, ExpressionPtr _expr2)
         : Type(_Type)
@@ -245,8 +222,8 @@ class AbstractDeclarator
     : public Expression
 {
 protected:
-    ExpressionPtr exprL;
-    ExpressionPtr exprR;
+    ExpressionPtr exprL = NULL;
+    ExpressionPtr exprR = NULL;
 public:
     AbstractDeclarator(ExpressionPtr _exprL, ExpressionPtr _exprR)
         : exprL(_exprL)

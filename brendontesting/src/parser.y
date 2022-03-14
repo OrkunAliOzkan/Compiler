@@ -56,8 +56,11 @@ expression_statement selection_statement iteration_statement jump_statement tran
 //TYPE_QUALIFIER_LIST INITIALIZER_LIST
 
 
-%start translation_unit
+%start HeadNODE
 %%
+
+HeadNODE : translation_unit { g_root = new HeadNode($1); }
+
 	//	TODO:	These haven't been done yet!
 primary_expression
 	: IDENTIFIER				{ std::cout<< "primary_expression -> IDENTIFIER " << std::endl; $$ = new Variable(*$1); 	}
@@ -211,13 +214,13 @@ declaration_specifiers
 	;
 
 init_declarator_list
-	: init_declarator								{ std::cout<<"init_declarator_list -> init_declarator"<<std::endl; $$ = $1; /*	$$ = new init_declarator_list(NULL, $1);	*/}
-	| init_declarator_list ',' init_declarator		{ std::cout<<"init_declarator_list -> init_declarator_list ',' init_declarator"<<std::endl; $$ = new Init_Declarator_List($1, $3); }
+	: init_declarator								{ $$ = $1; std::cout<<"init_declarator_list -> init_declarator"<<std::endl;  }
+	| init_declarator_list ',' init_declarator		{  $$ = new Init_Declarator_List($1, $3); std::cout<<"init_declarator_list -> init_declarator_list ',' init_declarator"<<std::endl; }
 	;
 
 init_declarator
-	: declarator									{ std::cout<<"init_declarator -> declarator"<<std::endl; $$ = $1; /*	$$ = new Init_Declarator($1, NULL); */}
-	| declarator EQ_ASSIGN initializer					{ std::cout<<"init_declarator -> declarator '=' initializer"<<std::endl; 	$$ = new Init_Declarator($1, $3);}
+	: declarator									{ $$ = $1; std::cout<<"init_declarator -> declarator"<<std::endl;  /*	$$ = new Init_Declarator($1, NULL); */}
+	| declarator EQ_ASSIGN initializer				{ $$ = new Init_Declarator($1, $3); std::cout<<"init_declarator -> declarator '=' initializer"<<std::endl; }
 	;
 
 storage_class_specifier
@@ -303,8 +306,8 @@ type_qualifier
 	;
 
 declarator
-	: pointer direct_declarator			{ std::cout << "declarator -> pointer direct_declarator" << std::endl; $$ = new Declarator($1, $2); }
-	| direct_declarator					{ std::cout << "declarator -> direct_declarator" << std::endl; $$ = $1; }
+	: pointer direct_declarator			{ $$ = new Declarator($1, $2);  std::cout << "declarator -> pointer direct_declarator" << std::endl;}
+	| direct_declarator					{ $$ = $1; std::cout << "declarator -> direct_declarator" << std::endl;  }
 	;
 
 direct_declarator
@@ -444,13 +447,13 @@ jump_statement
 	;
 
 translation_unit
-	: external_declaration						{ $$ = $1;						std::cout<<"translation_unit -> external_declaration"<<std::endl; $$ = $1; /* Put the function in here?*/ $$ = $1;	}
+	: external_declaration						{ $$ = new Translation_Unit($1);		std::cout<<"translation_unit -> external_declaration"<<std::endl; /* Put the function in here?*/}
 	| translation_unit external_declaration		{ $$ = new Translation_Unit($1, $2);	std::cout<<"translation_unit -> translation_unit external_declaration"<<std::endl; /* Put the function in here?*/	}
 	;
 
 external_declaration
-	: function_definition			{ $$ = new ExternalDeclaration("function" , $1); 	std::cout<<"external_declaration -> function_definition"<<std::endl; }
-	| declaration					{ $$ = new ExternalDeclaration("declaration" , $1); std::cout<<"external_declaration -> declaration"<<std::endl; }
+	: function_definition			{ $$ = $1; /*new ExternalDeclaration("function" , $1); 	*/std::cout<<"external_declaration -> function_definition"<<std::endl; }
+	| declaration					{ $$ = $1; /*new ExternalDeclaration("declaration" , $1);*/ std::cout<<"external_declaration -> declaration"<<std::endl; }
 	;
 
 function_definition
@@ -469,15 +472,11 @@ void yyerror (char const *s) {
     exit(1);
 }
 
-//int main() {
-//    yyparse(); // parse user input
-//}
-
 Expression *g_root; // Definition of variable (to match declaration earlier)
 
 Expression *parseAST()
 {
-  g_root=0;
+  g_root=NULL;
   yyparse();
   return g_root;
 }
@@ -485,7 +484,8 @@ Expression *parseAST()
 int main()
 {
 // Parse the AST
-    Expression *ast=parseAST();
+    Expression *ast=
+	parseAST();
 //Compile AST? Need function in the class
 
 	std::string current_func;
@@ -500,8 +500,8 @@ int main()
 	std::cout<<"----------------------------------"<<std::endl;
 
 	std::string MIPS;
-	ast->AtLocation();
-	//MIPS = ast->Compile( current_func, initial_memory, g_Var, reg_available, type_check );
-	//std::cout<<"MIPS: " << MIPS <<std::endl;
+	//ast->AtLocation();
+	MIPS = ast->Compile( current_func, initial_memory, g_Var, reg_available, type_check );
+	std::cout<<"MIPS: " << MIPS <<std::endl;
     return 0;
 }

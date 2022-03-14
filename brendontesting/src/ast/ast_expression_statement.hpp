@@ -9,7 +9,7 @@ class ExpressionStatement
     : public Expression
 {
 protected:
-    ExpressionPtr expr;
+    ExpressionPtr expr = NULL;
 public:
     ExpressionStatement()
     {}

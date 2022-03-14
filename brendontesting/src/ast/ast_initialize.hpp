@@ -10,7 +10,7 @@ class Initializer
 {
 protected:
     std::string Type;
-    ExpressionPtr expr;
+    ExpressionPtr expr = NULL;
 public:
     Initializer(std::string _Type, ExpressionPtr _expr)
         : Type(_Type)
@@ -29,8 +29,8 @@ class InitializerList
     : public Expression
 {
 protected:
-    ExpressionPtr exprL;
-    ExpressionPtr exprR;
+    ExpressionPtr exprL = NULL;
+    ExpressionPtr exprR = NULL;
 public:
     InitializerList(ExpressionPtr _exprL, ExpressionPtr _exprR)
         : exprL(_exprL)

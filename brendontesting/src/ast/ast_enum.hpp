@@ -11,7 +11,7 @@ class EnumSpecifier
 protected:
     int Type;
     std::string text;
-    ExpressionPtr expr;
+    ExpressionPtr expr = NULL;
 public:
     EnumSpecifier(int _Type, std::string _text, ExpressionPtr _expr)
         : Type(_Type)
@@ -35,8 +35,8 @@ class EnumeratorList
     : public Expression
 {
 protected:
-    ExpressionPtr exprL;
-    ExpressionPtr exprR;
+    ExpressionPtr exprL = NULL;
+    ExpressionPtr exprR = NULL;
 public:
     EnumeratorList(ExpressionPtr _exprL, ExpressionPtr _exprR)
         : exprL(_exprL)
@@ -56,7 +56,7 @@ class Enumerator
 {
 protected:
     std::string ident;
-    ExpressionPtr expr;
+    ExpressionPtr expr = NULL;
 public:
     Enumerator(std::string _ident, ExpressionPtr _expr)
         : ident(_ident)

@@ -22,10 +22,10 @@ public:
     //REMOVE LATER
     virtual std::string Compile( std::string current_func, int mem, std::map<std::string, std::string> g_Var, std::map<std::string, bool> reg_available, std::string type_check ) 
     {
-        throw std::runtime_error("This should not be called. Needs to be overriden.");
+        throw std::runtime_error("This should not be called. Needs to be overriden. COMPILE");
     }
 
-    virtual void AtLocation() { throw std::runtime_error("This should not be called. Needs to be overriden."); }
+    virtual void AtLocation() { throw std::runtime_error("This should not be called. Needs to be overriden. AT LOCATION"); }
     
 };
 

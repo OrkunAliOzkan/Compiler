@@ -9,9 +9,9 @@ class SelectionStatement
     : public Expression
 {
 protected:
-    ExpressionPtr statement1;
-    ExpressionPtr statement2;
-    ExpressionPtr statement3;
+    ExpressionPtr statement1 = NULL;
+    ExpressionPtr statement2 = NULL;
+    ExpressionPtr statement3 = NULL;
 public:
     SelectionStatement(ExpressionPtr _statement1, ExpressionPtr _statement2)
         : statement1(_statement1)

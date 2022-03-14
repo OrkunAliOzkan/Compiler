@@ -10,8 +10,8 @@ class LabeledStatement
 {
 protected:
     std::string Type;
-    ExpressionPtr exprL;
-    ExpressionPtr exprR;
+    ExpressionPtr exprL = NULL;
+    ExpressionPtr exprR = NULL;
 public:
     LabeledStatement(std::string _Type, ExpressionPtr _exprL, ExpressionPtr _exprR)
         : Type(_Type)

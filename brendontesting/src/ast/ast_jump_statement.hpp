@@ -11,7 +11,7 @@ class JumpStatement
 protected:
     int Type;
     std::string ident;
-    ExpressionPtr expr;
+    ExpressionPtr expr = NULL;
 public:
     JumpStatement(int _Type, std::string _ident)
         : Type(_Type)

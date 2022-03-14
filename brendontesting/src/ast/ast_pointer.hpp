@@ -9,8 +9,8 @@ class pointer
     : public Expression
 {
 protected:
-    ExpressionPtr exprL;
-    ExpressionPtr exprR;
+    ExpressionPtr exprL = NULL;
+    ExpressionPtr exprR = NULL;
 public:
     pointer(ExpressionPtr _exprL, ExpressionPtr _exprR)
         : exprL(_exprL)

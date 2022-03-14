@@ -9,8 +9,8 @@ class Operator
     : public Expression
 {
 protected:
-    ExpressionPtr left;
-    ExpressionPtr right;
+    ExpressionPtr left  = NULL;
+    ExpressionPtr right = NULL;
 public:
     Operator(ExpressionPtr _left, ExpressionPtr _right)
         : left(_left)

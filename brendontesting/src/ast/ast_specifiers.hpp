@@ -35,15 +35,17 @@ public:
     {
         return Operator;
     }
+
+    virtual void AtLocation() override { std::cout << "Hello in Type Specifier!" << std::endl; }
 };
 
 class Struct_Or_Union_Specifier
     : public Expression
 {
 protected:
-    ExpressionPtr exprL;
+    ExpressionPtr exprL = NULL;
     std::string text;
-    ExpressionPtr exprR;
+    ExpressionPtr exprR = NULL;
 public:
     Struct_Or_Union_Specifier(ExpressionPtr _exprL, std::string _text, ExpressionPtr _exprR)
         : exprL(_exprL)
@@ -76,8 +78,8 @@ class SpecifierQualifierList
 {
 protected:
     int Type;
-    ExpressionPtr exprL;
-    ExpressionPtr exprR;
+    ExpressionPtr exprL = NULL;
+    ExpressionPtr exprR = NULL;
 public:
     SpecifierQualifierList(int _Type, ExpressionPtr _exprL, ExpressionPtr _exprR)
         : Type(_Type)

@@ -8,7 +8,7 @@ class Unary
     : public Expression
 {
 private:
-    ExpressionPtr expr;
+    ExpressionPtr expr = NULL;
 protected:
     Unary(const ExpressionPtr _expr)
         : expr(_expr)
