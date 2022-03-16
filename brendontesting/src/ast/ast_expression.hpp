@@ -20,7 +20,7 @@ public:
 
     // The map will contain gVar[VARIABLE_NAME] = VARIABLE_LOCATION (global variables)
     //REMOVE LATER
-    virtual std::string Compile( std::string current_func, int mem, std::map<std::string, std::string> g_Var, std::map<std::string, bool> reg_available, std::string type_check ) 
+    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, double>> g_Var, std::map<std::string, std::pair<std::string, double>> loc_Var, std::string type_check , bool &isConstant) 
     {
         throw std::runtime_error("This should not be called. Needs to be overriden. COMPILE");
     }

@@ -1067,7 +1067,7 @@ YY_RULE_SETUP
 case 34:
 YY_RULE_SETUP
 #line 53 "lexer.l"
-{ return(CONSTANT); }
+{  return(CONSTANT); }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
@@ -1077,7 +1077,7 @@ YY_RULE_SETUP
 case 36:
 YY_RULE_SETUP
 #line 55 "lexer.l"
-{ return(CONSTANT); }
+{ yylval.string = new std::string(yytext); return(CONSTANT); }
 	YY_BREAK
 case 37:
 /* rule 37 can match eol */

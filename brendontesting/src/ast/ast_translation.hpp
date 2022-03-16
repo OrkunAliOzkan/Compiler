@@ -21,9 +21,9 @@ public:
         : exprL(_exprL)
     {}
 
-    virtual std::string Compile( std::string current_func, int mem, std::map<std::string, std::string> g_Var, std::map<std::string, bool> reg_available, std::string type_check ) override
+    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, double>> g_Var, std::map<std::string, std::pair<std::string, double>> loc_Var, std::string type_check , bool &isConstant) override
     {
-        if (exprR == NULL)  { return exprL->Compile(current_func, mem, g_Var, reg_available, type_check); }
+        if (exprR == NULL)  { return exprL->Compile(mem, g_Var, loc_Var, type_check, isConstant); }
         else                { std::cout << "Not implemented yet" << std::endl; return "Not implemented."; }
     }
 

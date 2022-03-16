@@ -9,26 +9,15 @@ class CompoundStatement
     : public Expression
 {
 protected:
-    int Type;
     ExpressionPtr exprL = NULL;
     ExpressionPtr exprR = NULL;
 public:
-    CompoundStatement(int _Type)
-        : Type(_Type)
-    {}
-
-    CompoundStatement(int _Type, ExpressionPtr _exprL)
-        : Type(_Type)
-        , exprL(_exprL)
-    {}
-
-    CompoundStatement(int _Type, ExpressionPtr _exprL, ExpressionPtr _exprR)
-        : Type(_Type)
-        , exprL(_exprL)
+    CompoundStatement(ExpressionPtr _exprL, ExpressionPtr _exprR)
+        : exprL(_exprL)
         , exprR(_exprR)
     {}
 
-    virtual std::string Compile( std::string current_func, int mem, std::map<std::string, std::string> g_Var, std::map<std::string, bool> reg_available, std::string type_check ) override
+    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, double>> g_Var, std::map<std::string, std::pair<std::string, double>> loc_Var, std::string type_check , bool &isConstant) override
     {
         return "CompoundStatement";
     }

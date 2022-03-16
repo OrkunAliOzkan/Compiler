@@ -15,7 +15,7 @@ public:
         : id(_id)
     {}
 
-    virtual std::string Compile( std::string current_func, int mem, std::map<std::string, std::string> g_Var, std::map<std::string, bool> reg_available, std::string type_check ) override
+    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, double>> g_Var, std::map<std::string, std::pair<std::string, double>> loc_Var, std::string type_check , bool &isConstant) override
     {
         return id;
     }    
@@ -44,13 +44,17 @@ class Integer
     : public Expression
 {
 protected:
-    int value;
+    std::string value;
 public:
-    Integer(int _value)
+    Integer(std::string _value)
         : value(_value)
     {}
 
-    virtual int getVAL() const { return value;}
+    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, double>> g_Var, std::map<std::string, std::pair<std::string, double>> loc_Var, std::string type_check , bool &isConstant) override
+    {
+        isConstant = 1;
+        return value;   //  returns string
+    }
 };
 
 class Double

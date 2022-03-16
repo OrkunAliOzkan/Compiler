@@ -50,9 +50,9 @@ IS			(u|U|l|L)*
 
 {L}({L}|{D})*		{ yylval.string = new std::string(yytext); return(IDENTIFIER); }
 
-0[xX]{H}+{IS}?		{ return(CONSTANT); }
+0[xX]{H}+{IS}?		{  return(CONSTANT); }
 0{D}+{IS}?		{ return(CONSTANT); }
-{D}+{IS}?		{ return(CONSTANT); }
+{D}+{IS}?		{ yylval.string = new std::string(yytext); return(CONSTANT); }
 L?'(\\.|[^\\'])+'	{ return(CONSTANT); }
 
 {D}+{E}{FS}?		{ return(CONSTANT); }

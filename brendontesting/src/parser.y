@@ -22,10 +22,8 @@
 	std::string *string;
 }
  
-%token CONSTANT
-%token IDENTIFIER
-%type<string> IDENTIFIER
-%type<int_num> CONSTANT
+%token IDENTIFIER CONSTANT
+%type<string> IDENTIFIER CONSTANT
 
 %token STRING_LITERAL SIZEOF
 %token PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP
@@ -64,7 +62,7 @@ HeadNODE : translation_unit { g_root = new HeadNode($1); }
 	//	TODO:	These haven't been done yet!
 primary_expression
 	: IDENTIFIER				{ std::cout<< "primary_expression -> IDENTIFIER " << std::endl; $$ = new Variable(*$1); 	}
-	| CONSTANT					{ std::cout<< "primary_expression -> CONSTANT " << std::endl; $$ = new Integer($1); 		}
+	| CONSTANT					{ std::cout<< "primary_expression -> CONSTANT " << std::endl; $$ = new Integer(*$1); 		}
 	| STRING_LITERAL			{ std::cout<< "primary_expression -> STRING_LITERAL" <<std::endl; /*$$ = new StringLiteral();*/	}
 	| '(' expression ')'		{ std::cout<< "primary_expression -> ( expression )" <<std::endl; /*$$ = new Expression;*/}
 	;
@@ -219,7 +217,7 @@ init_declarator_list
 	;
 
 init_declarator
-	: declarator									{ $$ = $1; std::cout<<"init_declarator -> declarator"<<std::endl;  /*	$$ = new Init_Declarator($1, NULL); */}
+	: declarator									{ $$ = new Init_Declarator($1); 	std::cout<<"init_declarator -> declarator"<<std::endl;  /*	$$ = new Init_Declarator($1, NULL); */}
 	| declarator EQ_ASSIGN initializer				{ $$ = new Init_Declarator($1, $3); std::cout<<"init_declarator -> declarator '=' initializer"<<std::endl; }
 	;
 
@@ -404,20 +402,20 @@ labeled_statement
 	;
 
 compound_statement
-	: '{' '}'									{$$ = new CompoundStatement(0);	}
-	| '{' statement_list '}'					{$$ = new CompoundStatement(1, $2);	}
-	| '{' declaration_list '}'					{$$ = new CompoundStatement(2, $2);	}
-	| '{' declaration_list statement_list '}'	{$$ = new CompoundStatement(3, $2, $3);	}
+	: '{' '}'									{											std::cout << "compound_statement -> '{' '}'" << std::endl;   }
+	| '{' statement_list '}'					{$$ = $2;									std::cout << "compound_statement -> '{' statement_list '}'" << std::endl;	}
+	| '{' declaration_list '}'					{$$ = $2;									std::cout << "compound_statement -> '{' declaration_list '}'" << std::endl; 	}
+	| '{' declaration_list statement_list '}'	{$$ = new CompoundStatement($2, $3); 	std::cout << "compound_statement -> '{' declaration_list statement_list '}'" << std::endl;	}
 	;
 
 declaration_list
-	: declaration								{$$ = $1;	}
-	| declaration_list declaration				{$$ = new DeclarationList($1, $2);	}
+	: declaration								{$$ = $1;									std::cout << "declaration_list -> declaration" << std::endl; }
+	| declaration_list declaration				{$$ = new DeclarationList($1, $2);			std::cout << "declaration_list -> declaration_list declaration" << std::endl; }
 	;
 
 statement_list
-	: statement									{$$ = $1;	}
-	| statement_list statement					{$$ = new StatementList($1, $2);	}
+	: statement									{$$ = $1;									std::cout << "statement_list -> statement" << std::endl; }
+	| statement_list statement					{$$ = new StatementList($1, $2);			std::cout << "statement_list -> statement_list statement" << std::endl; }
 	;
 
 expression_statement
@@ -458,8 +456,8 @@ external_declaration
 
 function_definition
 	: declaration_specifiers declarator declaration_list compound_statement			{ $$ = new FunctionDefinition($1, $2, $3, $4);	std::cout<<"function_definition -> declaration_specifiers declarator declaration_list compound_statement"<<std::endl; }
-	| declaration_specifiers declarator compound_statement							{ $$ = new FunctionDefinition($1, $2, $3);		std::cout<<"function_definition -> declaration_specifiers declarator compound_statement"<<std::endl; }
-	| declarator declaration_list compound_statement								{ $$ = new FunctionDefinition($1, $2, $3);		std::cout<<"function_definition -> declarator declaration_list compound_statement"<<std::endl; }
+	| declaration_specifiers declarator compound_statement							{ $$ = new FunctionDefinition($1, $2, $3, 0);		std::cout<<"function_definition -> declaration_specifiers declarator compound_statement"<<std::endl; }
+	| declarator declaration_list compound_statement								{ $$ = new FunctionDefinition($1, $2, $3, 1);		std::cout<<"function_definition -> declarator declaration_list compound_statement"<<std::endl; }
 	| declarator compound_statement													{ $$ = new FunctionDefinition($1, $2);			std::cout<<"function_definition -> declarator compound_statement	"<<std::endl; }
 	;
 
@@ -484,15 +482,14 @@ Expression *parseAST()
 int main()
 {
 // Parse the AST
-    Expression *ast=
-	parseAST();
+    Expression *ast = parseAST();
 //Compile AST? Need function in the class
 
-	std::string current_func;
-	std::map<std::string, std::string> g_Var;
-	std::map<std::string, bool> reg_available;
+	std::map< std::string, std::pair < std::string, double > > g_Var; 		//name, <type, mem location>
+	std::map< std::string, std::pair < std::string, double > > loc_Var;	//name, <type, mem location>
 	std::string type_check;
 	int initial_memory = 0;
+	bool isConstant;
 
 	std::cout<<"----------------------------------"<<std::endl;
 	std::cout<<"----------------------------------"<<std::endl;
@@ -500,8 +497,7 @@ int main()
 	std::cout<<"----------------------------------"<<std::endl;
 
 	std::string MIPS;
-	//ast->AtLocation();
-	MIPS = ast->Compile( current_func, initial_memory, g_Var, reg_available, type_check );
-	std::cout<<"MIPS: " << MIPS <<std::endl;
+	MIPS = ast->Compile( initial_memory, g_Var, loc_Var, type_check, isConstant);
+	std::cout<<"MIPS: \n" << MIPS <<std::endl;
     return 0;
 }
