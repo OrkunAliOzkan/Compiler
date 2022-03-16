@@ -15,9 +15,9 @@ public:
         : child(_child)
     {}
 
-    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, double>> g_Var, std::map<std::string, std::pair<std::string, double>> loc_Var, std::string type_check , bool &isConstant) override
+    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
     {
-        return child->Compile(mem, g_Var, loc_Var, type_check, isConstant);
+        return child->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal);
     }
 
     virtual void AtLocation() override { std::cout << "In Head Node" << std::endl; child->AtLocation(); }

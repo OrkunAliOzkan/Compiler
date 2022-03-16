@@ -3361,11 +3361,11 @@ int main()
     Expression *ast = parseAST();
 //Compile AST? Need function in the class
 
-	std::map< std::string, std::pair < std::string, double > > g_Var; 		//name, <type, mem location>
-	std::map< std::string, std::pair < std::string, double > > loc_Var;	//name, <type, mem location>
+	std::map< std::string, std::pair < std::string, int > > g_Var; 		//name, <type, mem location>
+	std::map< std::string, std::pair < std::string, int > > loc_Var;	//name, <type, mem location>
 	std::string type_check;
 	int initial_memory = 0;
-	bool isConstant;
+	bool isConstant, isLocal;
 
 	std::cout<<"----------------------------------"<<std::endl;
 	std::cout<<"----------------------------------"<<std::endl;
@@ -3373,7 +3373,7 @@ int main()
 	std::cout<<"----------------------------------"<<std::endl;
 
 	std::string MIPS;
-	MIPS = ast->Compile( initial_memory, g_Var, loc_Var, type_check, isConstant);
+	MIPS = ast->Compile( initial_memory, g_Var, loc_Var, type_check, isConstant, isLocal);
 	std::cout<<"MIPS: \n" << MIPS <<std::endl;
     return 0;
 }
