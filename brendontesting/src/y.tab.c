@@ -3365,7 +3365,7 @@ int main()
 	std::map< std::string, std::pair < std::string, int > > loc_Var;	//name, <type, mem location>
 	std::string type_check;
 	int initial_memory = 0;
-	bool isConstant, isLocal;
+	bool isConstant, isLocal = 0;
 
 	std::cout<<"----------------------------------"<<std::endl;
 	std::cout<<"----------------------------------"<<std::endl;

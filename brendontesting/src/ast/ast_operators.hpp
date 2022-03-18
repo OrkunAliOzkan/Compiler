@@ -32,9 +32,57 @@ public:
         : Operator(_left, _right)
     {}
 
-    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
+    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> &loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
     {
-        return "add 1 2 3";
+        bool op1_const, op2_const;
+        std::string soln;    //  Is formatted soln
+        std::string op1 = left->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal);
+        op1_const = isConstant;
+        std::string op2 = right->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal);
+        op2_const = isConstant;
+
+        if ( op1_const & op2_const )
+        {
+            std::cout<< "2 ints" << std::endl;
+            if (type_check == "int")    
+            {
+                int result = std::stoi(op1) + std::stoi(op2);
+                isConstant = 1;
+                return std::to_string(result);
+            }
+        }
+        else if ( !(op1_const) & !(op2_const) )
+        {
+            //std::cout<< "2 var" << std::endl;
+            if (type_check == "int")    
+            { 
+                soln += "lw $3, " + std::to_string(loc_Var[op1].second) + "($fp)" + "\n";
+                soln += "lw $2, " + std::to_string(loc_Var[op2].second) + "($fp)" + "\n";
+                soln += "nop\naddu $2,$3,$2\n";
+                isConstant = 0;
+                return soln;
+            }
+        }
+        else
+        {
+            //std::cout<< "1 var" << std::endl;
+            if (type_check == "int")    
+            {
+                if (op1_const)
+                {  
+                    soln += "lw $2, " + std::to_string(loc_Var[op2].second) + "($fp)" + "\n";
+                    soln += "nop\naddu $2,$2," + op1 + '\n';
+                    isConstant = 0;
+                }
+                else
+                {
+                    soln += "lw $2, " + std::to_string(loc_Var[op1].second) + "($fp)" + "\n";
+                    soln += "nop\naddiu $2,$2," + op2 + '\n';
+                }
+                isConstant = 0;
+                return soln;
+            } 
+        } 
     }
 };
 
@@ -45,6 +93,57 @@ public:
     SubOperator(ExpressionPtr _left, ExpressionPtr _right)
         : Operator(_left, _right)
     {}
+
+    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> &loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
+    {
+        bool op1_const, op2_const;
+        std::string soln;    //  Is formatted soln
+        std::string op1 = left->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal);
+        op1_const = isConstant;
+        std::string op2 = right->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal);
+        op2_const = isConstant;
+
+        if ( op1_const & op2_const )
+        {
+            std::cout<< "2 ints" << std::endl;
+            if (type_check == "int")    
+            {
+                int result = std::stoi(op1) - std::stoi(op2);
+                isConstant = 1;
+                return std::to_string(result);
+            }
+        }
+        else if ( !(op1_const) & !(op2_const) )
+        {
+            if (type_check == "int")    
+            { 
+                soln += "lw $3, " + std::to_string(loc_Var[op1].second) + "($fp)" + "\n";
+                soln += "lw $2, " + std::to_string(loc_Var[op2].second) + "($fp)" + "\n";
+                soln += "nop\nsubu $2,$3,$2\n";
+                isConstant = 0;
+                return soln;
+            }
+        }
+        else
+        {
+            if (type_check == "int")    
+            {
+                if (op1_const)
+                {  
+                    soln += "lw $2, " + std::to_string(loc_Var[op2].second) + "($fp)" + "\n";
+                    soln += "nop\nsubu $2,$2," + op1 + '\n';
+                    isConstant = 0;
+                }
+                else
+                {
+                    soln += "lw $2, " + std::to_string(loc_Var[op1].second) + "($fp)" + "\n";
+                    soln += "nop\nsubu $2,$2," + op2 + '\n';
+                }
+                isConstant = 0;
+                return soln;
+            } 
+        } 
+    }
 };
 
 
@@ -73,6 +172,7 @@ public:
     ModOperator(ExpressionPtr _left, ExpressionPtr _right)
         : Operator(_left, _right)
     {}
+
 };
 
 class OrOperator
@@ -82,6 +182,56 @@ public:
     OrOperator(ExpressionPtr _left, ExpressionPtr _right)
         : Operator(_left, _right)
     {}
+
+    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> &loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
+    {
+        bool op1_const, op2_const;
+        std::string soln;    //  Is formatted soln
+        std::string op1 = left->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal);
+        op1_const = isConstant;
+        std::string op2 = right->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal);
+        op2_const = isConstant;
+
+        if ( op1_const & op2_const )
+        {
+            if (type_check == "int")    
+            {
+                int result = std::stoi(op1) - std::stoi(op2);
+                isConstant = 1;
+                return std::to_string(result);
+            }
+        }
+        else if ( !(op1_const) & !(op2_const) )
+        {
+            if (type_check == "int")    
+            { 
+                soln += "lw $3, " + std::to_string(loc_Var[op1].second) + "($fp)" + "\n";
+                soln += "lw $2, " + std::to_string(loc_Var[op2].second) + "($fp)" + "\n";
+                soln += "nop\nand $2,$3,$2\n";
+                isConstant = 0;
+                return soln;
+            }
+        }
+        else
+        {
+            if (type_check == "int")    
+            {
+                if (op1_const)
+                {  
+                    soln += "lw $2, " + std::to_string(loc_Var[op2].second) + "($fp)" + "\n";
+                    soln += "nop\nandi $2,$2," + op1 + '\n';
+                    isConstant = 0;
+                }
+                else
+                {
+                    soln += "lw $2, " + std::to_string(loc_Var[op1].second) + "($fp)" + "\n";
+                    soln += "nop\nandi $2,$2," + op2 + '\n';
+                }
+                isConstant = 0;
+                return soln;
+            } 
+        } 
+    }
 };
 
 class bOrOperator
@@ -109,6 +259,55 @@ public:
     bAndOperator(ExpressionPtr _left, ExpressionPtr _right)
         : Operator(_left, _right)
     {}
+  virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> &loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
+    {
+        bool op1_const, op2_const;
+        std::string soln;    //  Is formatted soln
+        std::string op1 = left->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal);
+        op1_const = isConstant;
+        std::string op2 = right->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal);
+        op2_const = isConstant;
+
+        if ( op1_const & op2_const )
+        {
+            if (type_check == "int")    
+            {
+                int result = std::stoi(op1) & std::stoi(op2);
+                isConstant = 1;
+                return std::to_string(result);
+            }
+        }
+        else if ( !(op1_const) & !(op2_const) )
+        {
+            if (type_check == "int")    
+            { 
+                soln += "lw $3, " + std::to_string(loc_Var[op1].second) + "($fp)" + "\n";
+                soln += "lw $2, " + std::to_string(loc_Var[op2].second) + "($fp)" + "\n";
+                soln += "nop\nand $2,$3,$2\n";
+                isConstant = 0;
+                return soln;
+            }
+        }
+        else
+        {
+            if (type_check == "int")    
+            {
+                if (op1_const)
+                {  
+                    soln += "lw $2, " + std::to_string(loc_Var[op2].second) + "($fp)" + "\n";
+                    soln += "nop\nand $2,$2," + op1 + '\n';
+                    isConstant = 0;
+                }
+                else
+                {
+                    soln += "lw $2, " + std::to_string(loc_Var[op1].second) + "($fp)" + "\n";
+                    soln += "nop\nand $2,$2," + op2 + '\n';
+                }
+                isConstant = 0;
+                return soln;
+            } 
+        }
+    } 
 };
 
 class xorOperator
@@ -188,8 +387,7 @@ class LShiftRightOperator
 {
 public:
     LShiftRightOperator(ExpressionPtr _left, ExpressionPtr _right)
-        : Operator(_left, _right)
-    {}
+        : Operator(_left, _right) {}
 };
 
 
