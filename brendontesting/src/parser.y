@@ -48,11 +48,9 @@ enumerator_list enumerator type_qualifier declarator direct_declarator pointer t
 type_name abstract_declarator direct_abstract_declarator initializer initializer_list statement labeled_statement compound_statement declaration_list statement_list
 expression_statement selection_statement iteration_statement jump_statement translation_unit external_declaration function_definition assignment_operator
 
-
 // Possibly this for lists? 
 //%type <exprList> STATEMENT_LIST PARAMETER_LIST TRANSLATION_UNIT DECLARATION_LIST ARGUMENT_EXPRESSION_LIST IDENTIFIER_LIST INIT_DECLARATOR_LIST PARAMETER_TYPE_LIST
 //TYPE_QUALIFIER_LIST INITIALIZER_LIST
-
 
 %start HeadNODE
 %%
