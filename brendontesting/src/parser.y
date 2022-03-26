@@ -198,8 +198,8 @@ constant_expression
 	;
 
 declaration
-	: declaration_specifiers ';'							{ std::cout<<"declaration -> declaration_specifiers ;" << std::endl; $$ = $1; }
-	| declaration_specifiers init_declarator_list ';'		{ std::cout<<"declaration -> declaration_specifiers init_declarator_list ;" << std::endl; $$ = new Declaration($1, $2); }
+	: declaration_specifiers ';'							{ $$ = $1; std::cout<<"declaration -> declaration_specifiers ;" << std::endl;  }
+	| declaration_specifiers init_declarator_list ';'		{ $$ = new Declaration($1, $2); std::cout<<"declaration -> declaration_specifiers init_declarator_list ;" << std::endl; }
 	;
 
 declaration_specifiers
@@ -487,7 +487,7 @@ int main()
 
 	std::map< std::string, std::pair < std::string, int > > g_Var; 		//name, <type, mem location>
 	std::map< std::string, std::pair < std::string, int > > loc_Var;	//name, <type, mem location>
-	std::string type_check;
+	std::string type_check = "update";
 	int initial_memory = 0;
 	bool isConstant, isLocal = 0;
 

@@ -140,11 +140,11 @@ public:
         }
         else
         {
-            if (type_check == "int")
-            {
             std::string var_name = exprL->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal);
             std::string evaluation = exprR->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal);
 
+            if (type_check == "int")
+            {
                 if(isConstant)
                 {
                     mem += 4;
@@ -152,7 +152,6 @@ public:
                     std::string localityCheck = (isLocal) ? ("\n\t") : ("\n");
                     def_int += "li $2, " + evaluation + localityCheck;   //  loading the evaluation into reg 2
                     def_int += "sw $2, " + std::to_string(mem) + "($fp)" + localityCheck;     //  Store $2 into memory location where @
-
 
                     //Adding to map of values.
                     if(isLocal)     { loc_Var[var_name] = std::make_pair("int", mem); }
@@ -163,11 +162,9 @@ public:
                 else
                 {
                     mem += 4;
-                    std::cout<< "GOT HERE 1" <<std::endl;
                     std::string def_int;
                     std::string localityCheck = (isLocal) ? ("\n\t") : ("\n");   
 
-                    std::cout<< "GOT HERE 2" <<std::endl;
                     def_int += evaluation + localityCheck;
                     def_int += "sw $2, " + std::to_string(mem) + "($fp)" + localityCheck;     //  Store $2 into memory location where @
 
@@ -227,8 +224,16 @@ public:
     {
         std::string type = exprL->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal);
 
-        if( type.find("int") != std::string::npos )     { return exprR->Compile(mem, g_Var, loc_Var, "int", isConstant, isLocal); }
-        else                                            { return "not implemented"; }
+        if( type.find("void") != std::string::npos )                { return exprR->Compile(mem, g_Var, loc_Var, "void", isConstant, isLocal); }
+        else if ( type.find("char") != std::string::npos )          { return exprR->Compile(mem, g_Var, loc_Var, "char", isConstant, isLocal); }
+        else if ( type.find("short") != std::string::npos )         { return exprR->Compile(mem, g_Var, loc_Var, "short", isConstant, isLocal); }
+        else if ( type.find("int") != std::string::npos )           { return exprR->Compile(mem, g_Var, loc_Var, "int", isConstant, isLocal); }
+        else if ( type.find("long") != std::string::npos )          { return exprR->Compile(mem, g_Var, loc_Var, "long", isConstant, isLocal); }
+        else if ( type.find("float") != std::string::npos )         { return exprR->Compile(mem, g_Var, loc_Var, "float", isConstant, isLocal); }
+        else if ( type.find("double") != std::string::npos )        { return exprR->Compile(mem, g_Var, loc_Var, "double", isConstant, isLocal); }
+        else if ( type.find("signed") != std::string::npos )        { return exprR->Compile(mem, g_Var, loc_Var, "signed", isConstant, isLocal); }
+        else if ( type.find("unsigned") != std::string::npos )      { return exprR->Compile(mem, g_Var, loc_Var, "unsigned", isConstant, isLocal); }
+        else                                                        { return "not implemented"; }
     }
 
     virtual ~Declaration()
