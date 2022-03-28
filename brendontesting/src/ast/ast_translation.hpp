@@ -21,10 +21,10 @@ public:
         : exprL(_exprL)
     {}
 
-    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> &loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
+    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> &loc_Var, std::string type_check , bool &isConstant, bool isLocal, std::vector<int> func_call) override
     {
-        if (exprR == NULL)  { return exprL->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal); }
-        else                { std::cout << "Not implemented yet" << std::endl; return "Not implemented."; }
+        if (exprR == NULL)  { return exprL->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal, func_call); }
+        else                { return exprL->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal, func_call) + exprR->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal, func_call); }
     }
 
     virtual void AtLocation() override { std::cout << "Hello in Translation_Unit!" << std::endl; }

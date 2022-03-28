@@ -31,12 +31,12 @@ Grammar
    20                 | SIZEOF unary_expression
    21                 | SIZEOF '(' type_name ')'
 
-   22 unary_operator: '&'
-   23               | '*'
-   24               | '+'
-   25               | '-'
-   26               | '~'
-   27               | '!'
+   22 unary_operator: AND
+   23               | POINTER
+   24               | PLUS
+   25               | MINUS
+   26               | TILDE
+   27               | EXCL
 
    28 cast_expression: unary_expression
    29                | '(' type_name ')' cast_expression
@@ -284,15 +284,14 @@ Grammar
 Terminals, with rules where they appear
 
     $end (0) 0
-    '!' (33) 27
     '%' (37) 33
-    '&' (38) 22 49
+    '&' (38) 49
     '(' (40) 5 8 9 21 29 133 136 137 138 159 164 165 166 167 192 193 194 195 196 197 198
     ')' (41) 5 8 9 21 29 133 136 137 138 159 164 165 166 167 192 193 194 195 196 197 198
-    '*' (42) 23 31 139 140 141 142
-    '+' (43) 24 35
+    '*' (42) 31 139 140 141 142
+    '+' (43) 35
     ',' (44) 15 74 85 117 125 146 148 153 170 172
-    '-' (45) 25 36
+    '-' (45) 36
     '.' (46) 10
     '/' (47) 32
     ':' (58) 59 119 120 179 180 181
@@ -306,7 +305,6 @@ Terminals, with rules where they appear
     '{' (123) 104 105 121 122 169 170 182 183 184 185
     '|' (124) 53
     '}' (125) 104 105 121 122 169 170 182 183 184 185
-    '~' (126) 26
     error (256)
     IDENTIFIER <string> (258) 2 10 11 104 106 122 123 126 127 132 152 153 179 199
     CONSTANT <string> (259) 3
@@ -355,213 +353,219 @@ Terminals, with rules where they appear
     CONTINUE <string> (302) 200
     BREAK <string> (303) 201
     RETURN <string> (304) 202 203
-    EQ_ASSIGN <string> (305) 62 87 127
-    MUL_ASSIGN <string> (306) 63
-    DIV_ASSIGN <string> (307) 64
-    MOD_ASSIGN <string> (308) 65
-    ADD_ASSIGN <string> (309) 66
-    SUB_ASSIGN <string> (310) 67
-    LEFT_ASSIGN <string> (311) 68
-    RIGHT_ASSIGN <string> (312) 69
-    AND_ASSIGN <string> (313) 70
-    XOR_ASSIGN <string> (314) 71
-    OR_ASSIGN <string> (315) 72
+    AND <string> (305) 22
+    POINTER <string> (306) 23
+    PLUS <string> (307) 24
+    MINUS <string> (308) 25
+    TILDE <string> (309) 26
+    EXCL <string> (310) 27
+    EQ_ASSIGN <string> (311) 62 87 127
+    MUL_ASSIGN <string> (312) 63
+    DIV_ASSIGN <string> (313) 64
+    MOD_ASSIGN <string> (314) 65
+    ADD_ASSIGN <string> (315) 66
+    SUB_ASSIGN <string> (316) 67
+    LEFT_ASSIGN <string> (317) 68
+    RIGHT_ASSIGN <string> (318) 69
+    AND_ASSIGN <string> (319) 70
+    XOR_ASSIGN <string> (320) 71
+    OR_ASSIGN <string> (321) 72
 
 
 Nonterminals, with rules where they appear
 
-    $accept (84)
+    $accept (88)
         on left: 0
-    HeadNODE (85)
+    HeadNODE (89)
         on left: 1
         on right: 0
-    primary_expression <expr> (86)
+    primary_expression <expr> (90)
         on left: 2 3 4 5
         on right: 6
-    postfix_expression <expr> (87)
+    postfix_expression <expr> (91)
         on left: 6 7 8 9 10 11 12 13
         on right: 7 8 9 10 11 12 13 16
-    argument_expression_list <expr> (88)
+    argument_expression_list <expr> (92)
         on left: 14 15
         on right: 9 15
-    unary_expression <expr> (89)
+    unary_expression <expr> (93)
         on left: 16 17 18 19 20 21
         on right: 17 18 20 28 61
-    unary_operator (90)
+    unary_operator <expr> (94)
         on left: 22 23 24 25 26 27
         on right: 19
-    cast_expression <expr> (91)
+    cast_expression <expr> (95)
         on left: 28 29
         on right: 19 29 30 31 32 33
-    multiplicative_expression <expr> (92)
+    multiplicative_expression <expr> (96)
         on left: 30 31 32 33
         on right: 31 32 33 34 35 36
-    additive_expression <expr> (93)
+    additive_expression <expr> (97)
         on left: 34 35 36
         on right: 35 36 37 38 39
-    shift_expression <expr> (94)
+    shift_expression <expr> (98)
         on left: 37 38 39
         on right: 38 39 40 41 42 43 44
-    relational_expression <expr> (95)
+    relational_expression <expr> (99)
         on left: 40 41 42 43 44
         on right: 41 42 43 44 45 46 47
-    equality_expression <expr> (96)
+    equality_expression <expr> (100)
         on left: 45 46 47
         on right: 46 47 48 49
-    and_expression <expr> (97)
+    and_expression <expr> (101)
         on left: 48 49
         on right: 49 50 51
-    exclusive_or_expression <expr> (98)
+    exclusive_or_expression <expr> (102)
         on left: 50 51
         on right: 51 52 53
-    inclusive_or_expression <expr> (99)
+    inclusive_or_expression <expr> (103)
         on left: 52 53
         on right: 53 54 55
-    logical_and_expression <expr> (100)
+    logical_and_expression <expr> (104)
         on left: 54 55
         on right: 55 56 57
-    logical_or_expression <expr> (101)
+    logical_or_expression <expr> (105)
         on left: 56 57
         on right: 57 58 59
-    conditional_expression <expr> (102)
+    conditional_expression <expr> (106)
         on left: 58 59
         on right: 59 60 75
-    assignment_expression <expr> (103)
+    assignment_expression <expr> (107)
         on left: 60 61
         on right: 14 15 61 73 74 168
-    assignment_operator <expr> (104)
+    assignment_operator <string> (108)
         on left: 62 63 64 65 66 67 68 69 70 71 72
         on right: 61
-    expression <expr> (105)
+    expression <expr> (109)
         on left: 73 74
         on right: 5 7 59 74 191 192 193 194 195 196 198 203
-    constant_expression <expr> (106)
+    constant_expression <expr> (110)
         on left: 75
         on right: 119 120 127 134 161 163 180
-    declaration <expr> (107)
+    declaration <expr> (111)
         on left: 76 77
         on right: 186 187 207
-    declaration_specifiers <expr> (108)
+    declaration_specifiers <expr> (112)
         on left: 78 79 80 81 82 83
         on right: 76 77 79 81 83 149 150 151 208 209
-    init_declarator_list <expr> (109)
+    init_declarator_list <expr> (113)
         on left: 84 85
         on right: 77 85
-    init_declarator <expr> (110)
+    init_declarator <expr> (114)
         on left: 86 87
         on right: 84 85
-    storage_class_specifier <expr> (111)
+    storage_class_specifier <expr> (115)
         on left: 88 89 90 91 92
         on right: 78 79
-    type_specifier <expr> (112)
+    type_specifier <expr> (116)
         on left: 93 94 95 96 97 98 99 100 101 102 103
         on right: 80 81 112 113
-    struct_or_union_specifier <expr> (113)
+    struct_or_union_specifier <expr> (117)
         on left: 104 105 106
         on right: 102
-    struct_or_union <expr> (114)
+    struct_or_union <expr> (118)
         on left: 107 108
         on right: 104 105 106
-    struct_declaration_list <expr> (115)
+    struct_declaration_list <expr> (119)
         on left: 109 110
         on right: 104 105 110
-    struct_declaration <expr> (116)
+    struct_declaration <expr> (120)
         on left: 111
         on right: 109 110
-    specifier_qualifier_list <expr> (117)
+    specifier_qualifier_list <expr> (121)
         on left: 112 113 114 115
         on right: 111 112 114 154 155
-    struct_declarator_list <expr> (118)
+    struct_declarator_list <expr> (122)
         on left: 116 117
         on right: 111 117
-    struct_declarator <expr> (119)
+    struct_declarator <expr> (123)
         on left: 118 119 120
         on right: 116 117
-    enum_specifier <expr> (120)
+    enum_specifier <expr> (124)
         on left: 121 122 123
         on right: 103
-    enumerator_list <expr> (121)
+    enumerator_list <expr> (125)
         on left: 124 125
         on right: 121 122 125
-    enumerator <expr> (122)
+    enumerator <expr> (126)
         on left: 126 127
         on right: 124 125
-    type_qualifier <expr> (123)
+    type_qualifier <expr> (127)
         on left: 128 129
         on right: 82 83 114 115 143 144
-    declarator <expr> (124)
+    declarator <expr> (128)
         on left: 130 131
         on right: 86 87 118 120 133 149 208 209 210 211
-    direct_declarator <expr> (125)
+    direct_declarator <expr> (129)
         on left: 132 133 134 135 136 137 138
         on right: 130 131 134 135 136 137 138
-    pointer <expr> (126)
+    pointer <expr> (130)
         on left: 139 140 141 142
         on right: 130 141 142 156 158
-    type_qualifier_list <expr> (127)
+    type_qualifier_list <expr> (131)
         on left: 143 144
         on right: 140 142 144
-    parameter_type_list <expr> (128)
+    parameter_type_list <expr> (132)
         on left: 145 146
         on right: 136 165 167
-    parameter_list <expr> (129)
+    parameter_list <expr> (133)
         on left: 147 148
         on right: 145 146 148
-    parameter_declaration <expr> (130)
+    parameter_declaration <expr> (134)
         on left: 149 150 151
         on right: 147 148
-    identifier_list <expr> (131)
+    identifier_list <expr> (135)
         on left: 152 153
         on right: 137 153
-    type_name <expr> (132)
+    type_name <expr> (136)
         on left: 154 155
         on right: 21 29
-    abstract_declarator <expr> (133)
+    abstract_declarator <expr> (137)
         on left: 156 157 158
         on right: 150 155 159
-    direct_abstract_declarator <expr> (134)
+    direct_abstract_declarator <expr> (138)
         on left: 159 160 161 162 163 164 165 166 167
         on right: 157 158 162 163 166 167
-    initializer <expr> (135)
+    initializer <expr> (139)
         on left: 168 169 170
         on right: 87 171 172
-    initializer_list <expr> (136)
+    initializer_list <expr> (140)
         on left: 171 172
         on right: 169 170 172
-    statement <expr> (137)
+    statement <expr> (141)
         on left: 173 174 175 176 177 178
         on right: 179 180 181 188 189 192 193 194 195 196 197 198
-    labeled_statement <expr> (138)
+    labeled_statement <expr> (142)
         on left: 179 180 181
         on right: 173
-    compound_statement <expr> (139)
+    compound_statement <expr> (143)
         on left: 182 183 184 185
         on right: 174 208 209 210 211
-    declaration_list <expr> (140)
+    declaration_list <expr> (144)
         on left: 186 187
         on right: 184 185 187 208 210
-    statement_list <expr> (141)
+    statement_list <expr> (145)
         on left: 188 189
         on right: 183 185 189
-    expression_statement <expr> (142)
+    expression_statement <expr> (146)
         on left: 190 191
         on right: 175 197 198
-    selection_statement <expr> (143)
+    selection_statement <expr> (147)
         on left: 192 193 194
         on right: 176
-    iteration_statement <expr> (144)
+    iteration_statement <expr> (148)
         on left: 195 196 197 198
         on right: 177
-    jump_statement <expr> (145)
+    jump_statement <expr> (149)
         on left: 199 200 201 202 203
         on right: 178
-    translation_unit <expr> (146)
+    translation_unit <expr> (150)
         on left: 204 205
         on right: 1 205
-    external_declaration <expr> (147)
+    external_declaration <expr> (151)
         on left: 206 207
         on right: 204 205
-    function_definition <expr> (148)
+    function_definition <expr> (152)
         on left: 208 209 210 211
         on right: 206
 
@@ -1304,13 +1308,13 @@ State 54
     CONTINUE        shift, and go to state 95
     BREAK           shift, and go to state 96
     RETURN          shift, and go to state 97
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
     ';'             shift, and go to state 105
     '{'             shift, and go to state 54
     '}'             shift, and go to state 106
@@ -1472,14 +1476,14 @@ State 60
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
     ']'             shift, and go to state 145
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -1610,13 +1614,13 @@ State 72
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
     '{'             shift, and go to state 154
 
     primary_expression         go to state 107
@@ -1860,13 +1864,13 @@ State 84
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
     '('             shift, and go to state 168
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
 
     primary_expression  go to state 107
     postfix_expression  go to state 108
@@ -1884,13 +1888,13 @@ State 85
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
     '('             shift, and go to state 170
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
 
     primary_expression  go to state 107
     postfix_expression  go to state 108
@@ -1908,13 +1912,13 @@ State 86
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
     '('             shift, and go to state 170
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
 
     primary_expression  go to state 107
     postfix_expression  go to state 108
@@ -1932,13 +1936,13 @@ State 87
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -2009,13 +2013,13 @@ State 92
     CONTINUE        shift, and go to state 95
     BREAK           shift, and go to state 96
     RETURN          shift, and go to state 97
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
     ';'             shift, and go to state 105
     '{'             shift, and go to state 54
 
@@ -2086,13 +2090,13 @@ State 97
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
     ';'             shift, and go to state 183
 
     primary_expression         go to state 107
@@ -2117,6 +2121,48 @@ State 97
 
 State 98
 
+   22 unary_operator: AND .
+
+    $default  reduce using rule 22 (unary_operator)
+
+
+State 99
+
+   23 unary_operator: POINTER .
+
+    $default  reduce using rule 23 (unary_operator)
+
+
+State 100
+
+   24 unary_operator: PLUS .
+
+    $default  reduce using rule 24 (unary_operator)
+
+
+State 101
+
+   25 unary_operator: MINUS .
+
+    $default  reduce using rule 25 (unary_operator)
+
+
+State 102
+
+   26 unary_operator: TILDE .
+
+    $default  reduce using rule 26 (unary_operator)
+
+
+State 103
+
+   27 unary_operator: EXCL .
+
+    $default  reduce using rule 27 (unary_operator)
+
+
+State 104
+
     5 primary_expression: '(' . expression ')'
    29 cast_expression: '(' . type_name ')' cast_expression
 
@@ -2140,13 +2186,13 @@ State 98
     STRUCT          shift, and go to state 18
     UNION           shift, and go to state 19
     ENUM            shift, and go to state 20
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -2173,48 +2219,6 @@ State 98
     enum_specifier             go to state 30
     type_qualifier             go to state 80
     type_name                  go to state 187
-
-
-State 99
-
-   22 unary_operator: '&' .
-
-    $default  reduce using rule 22 (unary_operator)
-
-
-State 100
-
-   23 unary_operator: '*' .
-
-    $default  reduce using rule 23 (unary_operator)
-
-
-State 101
-
-   24 unary_operator: '+' .
-
-    $default  reduce using rule 24 (unary_operator)
-
-
-State 102
-
-   25 unary_operator: '-' .
-
-    $default  reduce using rule 25 (unary_operator)
-
-
-State 103
-
-   26 unary_operator: '~' .
-
-    $default  reduce using rule 26 (unary_operator)
-
-
-State 104
-
-   27 unary_operator: '!' .
-
-    $default  reduce using rule 27 (unary_operator)
 
 
 State 105
@@ -2291,13 +2295,13 @@ State 110
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression  go to state 107
     postfix_expression  go to state 108
@@ -2517,13 +2521,13 @@ State 128
     CONTINUE        shift, and go to state 95
     BREAK           shift, and go to state 96
     RETURN          shift, and go to state 97
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
     ';'             shift, and go to state 105
     '{'             shift, and go to state 54
     '}'             shift, and go to state 228
@@ -2586,13 +2590,13 @@ State 129
     CONTINUE        shift, and go to state 95
     BREAK           shift, and go to state 96
     RETURN          shift, and go to state 97
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
     ';'             shift, and go to state 105
     '{'             shift, and go to state 54
     '}'             shift, and go to state 230
@@ -2798,13 +2802,13 @@ State 150
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -2859,13 +2863,13 @@ State 154
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
     '{'             shift, and go to state 154
 
     primary_expression         go to state 107
@@ -2971,13 +2975,13 @@ State 162
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -3052,13 +3056,13 @@ State 167
     CONTINUE        shift, and go to state 95
     BREAK           shift, and go to state 96
     RETURN          shift, and go to state 97
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
     ';'             shift, and go to state 105
     '{'             shift, and go to state 54
 
@@ -3114,13 +3118,13 @@ State 168
     STRUCT          shift, and go to state 18
     UNION           shift, and go to state 19
     ENUM            shift, and go to state 20
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -3166,13 +3170,13 @@ State 170
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -3236,13 +3240,13 @@ State 174
     CONTINUE        shift, and go to state 95
     BREAK           shift, and go to state 96
     RETURN          shift, and go to state 97
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
     ';'             shift, and go to state 105
     '{'             shift, and go to state 54
 
@@ -3284,13 +3288,13 @@ State 175
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -3322,13 +3326,13 @@ State 176
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -3360,13 +3364,13 @@ State 177
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -3406,13 +3410,13 @@ State 179
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
     ';'             shift, and go to state 105
 
     primary_expression         go to state 107
@@ -3537,14 +3541,14 @@ State 191
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
     ')'             shift, and go to state 270
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -3576,13 +3580,13 @@ State 192
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -3698,13 +3702,13 @@ State 205
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -3742,13 +3746,13 @@ State 207
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression  go to state 107
     postfix_expression  go to state 108
@@ -3767,13 +3771,13 @@ State 208
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression  go to state 107
     postfix_expression  go to state 108
@@ -3792,13 +3796,13 @@ State 209
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression  go to state 107
     postfix_expression  go to state 108
@@ -3817,13 +3821,13 @@ State 210
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -3843,13 +3847,13 @@ State 211
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -3869,13 +3873,13 @@ State 212
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -3896,13 +3900,13 @@ State 213
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -3923,13 +3927,13 @@ State 214
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -3951,13 +3955,13 @@ State 215
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -3979,13 +3983,13 @@ State 216
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -4007,13 +4011,13 @@ State 217
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -4035,13 +4039,13 @@ State 218
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -4064,13 +4068,13 @@ State 219
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -4093,13 +4097,13 @@ State 220
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -4123,13 +4127,13 @@ State 221
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -4154,13 +4158,13 @@ State 222
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -4186,13 +4190,13 @@ State 223
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -4219,13 +4223,13 @@ State 224
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -4253,13 +4257,13 @@ State 225
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -4291,13 +4295,13 @@ State 226
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -4354,13 +4358,13 @@ State 229
     CONTINUE        shift, and go to state 95
     BREAK           shift, and go to state 96
     RETURN          shift, and go to state 97
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
     ';'             shift, and go to state 105
     '{'             shift, and go to state 54
     '}'             shift, and go to state 296
@@ -4466,14 +4470,14 @@ State 233
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
     ']'             shift, and go to state 300
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -4686,13 +4690,13 @@ State 252
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -4748,13 +4752,13 @@ State 255
     CONTINUE        shift, and go to state 95
     BREAK           shift, and go to state 96
     RETURN          shift, and go to state 97
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
     ';'             shift, and go to state 105
     '{'             shift, and go to state 54
 
@@ -4838,13 +4842,13 @@ State 261
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
     ';'             shift, and go to state 105
 
     primary_expression         go to state 107
@@ -4964,13 +4968,13 @@ State 268
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression  go to state 107
     postfix_expression  go to state 108
@@ -5358,14 +5362,14 @@ State 304
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
     ']'             shift, and go to state 329
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -5418,13 +5422,13 @@ State 308
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
     '{'             shift, and go to state 154
     '}'             shift, and go to state 331
 
@@ -5505,13 +5509,13 @@ State 314
     CONTINUE        shift, and go to state 95
     BREAK           shift, and go to state 96
     RETURN          shift, and go to state 97
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
     ';'             shift, and go to state 105
     '{'             shift, and go to state 54
 
@@ -5563,13 +5567,13 @@ State 315
     CONTINUE        shift, and go to state 95
     BREAK           shift, and go to state 96
     RETURN          shift, and go to state 97
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
     ';'             shift, and go to state 105
     '{'             shift, and go to state 54
 
@@ -5621,13 +5625,13 @@ State 316
     CONTINUE        shift, and go to state 95
     BREAK           shift, and go to state 96
     RETURN          shift, and go to state 97
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
     ';'             shift, and go to state 105
     '{'             shift, and go to state 54
 
@@ -5668,13 +5672,13 @@ State 317
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -5707,14 +5711,14 @@ State 318
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
     ')'             shift, and go to state 337
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -5760,13 +5764,13 @@ State 321
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -5804,13 +5808,13 @@ State 323
     SIZEOF          shift, and go to state 84
     INC_OP          shift, and go to state 85
     DEC_OP          shift, and go to state 86
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
 
     primary_expression         go to state 107
     postfix_expression         go to state 108
@@ -5948,13 +5952,13 @@ State 337
     CONTINUE        shift, and go to state 95
     BREAK           shift, and go to state 96
     RETURN          shift, and go to state 97
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
     ';'             shift, and go to state 105
     '{'             shift, and go to state 54
 
@@ -6043,13 +6047,13 @@ State 343
     CONTINUE        shift, and go to state 95
     BREAK           shift, and go to state 96
     RETURN          shift, and go to state 97
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
     ';'             shift, and go to state 105
     '{'             shift, and go to state 54
 
@@ -6115,13 +6119,13 @@ State 346
     CONTINUE        shift, and go to state 95
     BREAK           shift, and go to state 96
     RETURN          shift, and go to state 97
-    '('             shift, and go to state 98
-    '&'             shift, and go to state 99
-    '*'             shift, and go to state 100
-    '+'             shift, and go to state 101
-    '-'             shift, and go to state 102
-    '~'             shift, and go to state 103
-    '!'             shift, and go to state 104
+    AND             shift, and go to state 98
+    POINTER         shift, and go to state 99
+    PLUS            shift, and go to state 100
+    MINUS           shift, and go to state 101
+    TILDE           shift, and go to state 102
+    EXCL            shift, and go to state 103
+    '('             shift, and go to state 104
     ';'             shift, and go to state 105
     '{'             shift, and go to state 54
 

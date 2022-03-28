@@ -32,19 +32,18 @@ public:
         : Operator(_left, _right)
     {}
 
-    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> &loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
+    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> &loc_Var, std::string type_check , bool &isConstant, bool isLocal, std::vector<int> func_call) override
     {
         bool op1_const, op2_const;
         std::string soln;    //  Is formatted soln
-        std::string op1 = left->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal);
+        std::string op1 = left->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal, func_call);
         op1_const = isConstant;
-        std::string op2 = right->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal);
+        std::string op2 = right->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal, func_call);
         op2_const = isConstant;
 
         if ( op1_const & op2_const )
         {
-            std::cout<< "2 ints" << std::endl;
-            if (type_check == "int")    
+            if (type_check == "int")    //  If x = ... where x is type int 
             {
                 int result = std::stoi(op1) + std::stoi(op2);
                 isConstant = 1;
@@ -53,7 +52,6 @@ public:
         }
         else if ( !(op1_const) & !(op2_const) )
         {
-            //std::cout<< "2 var" << std::endl;
             if (type_check == "int")    
             { 
                 soln += "lw $3, " + std::to_string(loc_Var[op1].second) + "($fp)" + "\n";
@@ -65,14 +63,12 @@ public:
         }
         else
         {
-            //std::cout<< "1 var" << std::endl;
             if (type_check == "int")    
             {
                 if (op1_const)
-                {  
+                {
                     soln += "lw $2, " + std::to_string(loc_Var[op2].second) + "($fp)" + "\n";
-                    soln += "nop\naddu $2,$2," + op1 + '\n';
-                    isConstant = 0;
+                    soln += "nop\naddiu $2,$2," + op1 + '\n';
                 }
                 else
                 {
@@ -81,8 +77,8 @@ public:
                 }
                 isConstant = 0;
                 return soln;
-            } 
-        } 
+            }
+        }
     }
 };
 
@@ -94,18 +90,17 @@ public:
         : Operator(_left, _right)
     {}
 
-    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> &loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
+    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> &loc_Var, std::string type_check , bool &isConstant, bool isLocal, std::vector<int> func_call) override
     {
         bool op1_const, op2_const;
         std::string soln;    //  Is formatted soln
-        std::string op1 = left->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal);
+        std::string op1 = left->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal, func_call);
         op1_const = isConstant;
-        std::string op2 = right->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal);
+        std::string op2 = right->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal, func_call);
         op2_const = isConstant;
 
         if ( op1_const & op2_const )
         {
-            std::cout<< "2 ints" << std::endl;
             if (type_check == "int")    
             {
                 int result = std::stoi(op1) - std::stoi(op2);
@@ -130,14 +125,14 @@ public:
             {
                 if (op1_const)
                 {  
+                    soln += "li $3 " + op1 + '\n';
                     soln += "lw $2, " + std::to_string(loc_Var[op2].second) + "($fp)" + "\n";
-                    soln += "nop\nsubu $2,$2," + op1 + '\n';
-                    isConstant = 0;
+                    soln += "nop\nsubu $2,$3,$2\n";
                 }
                 else
                 {
                     soln += "lw $2, " + std::to_string(loc_Var[op1].second) + "($fp)" + "\n";
-                    soln += "nop\nsubu $2,$2," + op2 + '\n';
+                    soln += "nop\naddiu $2,$2, -" + op2 + '\n';
                 }
                 isConstant = 0;
                 return soln;
@@ -183,13 +178,13 @@ public:
         : Operator(_left, _right)
     {}
 
-    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> &loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
+    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> &loc_Var, std::string type_check , bool &isConstant, bool isLocal, std::vector<int> func_call) override
     {
         bool op1_const, op2_const;
         std::string soln;    //  Is formatted soln
-        std::string op1 = left->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal);
+        std::string op1 = left->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal, func_call);
         op1_const = isConstant;
-        std::string op2 = right->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal);
+        std::string op2 = right->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal, func_call);
         op2_const = isConstant;
 
         if ( op1_const & op2_const )
@@ -259,13 +254,13 @@ public:
     bAndOperator(ExpressionPtr _left, ExpressionPtr _right)
         : Operator(_left, _right)
     {}
-  virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> &loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
+    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> &loc_Var, std::string type_check , bool &isConstant, bool isLocal, std::vector<int> func_call) override
     {
         bool op1_const, op2_const;
         std::string soln;    //  Is formatted soln
-        std::string op1 = left->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal);
+        std::string op1 = left->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal, func_call);
         op1_const = isConstant;
-        std::string op2 = right->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal);
+        std::string op2 = right->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal, func_call);
         op2_const = isConstant;
 
         if ( op1_const & op2_const )
@@ -326,6 +321,50 @@ public:
     EqOperator(ExpressionPtr _left, ExpressionPtr _right)
         : Operator(_left, _right)
     {}
+
+    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> &loc_Var, std::string type_check , bool &isConstant, bool isLocal, std::vector<int> func_call) override
+    {
+        bool op1_const, op2_const;
+        std::string soln;    //  Is formatted soln
+
+        std::string op1 = left->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal, func_call);
+        op1_const = isConstant;
+        std::string op2 = right->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal, func_call);
+        op2_const = isConstant;
+
+        if ( op1_const & op2_const ) 
+        {
+            if (std::stod(op1) == std::stod(op2))   { return "1"; }  //Do the IF
+            else                                    { return "-1"; } //Do the ELSE (or nothing)
+        }
+        else if ( !(op1_const) & !(op2_const) ) 
+        {
+            std::string soln;
+            soln += "lw $3, " + std::to_string(loc_Var[op1].second) + "($fp)" + "\n";
+            soln += "lw $2, " + std::to_string(loc_Var[op2].second) + "($fp)" + "\n";
+            soln += "nop\n";
+            soln += "bne $3, $2, $L2\n";
+            soln += "nop\n";
+
+            return soln;
+        }
+        else
+        {
+            if (op1_const) {
+                soln += "lw $3, " + std::to_string(loc_Var[op2].second) + "($fp)" + "\n";
+                soln += "li $2, " + op1 + "($fp)" + "\n";
+                soln += "bne $3, $2, $L2\n";
+                soln += "nop\n";
+            }
+            else {
+                soln += "lw $3, " + std::to_string(loc_Var[op1].second) + "($fp)" + "\n";
+                soln += "li $2, " + op2 + "($fp)" + "\n";
+                soln += "bne $3, $2, $L2\n";
+                soln += "nop\n";
+            }
+            return soln;
+        }
+    } 
 };
 
 class NeqOperator
@@ -335,6 +374,50 @@ public:
     NeqOperator(ExpressionPtr _left, ExpressionPtr _right)
         : Operator(_left, _right)
     {}
+
+    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> &loc_Var, std::string type_check , bool &isConstant, bool isLocal, std::vector<int> func_call) override
+    {
+        bool op1_const, op2_const;
+        std::string soln;    //  Is formatted soln
+
+        std::string op1 = left->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal, func_call);
+        op1_const = isConstant;
+        std::string op2 = right->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal, func_call);
+        op2_const = isConstant;
+
+        if ( op1_const & op2_const ) 
+        {
+            if (std::stod(op1) != std::stod(op2))   { return "1"; }  //Do the IF
+            else                                    { return "-1"; } //Do the ELSE (or nothing)
+        }
+        else if ( !(op1_const) & !(op2_const) ) 
+        {
+            std::string soln;
+            soln += "lw $3, " + std::to_string(loc_Var[op1].second) + "($fp)" + "\n";
+            soln += "lw $2, " + std::to_string(loc_Var[op2].second) + "($fp)" + "\n";
+            soln += "nop\n";
+            soln += "beq $3, $2, $L2\n";
+            soln += "nop\n";
+
+            return soln;
+        }
+        else
+        {
+            if (op1_const) {
+                soln += "lw $3, " + std::to_string(loc_Var[op2].second) + "($fp)" + "\n";
+                soln += "li $2, " + op1 + "($fp)" + "\n";
+                soln += "beq $3, $2, $L2\n";
+                soln += "nop\n";
+            }
+            else {
+                soln += "lw $3, " + std::to_string(loc_Var[op1].second) + "($fp)" + "\n";
+                soln += "li $2, " + op2 + "($fp)" + "\n";
+                soln += "beq $3, $2, $L2\n";
+                soln += "nop\n";
+            }
+            return soln;
+        }
+    } 
 };
 
 class LTOperator

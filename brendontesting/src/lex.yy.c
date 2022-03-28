@@ -1274,32 +1274,32 @@ YY_RULE_SETUP
 case 75:
 YY_RULE_SETUP
 #line 97 "lexer.l"
-{ return('&'); }
+{ return(AND); }
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
 #line 98 "lexer.l"
-{ return('!'); }
+{ return(EXCL); }
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
 #line 99 "lexer.l"
-{ return('~'); }
+{ return(TILDE); }
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
 #line 100 "lexer.l"
-{ return('-'); }
+{ return(MINUS); }
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
 #line 101 "lexer.l"
-{ return('+'); }
+{ return(PLUS); }
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
 #line 102 "lexer.l"
-{ return('*'); }
+{ return(POINTER); }
 	YY_BREAK
 case 81:
 YY_RULE_SETUP

@@ -4,6 +4,7 @@
   #include <cassert>
   #include <iostream>
   #include <iomanip>
+  #include <algorithm>
 
   extern Expression *g_root; // A way of getting the AST out
 
@@ -12,6 +13,7 @@
   // that Bison generated code can call them.
   int yylex(void);
   void yyerror(const char *);
+  std::vector<int> func_call;
 }
 
 %union{
@@ -36,6 +38,7 @@
 %token<string> STRUCT UNION ENUM ELLIPSIS
 
 %token<string> CASE DEFAULT IF ELSE SWITCH WHILE DO FOR GOTO CONTINUE BREAK RETURN
+%token<string> AND POINTER PLUS MINUS TILDE EXCL
 
 %token EQ_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN ADD_ASSIGN SUB_ASSIGN LEFT_ASSIGN RIGHT_ASSIGN AND_ASSIGN XOR_ASSIGN OR_ASSIGN
 %type<string> EQ_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN ADD_ASSIGN SUB_ASSIGN LEFT_ASSIGN RIGHT_ASSIGN AND_ASSIGN XOR_ASSIGN OR_ASSIGN
@@ -46,8 +49,9 @@ assignment_expression expression constant_expression declaration declaration_spe
 struct_or_union_specifier struct_or_union struct_declaration_list struct_declaration specifier_qualifier_list struct_declarator_list struct_declarator enum_specifier
 enumerator_list enumerator type_qualifier declarator direct_declarator pointer type_qualifier_list parameter_type_list parameter_list parameter_declaration identifier_list
 type_name abstract_declarator direct_abstract_declarator initializer initializer_list statement labeled_statement compound_statement declaration_list statement_list
-expression_statement selection_statement iteration_statement jump_statement translation_unit external_declaration function_definition assignment_operator
+expression_statement selection_statement iteration_statement jump_statement translation_unit external_declaration function_definition unary_operator
 
+%type<string> assignment_operator
 
 // Possibly this for lists? 
 //%type <exprList> STATEMENT_LIST PARAMETER_LIST TRANSLATION_UNIT DECLARATION_LIST ARGUMENT_EXPRESSION_LIST IDENTIFIER_LIST INIT_DECLARATOR_LIST PARAMETER_TYPE_LIST
@@ -68,14 +72,14 @@ primary_expression
 	;
 	//	TODO:	These haven't been done yet!
 postfix_expression
-	: primary_expression										{ std::cout<< "postfix_expression -> primary_expression" << std::endl; $$ = $1; }
-	| postfix_expression '[' expression ']'						{ std::cout<< "postfix_expression -> postfix_expression '[' expression ']'	" << std::endl; }
-	| postfix_expression '(' ')'								{ std::cout<< "postfix_expression -> postfix_expression '(' ')'" << std::endl; }
-	| postfix_expression '(' argument_expression_list ')'		{ std::cout<< "postfix_expression -> postfix_expression '(' argument_expression_list ')'" << std::endl; }
-	| postfix_expression '.' IDENTIFIER							{ std::cout<< "postfix_expression -> postfix_expression '.' IDENTIFIER" << std::endl; }
-	| postfix_expression PTR_OP IDENTIFIER						{ std::cout<< "postfix_expression -> postfix_expression PTR_OP IDENTIFIER" << std::endl; }
-	| postfix_expression INC_OP									{ std::cout<< "postfix_expression -> postfix_expression INC_OP" << std::endl; }
-	| postfix_expression DEC_OP									{ std::cout<< "postfix_expression -> postfix_expression DEC_OP" << std::endl; }
+	: primary_expression										{ 							std::cout<< "postfix_expression -> primary_expression" << std::endl; $$ = $1; }
+	| postfix_expression '[' expression ']'						{ 							std::cout<< "postfix_expression -> postfix_expression '[' expression ']'	" << std::endl; }
+	| postfix_expression '(' ')'								{ func_call.push_back(0); $$ = new postfix(1, $1); 	std::cout<< "postfix_expression -> postfix_expression '(' ')'" << std::endl; }
+	| postfix_expression '(' argument_expression_list ')'		{ func_call.push_back(0); $$ = new postfix(2, $1);	std::cout<< "postfix_expression -> postfix_expression '(' argument_expression_list ')'" << std::endl; }
+	| postfix_expression '.' IDENTIFIER							{							std::cout<< "postfix_expression -> postfix_expression '.' IDENTIFIER" << std::endl; }
+	| postfix_expression PTR_OP IDENTIFIER						{ 							std::cout<< "postfix_expression -> postfix_expression PTR_OP IDENTIFIER" << std::endl; }
+	| postfix_expression INC_OP									{ 							std::cout<< "postfix_expression -> postfix_expression INC_OP" << std::endl; }
+	| postfix_expression DEC_OP									{ 							std::cout<< "postfix_expression -> postfix_expression DEC_OP" << std::endl; }
 	;
 	//	TODO:	These haven't been done yet!
 argument_expression_list
@@ -84,21 +88,21 @@ argument_expression_list
 	;
 	//	TODO:	These haven't been done yet!
 unary_expression
-	: postfix_expression				{ std::cout<< "unary_expression -> postfix_expression" << std::endl; $$ = $1; }
-	| INC_OP unary_expression			{ std::cout<< "unary_expression -> INC_OP unary_expression" << std::endl; }
-	| DEC_OP unary_expression			{ std::cout<< "unary_expression -> DEC_OP unary_expression" << std::endl; }
-	| unary_operator cast_expression	{ std::cout<< "unary_expression -> unary_operator cast_expression" << std::endl; }
-	| SIZEOF unary_expression			{ std::cout<< "unary_expression -> SIZEOF unary_expression" << std::endl; }
-	| SIZEOF '(' type_name ')'			{ std::cout<< "unary_expression -> SIZEOF '(' type_name ')'" << std::endl; }
+	: postfix_expression				{ $$ = $1; std::cout<< "unary_expression -> postfix_expression" << std::endl; }
+	| INC_OP unary_expression			{ /*$$ = Unary(0, $2); */ std::cout<< "unary_expression -> INC_OP unary_expression" << std::endl; }
+	| DEC_OP unary_expression			{ /*$$ = Unary(1, $2); */ std::cout<< "unary_expression -> DEC_OP unary_expression" << std::endl; }
+	| unary_operator cast_expression	{ $$ = new Unary($1, $2);   std::cout<< "unary_expression -> unary_operator cast_expression" << std::endl; }
+	| SIZEOF unary_expression			{ /*$$ = Unary(2, $2); */ std::cout<< "unary_expression -> SIZEOF unary_expression" << std::endl; }
+	| SIZEOF '(' type_name ')'			{ /*$$ = Unary(3, $3); */ std::cout<< "unary_expression -> SIZEOF '(' type_name ')'" << std::endl; }
 	;
 	//	TODO:	These haven't been done yet!
 unary_operator
-	: '&'			{ std::cout<< "unary_operator -> &" << std::endl; }
-	| '*'			{ std::cout<< "unary_operator -> *" << std::endl; }
-	| '+'			{ std::cout<< "unary_operator -> +" << std::endl; }
-	| '-'			{ std::cout<< "unary_operator -> -" << std::endl; }
-	| '~'			{ std::cout<< "unary_operator -> ~" << std::endl; }
-	| '!'			{ std::cout<< "unary_operator -> !" << std::endl; }
+	: AND			{ std::cout<< "unary_operator -> &" << std::endl; $$ = new UnaryOperator(0); }
+	| POINTER		{ std::cout<< "unary_operator -> *" << std::endl; $$ = new UnaryOperator(1); }
+	| PLUS			{ std::cout<< "unary_operator -> +" << std::endl; $$ = new UnaryOperator(2); }
+	| MINUS			{ std::cout<< "unary_operator -> -" << std::endl; $$ = new UnaryOperator(3); }
+	| TILDE			{ std::cout<< "unary_operator -> ~" << std::endl; $$ = new UnaryOperator(4); }
+	| EXCL			{ std::cout<< "unary_operator -> !" << std::endl; $$ = new UnaryOperator(5); }
 	;
 	//	TODO:	These haven't been done yet!
 cast_expression
@@ -170,22 +174,22 @@ conditional_expression
 	;
 
 assignment_expression
-	: conditional_expression										{ std::cout << "assignment_expression -> conditional_expression" << std::endl;  $$ = $1; }
-	| unary_expression assignment_operator assignment_expression	{ std::cout << "assignment_expression -> unary_expression assignment_operator assignment_expression" << std::endl; }
+	: conditional_expression										{ $$ = $1; std::cout << "assignment_expression -> conditional_expression" << std::endl;   }
+	| unary_expression assignment_operator assignment_expression	{ $$ = new AssignmentOperator($1, *$2, $3); std::cout << "assignment_expression -> unary_expression assignment_operator assignment_expression" << std::endl; }
 	;
 
 assignment_operator
-	: EQ_ASSIGN				{ std::cout << "assignment_operator: =" << std::endl;  $$ = new AssignmentOperator(*$1);}
-	| MUL_ASSIGN			{ std::cout << "assignment_operator: *=" << std::endl; $$ = new AssignmentOperator(*$1);}
-	| DIV_ASSIGN			{ std::cout << "assignment_operator: /=" << std::endl; $$ = new AssignmentOperator(*$1);}
-	| MOD_ASSIGN			{ std::cout << "assignment_operator: %=" << std::endl; $$ = new AssignmentOperator(*$1);}
-	| ADD_ASSIGN			{ std::cout << "assignment_operator: +=" << std::endl; $$ = new AssignmentOperator(*$1);}
-	| SUB_ASSIGN			{ std::cout << "assignment_operator: -=" << std::endl; $$ = new AssignmentOperator(*$1);}
-	| LEFT_ASSIGN			{ std::cout << "assignment_operator: <<=" << std::endl;$$ = new AssignmentOperator(*$1);}
-	| RIGHT_ASSIGN			{ std::cout << "assignment_operator: >>=" << std::endl;$$ = new AssignmentOperator(*$1);}
-	| AND_ASSIGN			{ std::cout << "assignment_operator: &=" << std::endl; $$ = new AssignmentOperator(*$1);}
-	| XOR_ASSIGN			{ std::cout << "assignment_operator: ^=" << std::endl; $$ = new AssignmentOperator(*$1);}
-	| OR_ASSIGN				{ std::cout << "assignment_operator: |=" << std::endl; $$ = new AssignmentOperator(*$1);}
+	: EQ_ASSIGN				{ std::cout << "assignment_operator: =" << std::endl;  $$ = $1;}
+	| MUL_ASSIGN			{ std::cout << "assignment_operator: *=" << std::endl; $$ = $1;}
+	| DIV_ASSIGN			{ std::cout << "assignment_operator: /=" << std::endl; $$ = $1;}
+	| MOD_ASSIGN			{ std::cout << "assignment_operator: %=" << std::endl; $$ = $1;}
+	| ADD_ASSIGN			{ std::cout << "assignment_operator: +=" << std::endl; $$ = $1;}
+	| SUB_ASSIGN			{ std::cout << "assignment_operator: -=" << std::endl; $$ = $1;}
+	| LEFT_ASSIGN			{ std::cout << "assignment_operator: <<=" << std::endl;$$ = $1;}
+	| RIGHT_ASSIGN			{ std::cout << "assignment_operator: >>=" << std::endl;$$ = $1;}
+	| AND_ASSIGN			{ std::cout << "assignment_operator: &=" << std::endl; $$ = $1;}
+	| XOR_ASSIGN			{ std::cout << "assignment_operator: ^=" << std::endl; $$ = $1;}
+	| OR_ASSIGN				{ std::cout << "assignment_operator: |=" << std::endl; $$ = $1;}
 	;
 
 expression
@@ -203,12 +207,12 @@ declaration
 	;
 
 declaration_specifiers
-	: storage_class_specifier								{ std::cout<<"declaration_specifiers -> storage_class_specifier"<<std::endl; 							$$ = new Declaration_Spec("storage", $1); }
-	| storage_class_specifier declaration_specifiers		{ std::cout<<"declaration_specifiers -> storage_class_specifier declaration_specifiers"<<std::endl;		$$ = new Declaration_Spec("storage", $1, $2); }
-	| type_specifier										{ std::cout<<"declaration_specifiers -> type_specifier"<<std::endl; 									$$ = new Declaration_Spec("specifier", $1); }
-	| type_specifier declaration_specifiers					{ std::cout<<"declaration_specifiers -> type_specifier declaration_specifiers"<<std::endl;				$$ = new Declaration_Spec("specifier", $1, $2); }
-	| type_qualifier										{ std::cout<<"declaration_specifiers -> type_qualifier"<<std::endl;										$$ = new Declaration_Spec("qualifier", $1); }
-	| type_qualifier declaration_specifiers					{ std::cout<<"declaration_specifiers -> type_qualifier declaration_specifiers"<<std::endl; 				$$ = new Declaration_Spec("qualifier", $1, $2); }
+	: storage_class_specifier								{ $$ = new Declaration_Spec("storage", $1);			std::cout<<"declaration_specifiers -> storage_class_specifier"<<std::endl; 							 }
+	| storage_class_specifier declaration_specifiers		{ $$ = new Declaration_Spec("storage", $1, $2);		std::cout<<"declaration_specifiers -> storage_class_specifier declaration_specifiers"<<std::endl;	 }
+	| type_specifier										{ $$ = new Declaration_Spec("specifier", $1);		std::cout<<"declaration_specifiers -> type_specifier"<<std::endl; 							}
+	| type_specifier declaration_specifiers					{ $$ = new Declaration_Spec("specifier", $1, $2);	std::cout<<"declaration_specifiers -> type_specifier declaration_specifiers"<<std::endl;	}
+	| type_qualifier										{ $$ = new Declaration_Spec("qualifier", $1);		std::cout<<"declaration_specifiers -> type_qualifier"<<std::endl;							}
+	| type_qualifier declaration_specifiers					{ $$ = new Declaration_Spec("qualifier", $1, $2);	std::cout<<"declaration_specifiers -> type_qualifier declaration_specifiers"<<std::endl; 	}
 	;
 
 init_declarator_list
@@ -419,18 +423,18 @@ statement_list
 	;
 
 expression_statement
-	: ';'										{ $$ = new ExpressionStatement(); std::cout << "expression_statement -> ';'" << std::endl; }
-	| expression ';'							{ $$ = new ExpressionStatement($1); std::cout << "expression_statement -> expression ';'" << std::endl; }
+	: ';'										{ std::cout << "expression_statement -> ';'" << std::endl; }
+	| expression ';'							{ $$ = $1; std::cout << "expression_statement -> expression ';'" << std::endl; }
 	;
 
 selection_statement
-	: IF '(' expression ')' statement					{$$ = new SelectionStatement($3, $5);		}
+	: IF '(' expression ')' statement					{$$ = new SelectionStatement(0, $3, $5);	}
 	| IF '(' expression ')' statement ELSE statement	{$$ = new SelectionStatement($3, $5, $7);	}
-	| SWITCH '(' expression ')' statement				{$$ = new SelectionStatement($3, $5);		}
+	| SWITCH '(' expression ')' statement				{$$ = new SelectionStatement(1, $3, $5);	}
 	;
 
 iteration_statement
-	: WHILE '(' expression ')' statement											{$$ = new IterationStatement(0, $3, $5);	}
+	: WHILE '(' expression ')' statement											{$$ = new IterationStatement(0, $3, $5);	/*TODO: Implement*/}
 	| DO statement WHILE '(' expression ')' ';'										{$$ = new IterationStatement(1, $2, $5);	}
 	| FOR '(' expression_statement expression_statement ')' statement				{$$ = new IterationStatement(2, $3, $4, $6);}
 	| FOR '(' expression_statement expression_statement expression ')' statement	{$$ = new IterationStatement(3, $3, $5);	}
@@ -450,15 +454,15 @@ translation_unit
 	;
 
 external_declaration
-	: function_definition			{ $$ = $1; /*new ExternalDeclaration("function" , $1); 	*/std::cout<<"external_declaration -> function_definition"<<std::endl; }
+	: function_definition			{ func_call.push_back(1); $$ = $1; /*new ExternalDeclaration("function" , $1); 	*/std::cout<<"external_declaration -> function_definition"<<std::endl; }
 	| declaration					{ $$ = $1; /*new ExternalDeclaration("declaration" , $1);*/ std::cout<<"external_declaration -> declaration"<<std::endl; }
 	;
 
 function_definition
-	: declaration_specifiers declarator declaration_list compound_statement			{ $$ = new FunctionDefinition($1, $2, $3, $4);	std::cout<<"function_definition -> declaration_specifiers declarator declaration_list compound_statement"<<std::endl; }
-	| declaration_specifiers declarator compound_statement							{ $$ = new FunctionDefinition($1, $2, $3, 0);		std::cout<<"function_definition -> declaration_specifiers declarator compound_statement"<<std::endl; }
-	| declarator declaration_list compound_statement								{ $$ = new FunctionDefinition($1, $2, $3, 1);		std::cout<<"function_definition -> declarator declaration_list compound_statement"<<std::endl; }
-	| declarator compound_statement													{ $$ = new FunctionDefinition($1, $2);			std::cout<<"function_definition -> declarator compound_statement	"<<std::endl; }
+	: declaration_specifiers declarator declaration_list compound_statement			{ $$ = new FunctionDefinition($1, $2, $3, $4);		std::cout<<"1: function_definition -> declaration_specifiers declarator declaration_list compound_statement"<<std::endl; }
+	| declaration_specifiers declarator compound_statement							{ $$ = new FunctionDefinition($1, $2, $3, 0);		std::cout<<"2: function_definition -> declaration_specifiers declarator compound_statement"<<std::endl; }
+	| declarator declaration_list compound_statement								{ $$ = new FunctionDefinition($1, $2, $3, 1);		std::cout<<"3: function_definition -> declarator declaration_list compound_statement"<<std::endl; }
+	| declarator compound_statement													{ $$ = new FunctionDefinition($1, $2);				std::cout<<"4: function_definition -> declarator compound_statement	"<<std::endl; }
 	;
 
 %%
@@ -496,8 +500,14 @@ int main()
 	std::cout<<"----------------------------------"<<std::endl;
 	std::cout<<"----------------------------------"<<std::endl;
 
+	for(int i = 0; i < func_call.size(); i++)
+	{
+		std::cout << i << ": " << func_call[i] << std::endl;
+	}
+
 	std::string MIPS;
-	MIPS = ast->Compile( initial_memory, g_Var, loc_Var, type_check, isConstant, isLocal);
+	
+	MIPS = ast->Compile(initial_memory, g_Var, loc_Var, type_check, isConstant, isLocal, func_call);
 	std::cout<<"MIPS: \n" << MIPS <<std::endl;
     return 0;
 }
