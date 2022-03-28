@@ -23,7 +23,7 @@ public:
         delete exprR;
     }
 
-    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
+    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> &loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
     {
         return "declarator";
     }
@@ -51,7 +51,7 @@ public:
     // EXTERN TYPEDEF STATIC AUTO REGISTER
     // CONST VOLATILE
 
-    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
+    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> &loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
     {
         if (exprR == NULL)  { return exprL->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal); }
         else { return exprL->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal) + " " + exprR->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal); }
@@ -96,7 +96,7 @@ public:
         , exprR(_exprR)
     {}
 
-    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
+    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> &loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
     {
         if          (Type == 0) { return ident; } // For direct_declarator -> IDENTIFIER
         else if     (Type == 1) { return "NOT IMPLEMENTED"; }
@@ -129,7 +129,7 @@ public:
         : exprL(_exprL)
     {}
 
-    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
+    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> &loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
     {
         if ( exprR == NULL)
         {
@@ -140,11 +140,11 @@ public:
         }
         else
         {
-            if (type_check == "int")
-            {
             std::string var_name = exprL->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal);
             std::string evaluation = exprR->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal);
 
+            if (type_check == "int")
+            {
                 if(isConstant)
                 {
                     mem += 4;
@@ -153,10 +153,20 @@ public:
                     def_int += "li $2, " + evaluation + localityCheck;   //  loading the evaluation into reg 2
                     def_int += "sw $2, " + std::to_string(mem) + "($fp)" + localityCheck;     //  Store $2 into memory location where @
 
-
                     //Adding to map of values.
                     if(isLocal)     { loc_Var[var_name] = std::make_pair("int", mem); }
                     else            { g_Var[var_name] = std::make_pair("int", mem); }
+
+                    return def_int;
+                }
+                else
+                {
+                    mem += 4;
+                    std::string def_int;
+                    std::string localityCheck = (isLocal) ? ("\n\t") : ("\n");   
+
+                    def_int += evaluation + localityCheck;
+                    def_int += "sw $2, " + std::to_string(mem) + "($fp)" + localityCheck;     //  Store $2 into memory location where @
 
                     return def_int;
                 }
@@ -184,9 +194,11 @@ public:
         , exprR(_exprR)
     {}
 
-    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
+    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> &loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
     {
-        
+        std::string L = exprL->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal);
+        std::string R = exprR->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal);
+        return L + R;
     }
 
     virtual ~Init_Declarator_List()
@@ -208,12 +220,20 @@ public:
         , exprR(_exprR)
     {}
 
-    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
+    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> &loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
     {
         std::string type = exprL->Compile(mem, g_Var, loc_Var, type_check, isConstant, isLocal);
 
-        if( type.find("int") != std::string::npos )     { return exprR->Compile(mem, g_Var, loc_Var, "int", isConstant, isLocal); }
-        else                                            { return "not implemented"; }
+        if( type.find("void") != std::string::npos )                { return exprR->Compile(mem, g_Var, loc_Var, "void", isConstant, isLocal); }
+        else if ( type.find("char") != std::string::npos )          { return exprR->Compile(mem, g_Var, loc_Var, "char", isConstant, isLocal); }
+        else if ( type.find("short") != std::string::npos )         { return exprR->Compile(mem, g_Var, loc_Var, "short", isConstant, isLocal); }
+        else if ( type.find("int") != std::string::npos )           { return exprR->Compile(mem, g_Var, loc_Var, "int", isConstant, isLocal); }
+        else if ( type.find("long") != std::string::npos )          { return exprR->Compile(mem, g_Var, loc_Var, "long", isConstant, isLocal); }
+        else if ( type.find("float") != std::string::npos )         { return exprR->Compile(mem, g_Var, loc_Var, "float", isConstant, isLocal); }
+        else if ( type.find("double") != std::string::npos )        { return exprR->Compile(mem, g_Var, loc_Var, "double", isConstant, isLocal); }
+        else if ( type.find("signed") != std::string::npos )        { return exprR->Compile(mem, g_Var, loc_Var, "signed", isConstant, isLocal); }
+        else if ( type.find("unsigned") != std::string::npos )      { return exprR->Compile(mem, g_Var, loc_Var, "unsigned", isConstant, isLocal); }
+        else                                                        { return "not implemented"; }
     }
 
     virtual ~Declaration()
@@ -244,7 +264,7 @@ public:
         : Type(_Type)
     {}
 
-    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
+    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> &loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
     {
         return "DirectAbstractDeclarator!\n";
     }
@@ -264,7 +284,7 @@ public:
         , exprR(_exprR)
     {}
 
-    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
+    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> &loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
     {
         return "AbstractDeclarator!\n";
     }

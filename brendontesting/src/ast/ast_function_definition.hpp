@@ -32,7 +32,7 @@ public:
         , expr2(_expr2)
     {}
 
-    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
+    virtual std::string Compile( int &mem, std::map<std::string, std::pair<std::string, int>> g_Var, std::map<std::string, std::pair<std::string, int>> &loc_Var, std::string type_check , bool &isConstant, bool isLocal) override
     {
         if(expr4 == NULL)
         {
@@ -62,7 +62,8 @@ public:
                     
                     if( type_specifiers.find("void") != std::string::npos )   { ending += "\tnop\n"; }
 
-                    ending += "move $sp, $fp\n";
+                    ending += "move $2, $0\n";
+                    ending += "\tmove $sp, $fp\n";
                     ending += "\tlw $fp, " + std::to_string(-1*mem_used - 4) + "($sp)\n";
                     ending += "\taddiu $sp, $sp, " + std::to_string(-1*mem_used) + "\n";;
                     ending += "\tj $31\n";
